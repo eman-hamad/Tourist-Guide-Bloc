@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tourist_guide/core/widgets/landmark_card.dart';
-import 'package:tourist_guide/cubits/profile_cubit/profile_cubit.dart';
+// import 'package:tourist_guide/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tourist_guide/data/places_data/places_data.dart';
 import 'package:tourist_guide/ui/landmarks/widgets/header.dart';
 
@@ -32,35 +32,35 @@ class PlacesScreen extends StatelessWidget {
   }
 
   Widget _header(BuildContext context) {
-    context.read<ProfileCubit>().loadSavedImage();
+    // context.read<ProfileCubit>().loadSavedImage();
     return SafeArea(
-      child: BlocConsumer<ProfileCubit, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileImageError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
-            );
-          }
-        },
-        builder: (context, state) {
-          if (state is ProfileImageLoading) {
-            return Skeletonizer(
-              enabled: true,
-              child: Header(name: 'User', imgPath: ''),
-            );
-          } //
-          else if (state is ProfileInitial) {
-            return Header(name: 'User', imgPath: '');
-          } //
-          else if (state is ProfileImageLoaded) {
-            return Header(name: 'User', imgPath: state.image.path);
-          } //
-          else {
-            return Text('Error');
-          }
-        },
-      ),
-    );
+        // child: BlocConsumer<ProfileCubit, ProfileState>(
+        //   listener: (context, state) {
+        //     // if (state is ProfileImageError) {
+        //     //   ScaffoldMessenger.of(context).showSnackBar(
+        //     //     SnackBar(content: Text(state.errorMessage)),
+        //     //   );
+        //     // }
+        //   },
+        //   builder: (context, state) {
+        // if (state is ProfileImageLoading) {
+        //   return Skeletonizer(
+        //     enabled: true,
+        //     child: Header(name: 'User', imgPath: ''),
+        //   );
+        // } //
+        // else if (state is ProfileInitial) {
+        //   return Header(name: 'User', imgPath: '');
+        // } //
+        // else if (state is ProfileImageLoaded) {
+        //   return Header(name: 'User', imgPath: state.image.path);
+        // } //
+        // else {
+        child: Text('Error')
+        // }
+        //   },
+        // ),
+        );
   }
 
   Widget _body() {

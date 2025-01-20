@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
-import 'package:tourist_guide/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tourist_guide/ui/auth/login.dart';
 import 'package:tourist_guide/ui/governorate/governorate_details.dart';
 import 'package:tourist_guide/ui/home/home.dart';
@@ -36,10 +34,7 @@ class MyApp extends StatelessWidget {
           '/splash': (context) => const SplashScreen(),
           '/login': (context) => const Login(),
           '/signup': (context) => const Signup(),
-          '/home': (context) => BlocProvider(
-                create: (context) => ProfileCubit(),
-                child: const HomeScreen(),
-              ),
+          '/home': (context) => const HomeScreen(),
           '/details': (context) => DetailsScreen(),
           '/governate_detials': (context) => GovernorateDetails()
         },
