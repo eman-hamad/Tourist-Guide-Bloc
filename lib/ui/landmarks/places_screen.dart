@@ -1,44 +1,16 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/core/utils/user_manager.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tourist_guide/core/widgets/landmark_card.dart';
+import 'package:tourist_guide/cubits/profile_cubit/profile_cubit.dart';
 import 'package:tourist_guide/data/places_data/places_data.dart';
+import 'package:tourist_guide/ui/landmarks/widgets/header.dart';
 
-class PlacesScreen extends StatefulWidget {
+class PlacesScreen extends StatelessWidget {
   final void Function(int)? onNavigate;
   const PlacesScreen({super.key, this.onNavigate});
 
-  @override
-  State<PlacesScreen> createState() => _PlacesScreenState();
-}
-
-class _PlacesScreenState extends State<PlacesScreen> {
-  String userName = 'User';
-  String imgPath = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserName();
-    _loadUserImg();
-  }
-
-  void _loadUserName() async {
-    userName = await UserManager().loadUserName();
-    setState(() {});
-  }
-
-  void _loadUserImg() async {
-    imgPath = UserManager().getImg();
-    setState(() {});
-  }
-
-// The main UI of the PlacesScreen is built with padding and two main components:
-// the header and body. The header displays a personalized greeting, and the body
-// contains two sections for places.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +20,10 @@ class _PlacesScreenState extends State<PlacesScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              children: [_header(), _body()],
+              children: [
+                _header(context),
+                _body(),
+              ],
             ),
           ),
         ),
@@ -56,53 +31,34 @@ class _PlacesScreenState extends State<PlacesScreen> {
     );
   }
 
-  Widget _header() {
+  Widget _header(BuildContext context) {
+    context.read<ProfileCubit>().loadSavedImage();
     return SafeArea(
-      child: SizedBox(
-        height: 0.07.sh,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hi, $userName 👋',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Discover best places to go to vacation 😍',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: kLightBlack,
-                  ),
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: () {
-                widget.onNavigate!(3);
-              },
-              child: ClipOval(
-                child: Container(
-                  height: 0.05.sh,
-                  width: 0.05.sh,
-                  color: kGrey,
-                  child: imgPath != ''
-                      ? Image.file(File(imgPath))
-                      : Image.asset(
-                          'assets/images/card_bg.png',
-                          fit: BoxFit.fill,
-                        ),
-                ),
-              ),
-            )
-          ],
-        ),
+      child: BlocConsumer<ProfileCubit, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileImageError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileImageLoading) {
+            return Skeletonizer(
+              enabled: true,
+              child: Header(name: 'User', imgPath: ''),
+            );
+          } //
+          else if (state is ProfileInitial) {
+            return Header(name: 'User', imgPath: '');
+          } //
+          else if (state is ProfileImageLoaded) {
+            return Header(name: 'User', imgPath: state.image.path);
+          } //
+          else {
+            return Text('Error');
+          }
+        },
       ),
     );
   }

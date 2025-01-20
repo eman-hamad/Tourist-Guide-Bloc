@@ -13,9 +13,11 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   User user = User(email: "", id: "", name: "", password: "", phone: "");
   File image = File("");
+
 // func to save image in shared
   void loadSavedImage() async {
     try {
+      emit(ProfileImageLoading());
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? imagePath = prefs.getString('img');
 

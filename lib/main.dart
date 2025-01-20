@@ -37,8 +37,9 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const Login(),
           '/signup': (context) => const Signup(),
           '/home': (context) => BlocProvider(
-          create: (context) => ProfileCubit(),
-            child: const HomeScreen()),
+                create: (context) => ProfileCubit(),
+                child: const HomeScreen(),
+              ),
           '/details': (context) => DetailsScreen(),
           '/governate_detials': (context) => GovernorateDetails()
         },

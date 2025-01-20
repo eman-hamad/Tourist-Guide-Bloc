@@ -34,31 +34,29 @@ class _HomeScreenState extends State<HomeScreen> {
 // Creates a PageView widget that allows the user to swipe between
 // different screens (Places, Gov, Fav, and Profile) with a controlled navigation.
   Widget _body() {
-    return  
-    BlocProvider(
+    return PageView(
+      controller: _pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        BlocProvider(
           create: (context) => ProfileCubit(),
-      child: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            PlacesScreen(
-              onNavigate: (index) {
-                _pageController.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-                setState(() {
-                  pageIndex = index;
-                });
-              },
-            ),
-            const GovernorateScreen(),
-            const FavoritesScreen(),
-            
-             ProfileScreen()
-          ],
+          child: PlacesScreen(
+            onNavigate: (index) {
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+              setState(() {
+                pageIndex = index;
+              });
+            },
+          ),
         ),
+        const GovernorateScreen(),
+        const FavoritesScreen(),
+        ProfileScreen()
+      ],
     );
   }
 
