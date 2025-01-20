@@ -14,11 +14,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<LoadSavedImage>(loadSavedImage);
     on<GetData>(getData);
     on<PickImage>(pickImage);
+    on<LoadHeaderData>(getHeaderData);
   }
 
   User user = User(email: "", id: "", name: "", password: "", phone: "");
   File image = File("");
   String firstName = "";
+  File headerImage = File("");
 // func to save image in shared
   void loadSavedImage(LoadSavedImage event, Emitter<ProfileState> emit) async {
     try {
@@ -75,6 +77,37 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     } on Exception catch (e) {
       emit(ProfileImageError(e.toString()));
+    }
+  }
+
+  Future<void> getHeaderData(
+      LoadHeaderData event, Emitter<ProfileState> emit) async {
+    try {
+      emit(ProfileLoading());
+      User currentUser =
+          User(email: "", id: "", name: "", password: "", phone: "");
+      SharedPreferences? prefs = await SharedPreferences.getInstance();
+      final existingUserString = prefs.getString('current_user');
+
+      if (existingUserString != null) {
+        final userData = jsonDecode(existingUserString);
+        currentUser = User.fromJson(userData);
+        String fullName = currentUser.name;
+        List<String> nameParts = fullName.split(" ");
+        firstName = nameParts[0];
+      }
+      emit(FirstNameLoaded(firstName: firstName));
+      final String? imagePath = prefs.getString('img');
+
+      if (imagePath != null && File(imagePath).existsSync()) {
+        headerImage = File(imagePath);
+
+        emit(HeaderImageLoaded(image: File(imagePath)));
+      } else {
+        emit(ProfileInitial());
+      }
+    } on Exception catch (e) {
+      emit(HeaderDataError(e.toString()));
     }
   }
 }

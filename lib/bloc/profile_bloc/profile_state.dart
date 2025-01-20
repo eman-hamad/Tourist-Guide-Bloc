@@ -34,3 +34,19 @@ class ProfileImageError extends ProfileState {
   final String errorMessage;
   ProfileImageError(this.errorMessage);
 }
+
+class HeaderImageLoaded extends ProfileState {
+  final File image;
+  HeaderImageLoaded({required this.image});
+}
+
+class FirstNameLoaded extends ProfileState {
+  final String firstName;
+
+  FirstNameLoaded({required this.firstName});
+}
+
+class HeaderDataError extends ProfileState {
+  final String errorMessage;
+  HeaderDataError(this.errorMessage);
+}

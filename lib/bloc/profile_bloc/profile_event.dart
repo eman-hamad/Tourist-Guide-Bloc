@@ -8,3 +8,5 @@ class LoadSavedImage extends ProfileEvent {}
 class GetData extends ProfileEvent {}
 
 class PickImage extends ProfileEvent {}
+
+class LoadHeaderData extends ProfileEvent {}

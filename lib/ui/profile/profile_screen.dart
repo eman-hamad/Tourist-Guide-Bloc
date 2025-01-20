@@ -30,6 +30,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // get user's data and load img
     context.read<ProfileBloc>().add(GetData());
     context.read<ProfileBloc>().add(LoadSavedImage());
+    context.read<ProfileBloc>().add(LoadHeaderData());
+
     return SafeArea(
         child: Scaffold(
             body: Padding(
@@ -103,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Padding(
                                       padding: REdgeInsets.only(top: 8.h),
                                       child: Text(
-                                          context.read<ProfileBloc>().user.name,
+                                          context.read<ProfileBloc>().firstName,
                                           style: TextStyle(
                                               fontSize: 21.sp,
                                               fontWeight: FontWeight.bold))),
