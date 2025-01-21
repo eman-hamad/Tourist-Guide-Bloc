@@ -83,7 +83,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> getHeaderData(
       LoadHeaderData event, Emitter<ProfileState> emit) async {
     try {
-      emit(ProfileLoading());
+
       User currentUser =
           User(email: "", id: "", name: "", password: "", phone: "");
       SharedPreferences? prefs = await SharedPreferences.getInstance();
