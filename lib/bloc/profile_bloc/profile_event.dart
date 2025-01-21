@@ -1,4 +1,12 @@
 part of 'profile_bloc.dart';
 
-@immutable
+// profile events
 abstract class ProfileEvent {}
+
+class LoadSavedImage extends ProfileEvent {}
+
+class GetData extends ProfileEvent {}
+
+class PickImage extends ProfileEvent {}
+
+class LoadHeaderData extends ProfileEvent {}

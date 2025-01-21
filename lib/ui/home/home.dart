@@ -55,7 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const GovernorateScreen(),
         const FavoritesScreen(),
-        ProfileScreen()
+        BlocProvider(
+          create: (context) => ProfileBloc(),
+          child: ProfileScreen(),
+        )
       ],
     );
   }
