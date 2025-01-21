@@ -35,15 +35,10 @@ class ProfileImageError extends ProfileState {
   ProfileImageError(this.errorMessage);
 }
 
-class HeaderImageLoaded extends ProfileState {
+class HeaderLoaded extends ProfileState {
   final File image;
-  HeaderImageLoaded({required this.image});
-}
-
-class FirstNameLoaded extends ProfileState {
   final String firstName;
-
-  FirstNameLoaded({required this.firstName});
+  HeaderLoaded({required this.image, required this.firstName});
 }
 
 class HeaderDataError extends ProfileState {

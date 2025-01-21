@@ -96,16 +96,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         List<String> nameParts = fullName.split(" ");
         firstName = nameParts[0];
       }
-      emit(FirstNameLoaded(firstName: firstName));
+
       final String? imagePath = prefs.getString('img');
 
       if (imagePath != null && File(imagePath).existsSync()) {
         headerImage = File(imagePath);
-
-        emit(HeaderImageLoaded(image: File(imagePath)));
-      } else {
-        emit(ProfileInitial());
       }
+      await Future.delayed(Duration(seconds: 3));
+      emit(HeaderLoaded(firstName: firstName, image: headerImage));
     } on Exception catch (e) {
       emit(HeaderDataError(e.toString()));
     }
