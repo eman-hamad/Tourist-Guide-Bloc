@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tourist_guide/bloc/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
@@ -28,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     // get user's data and load img
-    context.read<ProfileBloc>().add(GetData());
+    context.read<ProfileBloc>().add(LoadProfile());
     context.read<ProfileBloc>().add(LoadSavedImage());
     context.read<ProfileBloc>().add(LoadHeaderData());
 
@@ -155,23 +156,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (con) => EditProfile(
-                                              name: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .name,
-                                              email: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .email,
-                                              password: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .password,
-                                              phone: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .phone,
+                                            builder: (con) => BlocProvider(
+                                              create: (context) =>
+                                                  EditProfileBloc(),
+                                              child: EditProfile(
+                                                name: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .name,
+                                                email: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .email,
+                                                password: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .password,
+                                                phone: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .phone,
+                                              ),
                                             ),
                                           ),
                                         );
