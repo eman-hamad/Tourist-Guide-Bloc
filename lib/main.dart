@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/bloc/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:tourist_guide/bloc/sign_up_bloc/sign_up_bloc.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/ui/auth/login.dart';
 import 'package:tourist_guide/ui/governorate/governorate_details.dart';
 import 'package:tourist_guide/ui/home/home.dart';
 import 'package:tourist_guide/ui/auth/signup.dart';
-import 'package:tourist_guide/ui/profile/edit_profile.dart';
 import 'package:tourist_guide/ui/splash/splash.dart';
 import 'package:tourist_guide/ui/landmarks/details_screen.dart';
 
@@ -36,7 +35,10 @@ class MyApp extends StatelessWidget {
         routes: {
           '/splash': (context) => const SplashScreen(),
           '/login': (context) => const Login(),
-          '/signup': (context) => const Signup(),
+          '/signup': (context) => BlocProvider(
+                create: (context) => SignUpBloc(),
+                child: Signup(),
+              ),
           '/home': (context) => const HomeScreen(),
           '/details': (context) => DetailsScreen(),
           '/governate_detials': (context) => GovernorateDetails(),

@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tourist_guide/bloc/sign_up_bloc/sign_up_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 
 import '../../core/widgets/custom_button.dart';
@@ -119,13 +119,7 @@ class _Signup extends State<Signup> {
                     keyboardType: TextInputType.phone,
                   ),
                   SizedBox(height: 48.h),
-                  CustomButton(
-                    text: 'Sign Up',
-                    fontSize: 16.sp,
-                    onPressed: _submitForm,
-                    height: 56.h,
-                    width: 0.9.sw,
-                  ),
+                  _listener(),
                   SizedBox(height: 36.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -161,86 +155,50 @@ class _Signup extends State<Signup> {
     );
   }
 
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      try {
-        final prefs = await SharedPreferences.getInstance();
-
-        // Check for existing users
-        List<Map<String, dynamic>> usersList = [];
-        String? existingUsersString = prefs.getString('users_list');
-
-        if (existingUsersString != null) {
-          // Parse existing users
-          usersList =
-              List<Map<String, dynamic>>.from(json.decode(existingUsersString));
-
-          // Check for duplicate email
-          if (usersList.any((user) =>
-              user['email'].toString().toLowerCase() ==
-              _emailController.text.toLowerCase())) {
-            if (!mounted) return;
-
-            CustomSnackBar.showError(
-              context: context,
-              message: 'This email is already registered',
-            );
-            return;
-          } else if (_phoneNumberController.text.trim().isNotEmpty &&
-              usersList.any((user) =>
-                  user['phone']?.toString().toLowerCase() ==
-                  _phoneNumberController.text.trim().toLowerCase())) {
-            if (!mounted) return;
-
-            CustomSnackBar.showError(
-              context: context,
-              message: 'This phone number is already registered',
-            );
-            return;
-          }
+  Widget _listener() {
+    return BlocListener<SignUpBloc, SignUpStates>(
+      listener: (context, state) async {
+        if (state is SignUpLoadingState) {
+          // Show loading indicator
+          CustomSnackBar.showInfo(
+            context: context,
+            message: state.loadingMessage,
+            duration: const Duration(milliseconds: 1500),
+          );
+        }
+        if (state is SignUpErrorState) {
+          CustomSnackBar.showError(
+            context: context,
+            message: state.errorMessage,
+          );
+          // Check if the widget is still mounted
         }
 
-        // Create new user data
-        Map<String, dynamic> newUser = {
-          'id': DateTime.now().millisecondsSinceEpoch.toString(), // Unique ID
-          'name': _nameController.text,
-          'email': _emailController.text.toLowerCase(),
-          'password': _passwordController.text,
-          'phone': _phoneNumberController.text,
-          'registrationDate': DateTime.now().toIso8601String(),
-        };
+        if (state is SignUpSuccessState) {
+          CustomSnackBar.showSuccess(
+            context: context,
+            message: state.succssesMessage,
+          );
+          Navigator.pushNamed(context, '/login');
+        }
+      },
+      child: CustomButton(
+        text: 'Sign Up',
+        fontSize: 16.sp,
+        onPressed: () async {
+          if (_formKey.currentState!.validate()) {
+            _formKey.currentState!.save();
 
-        // Add new user to the list
-        usersList.add(newUser);
-
-        // Save updated users list
-        await prefs.setString('users_list', json.encode(usersList));
-
-        // Save current user for session
-        await prefs.setString('current_user', json.encode(newUser));
-        await prefs.setBool('isLoggedIn', true);
-
-        debugPrint('Users List: ${prefs.getString('users_list')}');
-        debugPrint('Current User: ${prefs.getString('current_user')}');
-
-        if (!mounted) return;
-
-        CustomSnackBar.showSuccess(
-          context: context,
-          message: 'Registration successful!',
-        );
-
-        // Navigate directly to HomePage after successful signup
-        Navigator.pushNamed(context, '/login');
-      } catch (e) {
-        debugPrint('Error during registration: $e');
-        CustomSnackBar.showError(
-          context: context,
-          message: 'Registration failed: ${e.toString()}',
-        );
-      }
-    }
+            SignUpBloc.get(context).add(RegiesterEvent(
+                email: _emailController.text,
+                name: _nameController.text,
+                password: _passwordController.text,
+                phone: _phoneNumberController.text));
+          }
+        },
+        height: 56.h,
+        width: 0.9.sw,
+      ),
+    );
   }
 }
