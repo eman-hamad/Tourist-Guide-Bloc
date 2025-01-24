@@ -106,8 +106,8 @@ class _Signup extends State<Signup> {
                     controller: _confirmPasswordController,
                     fieldType: 'confirmPassword',
                     isPassword: true,
-                    passwordController: _passwordController,
-                    textInputAction: TextInputAction.done,
+                    // passwordController: _passwordController,
+                    // textInputAction: TextInputAction.done,
                   ),
                   SizedBox(height: 24.h),
                   CustomTextField(
@@ -193,6 +193,7 @@ class _Signup extends State<Signup> {
                 email: _emailController.text,
                 name: _nameController.text,
                 password: _passwordController.text,
+                confPassword: _confirmPasswordController.text,
                 phone: _phoneNumberController.text));
           }
         },

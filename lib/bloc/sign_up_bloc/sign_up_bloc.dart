@@ -18,6 +18,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
           phone: event.phone,
           name: event.name,
           password: event.password,
+          confPassword: event.confPassword,
           emit: emit),
     );
   }
@@ -28,6 +29,7 @@ Future<void> regis(
     required String phone,
     required String name,
     required String password,
+    required String confPassword,
     required Emitter<SignUpStates> emit}) async {
   try {
     emit(SignUpLoadingState(loadingMessage: 'Registering...'));
@@ -66,6 +68,7 @@ Future<void> regis(
       'name': name,
       'email': email.toLowerCase(),
       'password': password,
+      'confPassword': confPassword,
       'phone': phone,
       'registrationDate': DateTime.now().toIso8601String(),
     };

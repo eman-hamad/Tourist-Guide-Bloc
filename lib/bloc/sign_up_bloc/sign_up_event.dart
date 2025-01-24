@@ -9,10 +9,12 @@ class RegiesterEvent extends SignUpEvent {
   String phone;
   String name;
   String password;
+  String confPassword;
   RegiesterEvent({
     required this.email,
     required this.phone,
     required this.name,
     required this.password,
+    required this.confPassword,
   });
 }
