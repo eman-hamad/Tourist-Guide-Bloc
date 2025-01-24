@@ -4,6 +4,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tourist_guide/data/models/user_model.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
@@ -36,24 +37,23 @@ Future<void> regis(
     final prefs = await SharedPreferences.getInstance();
 
     // Check for existing users
-    List<Map<String, dynamic>> usersList = [];
+    List<User> usersList = [];
     String? existingUsersString = prefs.getString('users_list');
 
     if (existingUsersString != null) {
       // Parse existing users
-      usersList =
-          List<Map<String, dynamic>>.from(json.decode(existingUsersString));
+      usersList = (json.decode(existingUsersString) as List)
+          .map((userJson) => User.fromJson(userJson))
+          .toList();
 
       // Check for duplicate email
-      if (usersList.any((user) =>
-          user['email'].toString().toLowerCase() == email.toLowerCase())) {
+      if (usersList
+          .any((user) => user.email.toLowerCase() == email.toLowerCase())) {
         emit(
             SignUpErrorState(errorMessage: 'This email is already registered'));
         return;
       } else if (phone.trim().isNotEmpty &&
-          usersList.any((user) =>
-              user['phone']?.toString().toLowerCase() ==
-              phone.trim().toLowerCase())) {
+          usersList.any((user) => user.phone.trim() == phone.trim())) {
         emit(SignUpErrorState(
             errorMessage: 'This phone number is already registered'));
         return;
@@ -61,31 +61,29 @@ Future<void> regis(
     }
 
     // Create new user data
-    Map<String, dynamic> newUser = {
-      'id': DateTime.now().millisecondsSinceEpoch.toString(), // Unique ID
-      'name': name,
-      'email': email.toLowerCase(),
-      'password': password,
-      'phone': phone,
-      'registrationDate': DateTime.now().toIso8601String(),
-    };
+    User newUser = User(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      email: email.toLowerCase(),
+      password: password,
+      phone: phone,
+    );
 
     // Add new user to the list
     usersList.add(newUser);
 
     // Save updated users list
-    await prefs.setString('users_list', json.encode(usersList));
+    await prefs.setString('users_list',
+        json.encode(usersList.map((user) => user.toJson()).toList()));
 
     // Save current user for session
-    await prefs.setString('current_user', json.encode(newUser));
+    await prefs.setString('current_user', json.encode(newUser.toJson()));
     await prefs.setBool('isLoggedIn', true);
 
     debugPrint('Users List: ${prefs.getString('users_list')}');
     debugPrint('Current User: ${prefs.getString('current_user')}');
 
     emit(SignUpSuccessState(succssesMessage: 'Registration successful!'));
-
-    // Navigate directly to HomePage after successful signup
   } catch (e) {
     debugPrint('Error during registration: $e');
 
