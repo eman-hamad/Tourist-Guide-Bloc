@@ -10,9 +10,8 @@ import 'package:tourist_guide/data/models/landmark_model.dart';
 import 'package:tourist_guide/data/places_data/places_data.dart';
 
 class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({
-    super.key,
-  });
+  LandMark place;
+  DetailsScreen({super.key, required this.place});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -51,8 +50,11 @@ class _DetailsScreenState extends State<DetailsScreen>
       ),
     );
 
-    // Start the animations.
-    _controller.forward();
+    Future.delayed(
+      Duration(milliseconds: 1500),
+      () => // Start the animations.
+          _controller.forward(),
+    );
   }
 
   @override
@@ -63,8 +65,7 @@ class _DetailsScreenState extends State<DetailsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    LandMark landMark = arguments["landMark"];
+    LandMark landMark = widget.place;
 
     return Scaffold(
       body: Padding(
@@ -85,15 +86,8 @@ class _DetailsScreenState extends State<DetailsScreen>
               ),
               SizedBox(height: 16.h),
               FadeTransition(
-                opacity: _fadeAnimations[2],
-                child: Text(
-                  textAlign: TextAlign.center,
-                  landMark.description!,
-                  overflow: TextOverflow.fade,
-                  style:
-                      TextStyle(fontWeight: FontWeight.w600, fontSize: 18.sp),
-                ),
-              ),
+                  opacity: _fadeAnimations[2],
+                  child: _placeDescription(landMark)),
               // Check if there are nearby places and display them if available.
               PlacesData().nearbyPlaces(landMark).isNotEmpty
                   ? FadeTransition(
@@ -164,7 +158,7 @@ class _DetailsScreenState extends State<DetailsScreen>
             ),
             options: CarouselOptions(
               autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayInterval: const Duration(seconds: 5),
               viewportFraction: 1,
               height: 400.h,
             ),
@@ -176,7 +170,6 @@ class _DetailsScreenState extends State<DetailsScreen>
           bottom: 10,
           child: FavoriteButton(
             place: landMark,
-            refresh: () => setState(() {}),
           ),
         ),
       ],
@@ -208,13 +201,13 @@ class _DetailsScreenState extends State<DetailsScreen>
         ),
         SizedBox(height: 5),
         SizedBox(
-          height: 250.h,
+          height: 300.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: PlacesData().nearbyPlaces(landmark).length,
             itemBuilder: (context, index) {
               return SizedBox(
-                width: 200.w,
+                width: 220.w,
                 child: LandmarkCard(
                   place: PlacesData().nearbyPlaces(landmark)[index],
                 ),
@@ -224,6 +217,21 @@ class _DetailsScreenState extends State<DetailsScreen>
         ),
         SizedBox(height: 20.h),
       ],
+    );
+  }
+
+  Widget _placeDescription(LandMark landmark) {
+    return Container(
+      padding: REdgeInsets.all(12),
+      decoration: BoxDecoration(
+          border: Border.all(width: 1.w, color: Colors.black),
+          borderRadius: BorderRadius.circular(20.r)),
+      child: Text(
+        textAlign: TextAlign.center,
+        landmark.description!,
+        overflow: TextOverflow.fade,
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.sp),
+      ),
     );
   }
 }

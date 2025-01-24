@@ -133,7 +133,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: context.read<ProfileBloc>().user.phone,
+                                    txt: context
+                                            .read<ProfileBloc>()
+                                            .user
+                                            .phone
+                                            .isEmpty
+                                        ? 'N/A'
+                                        : context
+                                            .read<ProfileBloc>()
+                                            .user
+                                            .phone,
                                     icon: Icons.phone_android_outlined,
                                   ),
                                   GestureDetector(

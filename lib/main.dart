@@ -44,12 +44,10 @@ class MyApp extends StatelessWidget {
             '/login': (context) => Login(),
             '/signup': (context) => Signup(),
             '/home': (context) => const HomeScreen(),
-            '/details': (context) => DetailsScreen(),
             '/governate_detials': (context) => GovernorateDetails(),
           },
         ),
       ),
-
     );
   }
 }
