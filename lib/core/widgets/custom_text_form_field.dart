@@ -59,7 +59,8 @@ class CustomTextField extends StatelessWidget {
                 obscureText: isPassword ? obscureText : false,
                 keyboardType: keyboardType,
                 validator: (value) {
-                  bloc.add(TextChangedEvent(text: value ?? '', fieldType: fieldType));
+                  bloc.add(TextChangedEvent(
+                      text: value ?? '', fieldType: fieldType));
                   return null;
                 },
                 onChanged: (value) {
@@ -69,38 +70,40 @@ class CustomTextField extends StatelessWidget {
                   labelText: labelText,
                   hintText: hintText,
                   labelStyle: TextStyle(color: kMainColor),
-                  hintStyle: TextStyle(color: kMainColor.withValues(alpha: 150)),
+                  hintStyle:
+                      TextStyle(color: kMainColor.withValues(alpha: 150)),
                   prefixIcon: Icon(prefixIcon, color: kMainColor),
                   suffixIcon: isPassword
                       ? IconButton(
-                    icon: Icon(
-                      obscureText ? Icons.visibility : Icons.visibility_off,
-                      color: kMainColor,
-                    ),
-                    onPressed: () {
-                      bloc.add(TogglePasswordVisibilityEvent());
-                    },
-                  )
+                          icon: Icon(
+                            obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: kMainColor,
+                          ),
+                          onPressed: () {
+                            bloc.add(TogglePasswordVisibilityEvent());
+                          },
+                        )
                       : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0.r),
                     borderSide: BorderSide(
                         color: showError ? Colors.redAccent : Colors.grey,
-                        width: 1.5.w
-                    ),
+                        width: 1.5.w),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0.r),
                     borderSide: BorderSide(
-                        color: showError ? Colors.redAccent : Colors.grey.shade400
-                    ),
+                        color: showError
+                            ? Colors.redAccent
+                            : Colors.grey.shade400),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0.r),
                     borderSide: BorderSide(
                         color: showError ? Colors.redAccent : kMainColor,
-                        width: 2.0.w
-                    ),
+                        width: 2.0.w),
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -132,33 +135,34 @@ class CustomTextField extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: passwordRequirements?.entries.map((entry) {
-                            return Padding(
-                              padding: REdgeInsets.symmetric(vertical: 2.h),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    entry.value
-                                        ? Icons.check_circle
-                                        : Icons.circle_outlined,
-                                    color: entry.value
-                                        ? Colors.green
-                                        : Colors.grey,
-                                    size: 16.sp,
+                                return Padding(
+                                  padding: REdgeInsets.symmetric(vertical: 2.h),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        entry.value
+                                            ? Icons.check_circle
+                                            : Icons.circle_outlined,
+                                        color: entry.value
+                                            ? Colors.green
+                                            : Colors.grey,
+                                        size: 16.sp,
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        entry.key,
+                                        style: TextStyle(
+                                          color: entry.value
+                                              ? Colors.green
+                                              : Colors.grey,
+                                          fontSize: 12.sp,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(width: 8.w),
-                                  Text(
-                                    entry.key,
-                                    style: TextStyle(
-                                      color: entry.value
-                                          ? Colors.green
-                                          : Colors.grey,
-                                      fontSize: 12.sp,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList() ?? [],
+                                );
+                              }).toList() ??
+                              [],
                         ),
                       ),
                   ],
