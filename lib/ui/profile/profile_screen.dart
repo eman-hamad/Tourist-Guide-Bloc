@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
+import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
+import 'package:tourist_guide/core/themes/dark_theme.dart';
+import 'package:tourist_guide/core/themes/light_theme.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
 import 'package:tourist_guide/ui/profile/widgets/profile_image.dart';
@@ -34,6 +37,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return SafeArea(
         child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Profile'),
+              actions: [
+                BlocBuilder<SettingsBlocBloc, SettingsBlocState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          context.read<SettingsBlocBloc>().add(ToggleTheme());
+                        },
+                        child: Icon(
+                          state is SettingsBlocThemeLight
+                              ? Icons.dark_mode
+                              : Icons.sunny,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
             body: Padding(
                 padding: REdgeInsets.symmetric(
                   vertical: 15.h,
@@ -146,6 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   // SizedBox(
                                   //   height: 60.h,
                                   // ),
+
                                   CustomButton(
                                       text: "Edit Profile   ✍️",
                                       fontSize: 36,

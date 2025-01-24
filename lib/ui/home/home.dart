@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
+import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/ui/landmarks/fav_screen.dart';
 import 'package:tourist_guide/ui/governorate/govs_screen.dart';
@@ -52,10 +53,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const GovernorateScreen(),
         const FavoritesScreen(),
-        BlocProvider(
-          create: (context) => ProfileBloc(),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileBloc>(
+              create: (context) => ProfileBloc(),
+            ),
+            BlocProvider<SettingsBlocBloc>(
+              create: (context) => SettingsBlocBloc(),
+            ),
+          ],
           child: ProfileScreen(),
-        )
+        ),
       ],
     );
   }
