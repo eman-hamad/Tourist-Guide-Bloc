@@ -1,17 +1,25 @@
 // custom_text_field_bloc.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'custom_text_field_event.dart';
-import 'custom_text_field_state.dart';
 
-class CustomTextFieldBloc extends Bloc<CustomTextFieldEvent, CustomTextFieldState> {
-  CustomTextFieldBloc() : super(CustomTextFieldInitial()) {
+
+
+
+part 'custom_text_field_event.dart';
+part 'custom_text_field_state.dart';
+
+
+
+class FormFieldBloc extends Bloc<CustomTextFieldEvent, CustomFormFieldState> {
+  FormFieldBloc() : super(FormFieldInitial()) {
     on<TextChangedEvent>(_onTextChanged);
     on<TogglePasswordVisibilityEvent>(_onTogglePasswordVisibility);
+    on<UpdatePasswordEvent>(_onUpdatePassword);
   }
   bool _showPasswordRequirements = true;
   bool _showErrorMessage = true;
   bool _obscureText = true;
   String _password = '';
+  String _confirmPassword = '';
   final Map<String, bool> _passwordRequirements = {
     'Length': false,
     'Uppercase': false,
@@ -20,9 +28,20 @@ class CustomTextFieldBloc extends Bloc<CustomTextFieldEvent, CustomTextFieldStat
     'Special': false,
   };
 
-  void _onTextChanged(TextChangedEvent event, Emitter<CustomTextFieldState> emit) {
+  void _onTextChanged(TextChangedEvent event, Emitter<CustomFormFieldState> emit) {
     String? errorMessage;
     bool showError = true;
+
+    if (event.text.isEmpty && event.fieldType != 'phone') {
+      errorMessage = 'This field is required';
+      emit(FormFieldValidationState(
+        errorMessage: errorMessage,
+        obscureText: _obscureText,
+        showError: true,
+        isValid: false,
+      ));
+      return;
+    }
 
     switch (event.fieldType) {
       case 'name':
@@ -61,24 +80,70 @@ class CustomTextFieldBloc extends Bloc<CustomTextFieldEvent, CustomTextFieldStat
         }
         break;
       case 'confirmPassword':
+        _confirmPassword = event.text;
         if (_isValidConfirmPassword(event.text)) {
           errorMessage = null;
           showError = false;
-        } else {
+        } else if (event.text.isNotEmpty) {
           errorMessage = _getConfirmPasswordError(event.text);
+          showError = true;
+        } else {
+          showError = false;
         }
         break;
     }
 
     _showErrorMessage = showError;
 
-    emit(TextFieldValidationState(
+    emit(FormFieldValidationState(
       errorMessage: _showErrorMessage ? errorMessage : null,
       obscureText: _obscureText,
       passwordRequirements: event.fieldType == 'password' && _showPasswordRequirements
           ? _passwordRequirements
           : null,
       showError: _showErrorMessage,
+      isValid: !showError,
+    ));
+  }
+
+  void _onTogglePasswordVisibility(
+      TogglePasswordVisibilityEvent event, Emitter<CustomFormFieldState> emit) {
+    _obscureText = !_obscureText;
+
+    bool showError = false;
+    String? errorMessage;
+
+    if (_confirmPassword.isNotEmpty && !_isValidConfirmPassword(_confirmPassword)) {
+      showError = true;
+      errorMessage = _getConfirmPasswordError(_confirmPassword);
+    }
+
+    emit(FormFieldValidationState(
+      obscureText: _obscureText,
+      passwordRequirements: _showPasswordRequirements ? _passwordRequirements : null,
+      showError: showError,
+      errorMessage: errorMessage,
+      isValid: !showError,
+    ));
+  }
+
+  void _onUpdatePassword(UpdatePasswordEvent event, Emitter<CustomFormFieldState> emit) {
+    _password = event.password;
+
+    bool showError = false;
+    String? errorMessage;
+
+    if (_confirmPassword.isNotEmpty && !_isValidConfirmPassword(_confirmPassword)) {
+      showError = true;
+      errorMessage = _getConfirmPasswordError(_confirmPassword);
+    }
+
+    emit(FormFieldValidationState(
+      errorMessage: errorMessage,
+      obscureText: _obscureText,
+      passwordRequirements: _showPasswordRequirements ? _passwordRequirements : null,
+      showError: showError,
+      isValid: !showError,
     ));
   }
 
@@ -127,25 +192,11 @@ class CustomTextFieldBloc extends Bloc<CustomTextFieldEvent, CustomTextFieldStat
   }
 
   bool _isValidConfirmPassword(String value) {
-    return value.isNotEmpty && value == _password;
+    return value == _password;
   }
 
   String? _getConfirmPasswordError(String value) {
-    if (value.isEmpty) return 'Please confirm your password';
     return 'Passwords do not match';
   }
-
-  void _onTogglePasswordVisibility(
-      TogglePasswordVisibilityEvent event, Emitter<CustomTextFieldState> emit) {
-    _obscureText = !_obscureText;
-    emit(TextFieldValidationState(
-      obscureText: _obscureText,
-      passwordRequirements: _showPasswordRequirements ? _passwordRequirements : null,
-      showError: _showErrorMessage,
-    ));
-  }
-
-  void updatePassword(String password) {
-    _password = password;
-  }
 }
+

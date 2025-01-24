@@ -1,21 +1,23 @@
-// custom_snack_bar_state.dart
-import 'package:meta/meta.dart';
+part of 'custom_text_field_bloc.dart';
 
-@immutable
-abstract class CustomTextFieldState {}
 
-class CustomTextFieldInitial extends CustomTextFieldState {}
 
-class TextFieldValidationState extends CustomTextFieldState {
+abstract class CustomFormFieldState {}
+
+class FormFieldInitial extends CustomFormFieldState {}
+
+class FormFieldValidationState extends CustomFormFieldState {
   final String? errorMessage;
   final bool obscureText;
-  final bool showError;
   final Map<String, bool>? passwordRequirements;
+  final bool showError;
+  final bool isValid;
 
-  TextFieldValidationState({
+  FormFieldValidationState({
     this.errorMessage,
     this.obscureText = true,
     this.passwordRequirements,
     this.showError = false,
+    this.isValid = false,
   });
 }

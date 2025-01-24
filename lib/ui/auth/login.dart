@@ -118,6 +118,15 @@ class _LoginState extends State<Login> {
               ? null
               : () {
             if (_formKey.currentState!.validate()) {
+              if (_emailController.text.trim().isEmpty ||
+                  _passwordController.text.isEmpty) {
+                CustomSnackBar.showError(
+                  context: context,
+                  message: 'Please fill all required fields',
+                );
+                return;
+              }
+
               context.read<LoginBloc>().add(
                 LoginUserEvent(
                   email: _emailController.text.trim(),

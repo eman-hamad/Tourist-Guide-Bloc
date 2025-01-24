@@ -3,11 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/custom_text_field_bloc/custom_text_field_bloc.dart';
-import 'package:tourist_guide/bloc/custom_text_field_bloc/custom_text_field_event.dart';
-import 'package:tourist_guide/bloc/custom_text_field_bloc/custom_text_field_state.dart';
+
 import 'package:tourist_guide/core/colors/colors.dart';
 
-class CustomTextField extends StatelessWidget {
+
+
+
+
+class CustomTextField extends StatefulWidget {
   final String labelText;
   final String hintText;
   final IconData prefixIcon;
@@ -15,6 +18,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool isPassword;
   final String fieldType;
+  final TextEditingController? passwordController;
 
   const CustomTextField({
     super.key,
@@ -25,28 +29,90 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.isPassword = false,
     required this.fieldType,
+    this.passwordController,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CustomTextFieldBloc(),
-      child: BlocBuilder<CustomTextFieldBloc, CustomTextFieldState>(
-        builder: (context, state) {
-          final bloc = context.read<CustomTextFieldBloc>();
-          final obscureText = state is TextFieldValidationState
-              ? state.obscureText
-              : isPassword;
+  CustomTextFieldState createState() => CustomTextFieldState();
+}
 
-          final passwordRequirements = state is TextFieldValidationState
+class CustomTextFieldState extends State<CustomTextField> {
+  late FormFieldBloc _bloc;
+  bool isValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = FormFieldBloc();  // Updated type
+
+    if (widget.fieldType == 'confirmPassword' && widget.passwordController != null) {
+      widget.passwordController!.addListener(_onPasswordChange);
+      widget.controller.addListener(_onConfirmPasswordChange);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.fieldType == 'confirmPassword' && widget.passwordController != null) {
+      widget.passwordController!.removeListener(_onPasswordChange);
+      widget.controller.removeListener(_onConfirmPasswordChange);
+    }
+    _bloc.close();
+    super.dispose();
+  }
+
+  void _onPasswordChange() {
+    if (widget.fieldType == 'confirmPassword') {
+      _bloc.add(UpdatePasswordEvent(widget.passwordController!.text));
+      _bloc.add(TextChangedEvent(
+        text: widget.controller.text,
+        fieldType: widget.fieldType,
+      ));
+    }
+  }
+
+  void _onConfirmPasswordChange() {
+    if (widget.fieldType == 'confirmPassword') {
+      _bloc.add(TextChangedEvent(
+        text: widget.controller.text,
+        fieldType: widget.fieldType,
+      ));
+    }
+  }
+
+  bool isFieldValid() {
+    if (widget.fieldType == 'confirmPassword') {
+      return isValid && widget.controller.text == widget.passwordController?.text;
+    }
+    return isValid;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _bloc,
+      child: BlocConsumer<FormFieldBloc, CustomFormFieldState>(  // Updated types
+        listener: (context, state) {
+          if (state is FormFieldValidationState) {  // Updated type
+            setState(() {
+              isValid = state.isValid;
+            });
+          }
+        },
+        builder: (context, state) {
+          final obscureText = state is FormFieldValidationState  // Updated type
+              ? state.obscureText
+              : widget.isPassword;
+
+          final passwordRequirements = state is FormFieldValidationState  // Updated type
               ? state.passwordRequirements
               : null;
 
-          final bool showRequirements = fieldType == 'password' &&
+          final bool showRequirements = widget.fieldType == 'password' &&
               passwordRequirements != null &&
               !passwordRequirements.values.every((met) => met);
 
-          final bool showError = state is TextFieldValidationState &&
+          final bool showError = state is FormFieldValidationState &&
               state.showError &&
               state.errorMessage != null;
 
@@ -55,51 +121,47 @@ class CustomTextField extends StatelessWidget {
             children: [
               TextFormField(
                 cursorColor: kMainColor,
-                controller: controller,
-                obscureText: isPassword ? obscureText : false,
-                keyboardType: keyboardType,
-                validator: (value) {
-                  bloc.add(TextChangedEvent(text: value ?? '', fieldType: fieldType));
-                  return null;
-                },
+                controller: widget.controller,
+                obscureText: widget.isPassword ? obscureText : false,
+                keyboardType: widget.keyboardType,
                 onChanged: (value) {
-                  bloc.add(TextChangedEvent(text: value, fieldType: fieldType));
+                  _bloc.add(TextChangedEvent(text: value, fieldType: widget.fieldType));
                 },
                 decoration: InputDecoration(
-                  labelText: labelText,
-                  hintText: hintText,
+                  labelText: widget.labelText,
+                  hintText: widget.hintText,
                   labelStyle: TextStyle(color: kMainColor),
-                  hintStyle: TextStyle(color: kMainColor.withValues(alpha: 150)),
-                  prefixIcon: Icon(prefixIcon, color: kMainColor),
-                  suffixIcon: isPassword
+                  hintStyle: TextStyle(color: kMainColor.withAlpha(150)),
+                  prefixIcon: Icon(widget.prefixIcon, color: kMainColor),
+                  suffixIcon: widget.isPassword
                       ? IconButton(
                     icon: Icon(
                       obscureText ? Icons.visibility : Icons.visibility_off,
                       color: kMainColor,
                     ),
                     onPressed: () {
-                      bloc.add(TogglePasswordVisibilityEvent());
+                      _bloc.add(TogglePasswordVisibilityEvent());
                     },
                   )
                       : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0.r),
                     borderSide: BorderSide(
-                        color: showError ? Colors.redAccent : Colors.grey,
-                        width: 1.5.w
+                      color: showError ? Colors.redAccent : Colors.grey,
+                      width: 1.5.w,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0.r),
                     borderSide: BorderSide(
-                        color: showError ? Colors.redAccent : Colors.grey.shade400
+                      color: showError ? Colors.redAccent : Colors.grey.shade400,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0.r),
                     borderSide: BorderSide(
-                        color: showError ? Colors.redAccent : kMainColor,
-                        width: 2.0.w
+                      color: showError ? Colors.redAccent : kMainColor,
+                      width: 2.0.w,
                     ),
                   ),
                   filled: true,
@@ -117,7 +179,7 @@ class CustomTextField extends StatelessWidget {
                       Padding(
                         padding: REdgeInsets.only(top: 8.h, left: 16.w),
                         child: Text(
-                          state is TextFieldValidationState
+                          state is FormFieldValidationState
                               ? state.errorMessage ?? ''
                               : '',
                           style: TextStyle(
@@ -140,25 +202,23 @@ class CustomTextField extends StatelessWidget {
                                     entry.value
                                         ? Icons.check_circle
                                         : Icons.circle_outlined,
-                                    color: entry.value
-                                        ? Colors.green
-                                        : Colors.grey,
+                                    color: entry.value ? Colors.green : Colors.grey,
                                     size: 16.sp,
                                   ),
                                   SizedBox(width: 8.w),
                                   Text(
                                     entry.key,
                                     style: TextStyle(
-                                      color: entry.value
-                                          ? Colors.green
-                                          : Colors.grey,
+                                      color:
+                                      entry.value ? Colors.green : Colors.grey,
                                       fontSize: 12.sp,
                                     ),
                                   ),
                                 ],
                               ),
                             );
-                          }).toList() ?? [],
+                          }).toList() ??
+                              [],
                         ),
                       ),
                   ],

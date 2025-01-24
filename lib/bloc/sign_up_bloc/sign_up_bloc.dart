@@ -12,16 +12,95 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
   static SignUpBloc get(context) => BlocProvider.of(context);
 
   SignUpBloc() : super(SignUpInitialState()) {
-    on<RegiesterEvent>(
-      (event, emit) => regis(
-          email: event.email,
-          phone: event.phone,
-          name: event.name,
-          password: event.password,
-          confPassword: event.confPassword,
-          emit: emit),
-    );
+    on<RegiesterEvent>(_handleRegister);
+    on<ValidateFieldsEvent>(_handleValidateFields);
   }
+
+void _handleRegister(RegiesterEvent event, Emitter<SignUpStates> emit) async {
+  // First validate fields
+  final List<String> emptyFields = _validateFields(
+    name: event.name,
+    email: event.email,
+    password: event.password,
+    confPassword: event.confPassword,
+  );
+
+  if (emptyFields.isNotEmpty) {
+    emit(SignUpValidationErrorState(
+        errorMessage: _getEmptyFieldsMessage(emptyFields)));
+    return;
+  }
+
+  // If validation passes, proceed with registration
+  await regis(
+    email: event.email,
+    phone: event.phone,
+    name: event.name,
+    password: event.password,
+    confPassword: event.confPassword,
+    emit: emit,
+  );
+}
+
+void _handleValidateFields(
+    ValidateFieldsEvent event, Emitter<SignUpStates> emit) {
+  final List<String> emptyFields = _validateFields(
+    name: event.name,
+    email: event.email,
+    password: event.password,
+    confPassword: event.confPassword,
+  );
+
+  if (emptyFields.isNotEmpty) {
+    emit(SignUpValidationErrorState(
+        errorMessage: _getEmptyFieldsMessage(emptyFields)));
+  } else {
+    emit(SignUpValidationSuccessState());
+  }
+}
+
+List<String> _validateFields({
+  required String name,
+  required String email,
+  required String password,
+  required String confPassword,
+}) {
+  List<String> emptyFields = [];
+
+  if (name.trim().isEmpty) {
+    emptyFields.add('Full Name');
+  }
+  if (email.trim().isEmpty) {
+    emptyFields.add('Email');
+  }
+  if (password.isEmpty) {
+    emptyFields.add('Password');
+  }
+  if (confPassword.isEmpty) {
+    emptyFields.add('Confirm Password');
+  }
+
+  return emptyFields;
+}
+
+String _getEmptyFieldsMessage(List<String> emptyFields) {
+  if (emptyFields.isEmpty) return '';
+
+  if (emptyFields.length == 1) {
+    return 'Please enter your ${emptyFields[0]}';
+  }
+
+  String message = 'Please enter: ';
+  for (int i = 0; i < emptyFields.length; i++) {
+    if (i == emptyFields.length - 1) {
+      message += 'and ${emptyFields[i]}';
+    } else if (i == emptyFields.length - 2) {
+      message += '${emptyFields[i]} ';
+    } else {
+      message += '${emptyFields[i]}, ';
+    }
+  }
+  return message;
 }
 
 Future<void> regis(
@@ -95,4 +174,5 @@ Future<void> regis(
     emit(
         SignUpErrorState(errorMessage: 'Registration failed: ${e.toString()}'));
   }
+}
 }

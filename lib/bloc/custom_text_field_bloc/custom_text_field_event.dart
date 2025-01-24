@@ -1,7 +1,7 @@
-// custom_snack_bar_event.dart
-import 'package:meta/meta.dart';
+part of 'custom_text_field_bloc.dart';
 
-@immutable
+
+
 abstract class CustomTextFieldEvent {}
 
 class TextChangedEvent extends CustomTextFieldEvent {
@@ -12,3 +12,8 @@ class TextChangedEvent extends CustomTextFieldEvent {
 }
 
 class TogglePasswordVisibilityEvent extends CustomTextFieldEvent {}
+
+class UpdatePasswordEvent extends CustomTextFieldEvent {
+  final String password;
+  UpdatePasswordEvent(this.password);
+}

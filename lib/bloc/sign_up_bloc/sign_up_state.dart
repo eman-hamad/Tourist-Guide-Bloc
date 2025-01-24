@@ -3,26 +3,30 @@
 
 part of 'sign_up_bloc.dart';
 
-@immutable
+
+
 abstract class SignUpStates {}
 
 class SignUpInitialState extends SignUpStates {}
 
 class SignUpLoadingState extends SignUpStates {
-  String loadingMessage;
-  SignUpLoadingState({
-    required this.loadingMessage,
-  });
-}
-
-class SignUpErrorState extends SignUpStates {
-  String errorMessage;
-  SignUpErrorState({required this.errorMessage});
+  final String loadingMessage;
+  SignUpLoadingState({required this.loadingMessage});
 }
 
 class SignUpSuccessState extends SignUpStates {
-  String succssesMessage;
-  SignUpSuccessState({
-    required this.succssesMessage,
-  });
+  final String succssesMessage;
+  SignUpSuccessState({required this.succssesMessage});
 }
+
+class SignUpErrorState extends SignUpStates {
+  final String errorMessage;
+  SignUpErrorState({required this.errorMessage});
+}
+
+class SignUpValidationErrorState extends SignUpStates {
+  final String errorMessage;
+  SignUpValidationErrorState({required this.errorMessage});
+}
+
+class SignUpValidationSuccessState extends SignUpStates {}
