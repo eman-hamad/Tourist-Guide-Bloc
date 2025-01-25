@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tourist_guide/data/models/user_model.dart';
 
 import 'login_event.dart';
 import 'login_state.dart';
@@ -26,27 +27,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         return;
       }
 
-      List<Map<String, dynamic>> usersList =
-          List<Map<String, dynamic>>.from(json.decode(usersString));
+      List<User> usersList =
+          List<Map<String, dynamic>>.from(json.decode(usersString))
+              .map((userJson) => User.fromJson(userJson))
+              .toList();
 
-      final user = usersList.firstWhere(
+      User? user = usersList.firstWhere(
         (user) =>
-            user['email'].toString().toLowerCase() ==
-                event.email.toLowerCase() &&
-            user['password'] == event.password,
-        orElse: () => {},
+            user.email.toLowerCase() == event.email.toLowerCase() &&
+            user.password == event.password,
       );
 
-      if (user.isEmpty) {
+      if (user == null) {
         emit(LoginErrorState(
             errorMessage: 'Invalid email or password. Please try again.'));
         return;
       }
 
-      await prefs.setString('current_user', json.encode(user));
+      await prefs.setString('current_user', json.encode(user.toJson()));
       await prefs.setBool('isLoggedIn', true);
 
-      emit(LoginSuccessState(successMessage: 'Welcome back, ${user['name']}!'));
+      emit(LoginSuccessState(successMessage: 'Welcome back, ${user.name}!'));
     } catch (e) {
       emit(LoginErrorState(errorMessage: 'Login failed: ${e.toString()}'));
     }
