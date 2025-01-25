@@ -14,6 +14,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Future<void> _loginUser(
       LoginUserEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState(loadingMessage: 'Logging in...'));
+    // Add a small delay to show the loading message
+    await Future.delayed(const Duration(milliseconds: 1500));
     try {
       final prefs = await SharedPreferences.getInstance();
       final usersString = prefs.getString('users_list');
@@ -25,12 +27,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
 
       List<Map<String, dynamic>> usersList =
-      List<Map<String, dynamic>>.from(json.decode(usersString));
+          List<Map<String, dynamic>>.from(json.decode(usersString));
 
       final user = usersList.firstWhere(
-            (user) =>
-        user['email'].toString().toLowerCase() ==
-            event.email.toLowerCase() &&
+        (user) =>
+            user['email'].toString().toLowerCase() ==
+                event.email.toLowerCase() &&
             user['password'] == event.password,
         orElse: () => {},
       );
@@ -44,11 +46,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await prefs.setString('current_user', json.encode(user));
       await prefs.setBool('isLoggedIn', true);
 
-      emit(LoginSuccessState(
-          successMessage: 'Welcome back, ${user['name']}!'));
+      emit(LoginSuccessState(successMessage: 'Welcome back, ${user['name']}!'));
     } catch (e) {
-      emit(LoginErrorState(
-          errorMessage: 'Login failed: ${e.toString()}'));
+      emit(LoginErrorState(errorMessage: 'Login failed: ${e.toString()}'));
     }
   }
 }

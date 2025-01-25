@@ -224,7 +224,7 @@ class _DetailsScreenState extends State<DetailsScreen>
     return Container(
       padding: REdgeInsets.all(12),
       decoration: BoxDecoration(
-          border: Border.all(width: 1.w, color: Colors.black),
+          border: Border.all(width: 1.w, color: kMainColor),
           borderRadius: BorderRadius.circular(20.r)),
       child: Text(
         textAlign: TextAlign.center,
