@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 
-class PlaceDescription extends StatelessWidget {
+class PlaceDetails extends StatelessWidget {
   final String name;
   final String gov;
   final String rate;
-  const PlaceDescription({
+  const PlaceDetails({
     super.key,
     required this.name,
     required this.gov,

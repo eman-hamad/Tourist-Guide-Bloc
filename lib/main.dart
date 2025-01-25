@@ -13,7 +13,6 @@ import 'package:tourist_guide/ui/landmarks/govs/screens/gov_details.dart';
 import 'package:tourist_guide/ui/home/home.dart';
 import 'package:tourist_guide/ui/auth/signup.dart';
 import 'package:tourist_guide/ui/splash/splash.dart';
-import 'package:tourist_guide/ui/landmarks/details/details_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,7 +56,6 @@ class MyApp extends StatelessWidget {
         '/login': (context) => _login(),
         '/signup': (context) => _signup(),
         '/home': (context) => const HomeScreen(),
-        '/details': (context) => _details(),
         '/governate_detials': (context) => _govDetails(),
       },
     );
@@ -81,13 +79,6 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => SignUpBloc(),
       child: const Signup(),
-    );
-  }
-
-  Widget _details() {
-    return BlocProvider(
-      create: (_) => FavBloc(),
-      child: const DetailsScreen(),
     );
   }
 

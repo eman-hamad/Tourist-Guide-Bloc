@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/widgets/custom_page_route.dart';
 import 'package:tourist_guide/core/widgets/favorite_button.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
+import 'package:tourist_guide/ui/landmarks/details/details_screen.dart';
 
 class LandmarkCard extends StatelessWidget {
   final LandMark place;
@@ -12,48 +14,58 @@ class LandmarkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: ScreenUtil().screenWidth / 2 - 8,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        child: Stack(
-          children: [
-            _cardImg(context),
-            Padding(
-              padding: EdgeInsets.all(10.0.r),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FavoriteButton(place: place, isFavs: isFavs),
-                  const Expanded(child: SizedBox()),
-                  _aboutPlace(
-                    place.name,
-                    place.governorate,
-                    place.rate,
-                  ),
-                ],
-              ),
-            )
-          ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          CustomPageRoute(
+            child: DetailsScreen(
+              landMark: place,
+            ),
+            type: PageTransitionType.slideRight,
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeInOutCubic,
+          ),
+        );
+      },
+      child: SizedBox(
+        width: ScreenUtil().screenWidth / 2 - 8,
+        child: Card(
+          elevation: 5,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          child: Stack(
+            children: [
+              _cardImg(context),
+              Padding(
+                padding: EdgeInsets.all(10.0.r),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FavoriteButton(place: place, isFavs: isFavs),
+                    const Expanded(child: SizedBox()),
+                    _aboutPlace(
+                      place.name,
+                      place.governorate,
+                      place.rate,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _cardImg(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, '/details', arguments: place);
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image(
-          image: place.imgPath[0].image,
-          height: 1.sh,
-          width: 1.sw,
-          fit: BoxFit.cover,
-        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Image(
+        image: place.imgPath[0].image,
+        height: 1.sh,
+        width: 1.sw,
+        fit: BoxFit.cover,
       ),
     );
   }
