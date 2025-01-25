@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/favorite_button.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
 
@@ -11,6 +12,8 @@ class CoverImg extends StatelessWidget {
   // Widget to display the cover image with a back button and favorite button.
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Stack(
       children: [
         SizedBox(
@@ -34,7 +37,8 @@ class CoverImg extends StatelessWidget {
             ),
           ),
         ),
-        _backBtn(context), // Back button to navigate to the previous screen.
+        _backBtn(context,
+            isDarkMode), // Back button to navigate to the previous screen.
         Positioned(
           right: 15,
           bottom: 10,
@@ -44,17 +48,17 @@ class CoverImg extends StatelessWidget {
     );
   }
 
-  Widget _backBtn(BuildContext context) {
+  Widget _backBtn(BuildContext context, isDarkMode) {
     return Card(
+      color: isDarkMode ? kBlack : kWhite,
       margin: REdgeInsets.all(12),
       child: SizedBox(
-        width: 35.w,
-        height: 35.h,
         child: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios_rounded),
+          color: isDarkMode ? kWhite : kBlack,
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tourist_guide/bloc/data_blocs/places_bloc/places_data_bloc.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/data/places_data/places_data.dart';
 import 'package:tourist_guide/ui/landmarks/places/widgets/header.dart';
 import 'package:tourist_guide/ui/landmarks/places/widgets/pop_places.dart';
@@ -23,6 +24,8 @@ class PlacesScreen extends StatelessWidget {
 // contains two sections for places.
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     _triggerLoadingDataEvents(context);
 
     return Scaffold(
@@ -34,7 +37,7 @@ class PlacesScreen extends StatelessWidget {
             child: Column(
               children: [
                 _header(context),
-                _body(context),
+                _body(context, isDarkMode),
               ],
             ),
           ),
@@ -75,19 +78,19 @@ class PlacesScreen extends StatelessWidget {
     );
   }
 
-  Widget _body(BuildContext context) {
+  Widget _body(BuildContext context, bool isDarkMode) {
     return Expanded(
       child: Column(
         children: [
-          _suggestedPlaces(context),
-          _popularPlaces(context),
+          _suggestedPlaces(context, isDarkMode),
+          _popularPlaces(context, isDarkMode),
         ],
       ),
     );
   }
 
 // GridView of Suggested Places
-  Widget _suggestedPlaces(BuildContext context) {
+  Widget _suggestedPlaces(BuildContext context, bool isDarkMode) {
     return SizedBox(
       height: 0.53.sh - 75,
       child: Column(
@@ -98,9 +101,9 @@ class PlacesScreen extends StatelessWidget {
           Text(
             'Suggested Places',
             style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-            ),
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                color: isDarkMode ? kMainColorDark : kMainColor),
           ),
           SizedBox(height: 0.01.sh),
 
@@ -150,7 +153,7 @@ class PlacesScreen extends StatelessWidget {
   }
 
 // List of Popular Places
-  Widget _popularPlaces(BuildContext context) {
+  Widget _popularPlaces(BuildContext context, bool isDarkMode) {
     return SizedBox(
       height: 0.41.sh - 75,
       child: Column(
@@ -163,6 +166,7 @@ class PlacesScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.bold,
+              color: isDarkMode ? kMainColorDark : kMainColor,
             ),
           ),
           SizedBox(height: 0.01.sh),

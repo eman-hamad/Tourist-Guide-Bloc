@@ -9,9 +9,11 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     double statusBarHeight = MediaQuery.of(context).viewPadding.top;
     return Card(
-      color: kMainColor,
+      color: isDarkMode ? kMainColorDark : kMainColor,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

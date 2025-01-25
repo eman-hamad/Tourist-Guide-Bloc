@@ -9,8 +9,6 @@ import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_snack_bar.dart';
 import '../../core/widgets/custom_text_form_field.dart';
 
-
-
 class Signup extends StatefulWidget {
   const Signup({super.key});
 
@@ -53,8 +51,9 @@ class _Signup extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -74,7 +73,7 @@ class _Signup extends State<Signup> {
                     child: Text(
                       'Sign up !',
                       style: TextStyle(
-                        color: CupertinoColors.black,
+                        color: isDarkMode ? kGrey : kBlack,
                         fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -84,7 +83,7 @@ class _Signup extends State<Signup> {
                   Text(
                     'Welcome! Please enter your Name, email and password to create your account.',
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: isDarkMode ? kDarkTexe : Colors.grey,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.normal,
                     ),
@@ -139,7 +138,7 @@ class _Signup extends State<Signup> {
                   SizedBox(height: 48.h),
                   _buildSignUpButton(),
                   SizedBox(height: 36.h),
-                  _buildLoginRow(),
+                  _buildLoginRow(isDarkMode),
                 ],
               ),
             ),
@@ -181,29 +180,29 @@ class _Signup extends State<Signup> {
           onPressed: state is SignUpLoadingState
               ? null
               : () {
-            final confirmPasswordState =
-                _confirmPasswordFieldKey.currentState;
-            final bool isConfirmPasswordValid =
-                confirmPasswordState?.isFieldValid() ?? false;
+                  final confirmPasswordState =
+                      _confirmPasswordFieldKey.currentState;
+                  final bool isConfirmPasswordValid =
+                      confirmPasswordState?.isFieldValid() ?? false;
 
-            if (_validateFields()) {
-              if (!isConfirmPasswordValid) {
-                CustomSnackBar.showError(
-                  context: context,
-                  message: 'Passwords do not match',
-                );
-                return;
-              }
+                  if (_validateFields()) {
+                    if (!isConfirmPasswordValid) {
+                      CustomSnackBar.showError(
+                        context: context,
+                        message: 'Passwords do not match',
+                      );
+                      return;
+                    }
 
-              SignUpBloc.get(context).add(RegiesterEvent(
-                email: _emailController.text.trim(),
-                name: _nameController.text.trim(),
-                password: _passwordController.text,
-                confPassword: _confirmPasswordController.text,
-                phone: _phoneNumberController.text.trim(),
-              ));
-            }
-          },
+                    SignUpBloc.get(context).add(RegiesterEvent(
+                      email: _emailController.text.trim(),
+                      name: _nameController.text.trim(),
+                      password: _passwordController.text,
+                      confPassword: _confirmPasswordController.text,
+                      phone: _phoneNumberController.text.trim(),
+                    ));
+                  }
+                },
           height: 56.h,
           width: 0.9.sw,
         );
@@ -211,14 +210,14 @@ class _Signup extends State<Signup> {
     );
   }
 
-  Widget _buildLoginRow() {
+  Widget _buildLoginRow(bool isDarkMode) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           'Have an account?',
           style: TextStyle(
-            color: Colors.black,
+            color: isDarkMode ? kDarkTexe : Colors.black,
             fontSize: 14.sp,
           ),
         ),
@@ -227,7 +226,7 @@ class _Signup extends State<Signup> {
           child: Text(
             '  Log in',
             style: TextStyle(
-              color: kMainColor,
+              color: isDarkMode ? kMainColorDark : kMainColor,
               fontSize: 14.sp,
               fontWeight: FontWeight.bold,
             ),

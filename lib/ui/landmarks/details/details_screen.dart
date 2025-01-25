@@ -17,6 +17,9 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //check the theme
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -38,8 +41,8 @@ class DetailsScreen extends StatelessWidget {
                 SizedBox(height: 16.h),
                 _buildAnimatedDetails(landMark),
                 SizedBox(height: 16.h),
-                _buildAnimatedDescription(landMark),
-                _buildNearbyPlaces(landMark),
+                _buildAnimatedDescription(landMark, isDarkMode),
+                _buildNearbyPlaces(landMark, isDarkMode),
               ],
             ),
           ),
@@ -78,7 +81,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedDescription(LandMark landMark) {
+  Widget _buildAnimatedDescription(LandMark landMark, bool isDarkMode) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         return AnimatedOpacity(
@@ -88,7 +91,9 @@ class DetailsScreen extends StatelessWidget {
           child: Container(
             padding: REdgeInsets.all(12),
             decoration: BoxDecoration(
-                border: Border.all(width: 1.w, color: kMainColor),
+                border: Border.all(
+                    width: 1.w,
+                    color: isDarkMode ? kMainColorDark : kMainColor),
                 borderRadius: BorderRadius.circular(20.r)),
             child: Text(
               textAlign: TextAlign.center,
@@ -105,7 +110,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNearbyPlaces(LandMark landMark) {
+  Widget _buildNearbyPlaces(LandMark landMark, isDarkMode) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         if (!state.showFourth) return const SizedBox.shrink();
@@ -123,7 +128,7 @@ class DetailsScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  color: kMainColor,
+                  color: isDarkMode ? kMainColorDark : kMainColor,
                 ),
               ),
               SizedBox(height: 5.h),

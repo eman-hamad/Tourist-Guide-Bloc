@@ -31,4 +31,5 @@ ThemeData kDarkTheme = ThemeData(
     hintStyle: TextStyle(color: kMainColorDark.withAlpha(150)),
     prefixIconColor: kMainColorDark,
   ),
+  cardColor: kMainColorDark,
 );

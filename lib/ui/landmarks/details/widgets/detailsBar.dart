@@ -16,6 +16,8 @@ class PlaceDetails extends StatelessWidget {
   // Widget to display landmark details like name, location, and rating.
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         Row(
@@ -28,22 +30,23 @@ class PlaceDetails extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(Icons.place, color: kMainColor),
+            Icon(Icons.place, color: isDarkMode ? kMainColorDark : kMainColor),
             Text(
               gov,
               style: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w900,
-                  color: kMainColor),
+                  color: isDarkMode ? kMainColorDark : kMainColor),
             ),
             Spacer(),
-            Icon(Icons.star, color: kMainColor, size: 30),
+            Icon(Icons.star,
+                color: isDarkMode ? kMainColorDark : kMainColor, size: 30),
             Text(
               rate,
               style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w700,
-                  color: Colors.black),
+                  color: isDarkMode ? kDarkTexe : kBlack),
             ),
           ],
         ),

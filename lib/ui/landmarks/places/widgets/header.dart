@@ -13,6 +13,8 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return SizedBox(
       height: 0.07.sh,
       child: Row(
@@ -27,13 +29,16 @@ class Header extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
+                  color: isDarkMode ? kGrey : kBlack,
                 ),
               ),
               Text(
                 'Discover best places to go to vacation 😍',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: kLightBlack,
+                  color: isDarkMode
+                      ? const Color.fromARGB(116, 250, 250, 250)
+                      : kLightBlack,
                 ),
               ),
             ],

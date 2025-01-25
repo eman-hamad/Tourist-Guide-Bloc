@@ -9,13 +9,14 @@ class EmptyFavs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.favorite_outline_rounded,
-            color: kMainColor,
+            color: isDarkMode ? kMainColorDark : kMainColor,
             size: 80.h,
           ),
           SizedBox(height: 0.02.sh),

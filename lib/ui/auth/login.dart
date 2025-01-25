@@ -31,6 +31,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -46,7 +48,7 @@ class _LoginState extends State<Login> {
                   Text(
                     'Welcome Back! 😍',
                     style: TextStyle(
-                      color: CupertinoColors.black,
+                      color: isDarkMode ? kGrey : kBlack,
                       fontSize: 32.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -54,7 +56,9 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 12.h),
                   Text(
                     'Enter your email and password to log in.',
-                    style: TextStyle(color: Colors.grey, fontSize: 14.sp),
+                    style: TextStyle(
+                        color: isDarkMode ? kDarkTexe : Colors.grey,
+                        fontSize: 14.sp),
                   ),
                   SizedBox(height: 36.h),
                   CustomTextField(
@@ -77,7 +81,7 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 48.h),
                   _buildLoginButton(),
                   SizedBox(height: 36.h),
-                  _buildSignUpRow(),
+                  _buildSignUpRow(isDarkMode),
                 ],
               ),
             ),
@@ -146,9 +150,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _buildSignUpRow() {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
+  Widget _buildSignUpRow(bool isDarkMode) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

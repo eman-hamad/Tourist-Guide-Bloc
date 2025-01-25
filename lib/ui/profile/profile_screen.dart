@@ -34,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     context.read<ProfileBloc>().add(LoadProfile());
     context.read<ProfileBloc>().add(LoadSavedImage());
     context.read<ProfileBloc>().add(LoadHeaderData());
+    //check the theme 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SafeArea(
@@ -51,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: TextStyle(
                                 fontSize: 28.sp,
                                 fontWeight: FontWeight.bold,
-                                color: isDarkMode ? kWhite : kBlack)),
+                                color: isDarkMode ? kGrey : kBlack)),
                         SizedBox(
                           width: 190.w,
                         ),

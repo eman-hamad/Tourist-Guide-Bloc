@@ -23,16 +23,8 @@ class ProfileImage extends StatelessWidget {
               // call pickImage from bloc to upload img
               context.read<ProfileBloc>().add(UpdateAvatar());
             },
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(60.0.r)),
-                  border: Border.all(
-                    color: isDarkMode ? kMainColorDark : kMainColor,
-                    width: 8.w,
-                    style: BorderStyle.solid,
-                  ),
-                ),
-                child: img),
+            child:
+                Container(color: isDarkMode ? kDarkBody : kWhite, child: img),
           ),
         ),
       ),

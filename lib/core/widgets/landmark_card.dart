@@ -16,11 +16,6 @@ class LandmarkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => DetailsScreen(landMark: place),
-        //     ));
         Navigator.of(context).push(
           CustomPageRoute(
             child: DetailsScreen(
@@ -52,6 +47,7 @@ class LandmarkCard extends StatelessWidget {
                       place.name,
                       place.governorate,
                       place.rate,
+                      context,
                     ),
                   ],
                 ),
@@ -75,7 +71,10 @@ class LandmarkCard extends StatelessWidget {
     );
   }
 
-  Widget _aboutPlace(String name, String gov, String rate) {
+  Widget _aboutPlace(
+      String name, String gov, String rate, BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
@@ -90,10 +89,10 @@ class LandmarkCard extends StatelessWidget {
             Text(
               name,
               style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.bold,
-                overflow: TextOverflow.ellipsis,
-              ),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
+                  color:kBlack),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
