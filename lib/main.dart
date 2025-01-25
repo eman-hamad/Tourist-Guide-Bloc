@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/login_bloc/login_bloc.dart';
+import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
 import 'package:tourist_guide/bloc/sign_up_bloc/sign_up_bloc.dart';
 import 'package:tourist_guide/bloc/splash_bloc/splash_bloc.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
@@ -33,19 +34,29 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => SignUpBloc()),
           BlocProvider(create: (_) => SplashScreenBloc()),
         ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            fontFamily: 'Suwannaphum',
+        child: BlocProvider(
+          create: (context) => SettingsBlocBloc(),
+          child: BlocBuilder<SettingsBlocBloc, SettingsBlocState>(
+            builder: (context, state) {
+              ThemeData? theme;
+              if (state is SettingsBlocThemeLight) {
+                theme = state.lightTh;
+              } else if (state is SettingsBlocThemeDark) {
+                theme = state.darkTh;
+              }
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: theme,
+                home: SplashScreen(),
+                routes: {
+                  '/login': (context) => Login(),
+                  '/signup': (context) => Signup(),
+                  '/home': (context) => const HomeScreen(),
+                  '/governate_detials': (context) => GovernorateDetails(),
+                },
+              );
+            },
           ),
-          home: SplashScreen(),
-          routes: {
-            '/login': (context) => Login(),
-            '/signup': (context) => Signup(),
-            '/home': (context) => const HomeScreen(),
-            '/governate_detials': (context) => GovernorateDetails(),
-          },
         ),
       ),
     );

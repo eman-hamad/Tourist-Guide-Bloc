@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/landmark_card.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
 import 'package:tourist_guide/data/places_data/places_data.dart';
@@ -11,6 +12,8 @@ class GovernorateDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     String argument = ModalRoute.of(context)!.settings.arguments as String;
     List<LandMark> landmarks = PlacesData().getGoverLandmarks(argument);
     return Scaffold(
@@ -30,6 +33,7 @@ class GovernorateDetails extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 28.sp,
                         fontWeight: FontWeight.bold,
+                        color: isDarkMode ? kWhite : kBlack,
                       ),
                     ),
                   ),

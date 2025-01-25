@@ -11,6 +11,8 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Align(
@@ -25,7 +27,7 @@ class ProfileImage extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(60.0.r)),
                   border: Border.all(
-                    color: kMainColor,
+                    color: isDarkMode ? kMainColorDark : kMainColor,
                     width: 8.w,
                     style: BorderStyle.solid,
                   ),

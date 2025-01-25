@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
 import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
 import 'package:tourist_guide/core/widgets/custom_text_form_field.dart';
@@ -58,8 +59,9 @@ class _EditProfile extends State<EditProfile> {
     final verticalSpacing = screenHeight * 0.03; // 3% of screen height
     final horizontalPadding = screenWidth * 0.04; // 4% of screen width
 
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -82,9 +84,9 @@ class _EditProfile extends State<EditProfile> {
                           child: Text(
                             'Edit Profile !',
                             style: TextStyle(
-                              color: CupertinoColors.black,
                               fontSize: 29.sp,
                               fontWeight: FontWeight.bold,
+                              color: isDarkMode ? kWhite : kBlack,
                             ),
                           ),
                         ),

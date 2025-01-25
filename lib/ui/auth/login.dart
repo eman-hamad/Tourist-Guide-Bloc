@@ -32,7 +32,6 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -117,29 +116,29 @@ class _LoginState extends State<Login> {
           onPressed: state is LoginLoadingState
               ? null
               : () {
-            if (_formKey.currentState!.validate()) {
-              if (_emailController.text.trim().isEmpty ||
-                  _passwordController.text.isEmpty) {
-                CustomSnackBar.showError(
-                  context: context,
-                  message: 'Please fill all required fields',
-                );
-                return;
-              }
+                  if (_formKey.currentState!.validate()) {
+                    if (_emailController.text.trim().isEmpty ||
+                        _passwordController.text.isEmpty) {
+                      CustomSnackBar.showError(
+                        context: context,
+                        message: 'Please fill all required fields',
+                      );
+                      return;
+                    }
 
-              context.read<LoginBloc>().add(
-                LoginUserEvent(
-                  email: _emailController.text.trim(),
-                  password: _passwordController.text,
-                ),
-              );
-            } else {
-              CustomSnackBar.showError(
-                context: context,
-                message: 'Please fill all required fields correctly',
-              );
-            }
-          },
+                    context.read<LoginBloc>().add(
+                          LoginUserEvent(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text,
+                          ),
+                        );
+                  } else {
+                    CustomSnackBar.showError(
+                      context: context,
+                      message: 'Please fill all required fields correctly',
+                    );
+                  }
+                },
           height: 56.h,
           width: 0.9.sw,
         );
@@ -148,6 +147,8 @@ class _LoginState extends State<Login> {
   }
 
   Widget _buildSignUpRow() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -160,7 +161,7 @@ class _LoginState extends State<Login> {
           child: Text(
             '  Sign Up',
             style: TextStyle(
-              color: kMainColor,
+              color: isDarkMode ? kMainColorDark : kMainColor,
               fontSize: 14.sp,
               fontWeight: FontWeight.bold,
             ),
