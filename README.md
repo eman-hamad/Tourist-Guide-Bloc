@@ -6,7 +6,7 @@ Tourist Guide is a mobile application built using **Flutter and Bloc state manag
 
 ## Features
 
--**Theme Customization**: Toggle between dark and light modes to customize the visual experience. Dark mode is perfect for low-light environments, while light mode ensures clarity during the day. This app can also adapt to device's system settings.
+- **Theme Customization**: Toggle between dark and light modes to customize the visual experience. Dark mode is perfect for low-light environments, while light mode ensures clarity during the day. This app can also adapt to device's system settings.
 - **User Authentication**: Sign up and login to save your preferences, such as favorite places and profile images.
 - **Place Details**: Browse through a list of places, view details, and add them to favorites.
 - **Custom Widgets**: Reusable and customizable widgets for a consistent and easy-to-use UI.
