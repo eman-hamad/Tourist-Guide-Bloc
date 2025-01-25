@@ -33,56 +33,59 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-            child: Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 36.h),
-                  Text(
-                    'Welcome Back! 😍',
-                    style: TextStyle(
-                      color: isDarkMode ? kGrey : kBlack,
-                      fontSize: 32.sp,
-                      fontWeight: FontWeight.bold,
+    return BlocProvider(
+      create: (context) => LoginBloc(),
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 36.h),
+                    Text(
+                      'Welcome Back! 😍',
+                      style: TextStyle(
+                        color: isDarkMode ? kGrey : kBlack,
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    'Enter your email and password to log in.',
-                    style: TextStyle(
-                        color: isDarkMode ? kDarkTexe : Colors.grey,
-                        fontSize: 14.sp),
-                  ),
-                  SizedBox(height: 36.h),
-                  CustomTextField(
-                    labelText: 'Email',
-                    hintText: 'Enter your email',
-                    prefixIcon: Icons.email,
-                    controller: _emailController,
-                    fieldType: 'email',
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(height: 24.h),
-                  CustomTextField(
-                    labelText: 'Password',
-                    hintText: 'Enter your password',
-                    prefixIcon: Icons.lock,
-                    controller: _passwordController,
-                    fieldType: 'password',
-                    isPassword: true,
-                  ),
-                  SizedBox(height: 48.h),
-                  _buildLoginButton(),
-                  SizedBox(height: 36.h),
-                  _buildSignUpRow(isDarkMode),
-                ],
+                    SizedBox(height: 12.h),
+                    Text(
+                      'Enter your email and password to log in.',
+                      style: TextStyle(
+                          color: isDarkMode ? kDarkTexe : Colors.grey,
+                          fontSize: 14.sp),
+                    ),
+                    SizedBox(height: 36.h),
+                    CustomTextField(
+                      labelText: 'Email',
+                      hintText: 'Enter your email',
+                      prefixIcon: Icons.email,
+                      controller: _emailController,
+                      fieldType: 'email',
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(height: 24.h),
+                    CustomTextField(
+                      labelText: 'Password',
+                      hintText: 'Enter your password',
+                      prefixIcon: Icons.lock,
+                      controller: _passwordController,
+                      fieldType: 'password',
+                      isPassword: true,
+                    ),
+                    SizedBox(height: 48.h),
+                    _buildLoginButton(),
+                    SizedBox(height: 36.h),
+                    _buildSignUpRow(isDarkMode),
+                  ],
+                ),
               ),
             ),
           ),
