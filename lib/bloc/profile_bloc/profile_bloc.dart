@@ -12,8 +12,8 @@ part 'profile_state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(ProfileInitial()) {
     on<LoadSavedImage>(loadSavedImage);
-    on<GetData>(getData);
-    on<PickImage>(pickImage);
+    on<LoadProfile>(loadProfile);
+    on<UpdateAvatar>(updateAvatar);
     on<LoadHeaderData>(getHeaderData);
   }
 
@@ -38,7 +38,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
 // func to get user data from shared preferences
-  Future<void> getData(GetData event, Emitter<ProfileState> emit) async {
+  Future<void> loadProfile(
+      LoadProfile event, Emitter<ProfileState> emit) async {
     try {
       emit(ProfileLoading());
       SharedPreferences? prefs = await SharedPreferences.getInstance();
@@ -56,7 +57,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
 // func to pick image from gallery and emit states when all is done
-  Future<void> pickImage(PickImage event, Emitter<ProfileState> emit) async {
+  Future<void> updateAvatar(
+      UpdateAvatar event, Emitter<ProfileState> emit) async {
     try {
       emit(ProfileImageLoading());
       SharedPreferences? prefs = await SharedPreferences.getInstance();
@@ -83,7 +85,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> getHeaderData(
       LoadHeaderData event, Emitter<ProfileState> emit) async {
     try {
-
+      emit(ProfileLoading());
       User currentUser =
           User(email: "", id: "", name: "", password: "", phone: "");
       SharedPreferences? prefs = await SharedPreferences.getInstance();

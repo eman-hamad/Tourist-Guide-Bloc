@@ -1,10 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
-import 'package:tourist_guide/data/models/user_model.dart';
-import 'package:tourist_guide/ui/home/home.dart';
 
 class UserManager {
   static const String USERS_KEY = 'users_list';
@@ -125,68 +121,5 @@ class UserManager {
       return imagePath;
     }
     return '';
-  }
-
-  // func to save new edits by deleting the current user and save  new values to it
-  Future<void> saveEdits(
-      BuildContext context,
-      GlobalKey<FormState> formKey,
-      TextEditingController nameController,
-      TextEditingController emailController,
-      TextEditingController passwordController,
-      TextEditingController phoneNumberController) async {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState!.save();
-
-      try {
-        final prefs = await SharedPreferences.getInstance();
-        final myUser = prefs.getString('current_user');
-        if (myUser != null) {
-          Map<String, dynamic> map = jsonDecode(myUser);
-
-          var user1 = User.fromJson(map);
-          // remove the current user
-          UserManager.deleteUser(user1.id);
-        }
-        // Check for existing users
-        List<Map<String, dynamic>> usersList = [];
-        String? existingUsersString = prefs.getString('users_list');
-        if (existingUsersString != null) {
-          // Parse existing users
-          usersList =
-              List<Map<String, dynamic>>.from(json.decode(existingUsersString));
-        }
-
-        // Create new user data
-        Map<String, dynamic> newUser = {
-          'id': DateTime.now().millisecondsSinceEpoch.toString(), // Unique ID
-          'name': nameController.text,
-          'email': emailController.text.toLowerCase(),
-          'password': passwordController.text,
-          'phone': phoneNumberController.text,
-          'registrationDate': DateTime.now().toIso8601String(),
-        };
-
-        // Add new user to the list
-        usersList.add(newUser);
-        await prefs.setString('current_user', json.encode(newUser));
-        if (!context.mounted) return;
-
-        CustomSnackBar.showSuccess(
-          context: context,
-          message: 'Eidted successfully!',
-        );
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false,
-        );
-      } catch (e) {
-        debugPrint('Error during Edit: $e');
-        CustomSnackBar.showError(
-          context: context,
-          message: 'Edit failed: ${e.toString()}',
-        );
-      }
-    }
   }
 }

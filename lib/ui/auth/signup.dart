@@ -1,13 +1,15 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tourist_guide/core/colors/colors.dart';
 
+import 'package:tourist_guide/bloc/sign_up_bloc/sign_up_bloc.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_snack_bar.dart';
 import '../../core/widgets/custom_text_form_field.dart';
+
+
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -18,6 +20,7 @@ class Signup extends StatefulWidget {
 
 class _Signup extends State<Signup> {
   final _formKey = GlobalKey<FormState>();
+  final _confirmPasswordFieldKey = GlobalKey<CustomTextFieldState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -34,6 +37,20 @@ class _Signup extends State<Signup> {
     super.dispose();
   }
 
+  bool _validateFields() {
+    if (_nameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
+      CustomSnackBar.showError(
+        context: context,
+        message: 'Please fill all required fields',
+      );
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +64,7 @@ class _Signup extends State<Signup> {
             ),
             child: Form(
               key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -100,6 +118,7 @@ class _Signup extends State<Signup> {
                   ),
                   SizedBox(height: 24.h),
                   CustomTextField(
+                    key: _confirmPasswordFieldKey,
                     labelText: 'Confirm Password',
                     hintText: 'Confirm your password',
                     prefixIcon: Icons.lock_outline,
@@ -107,7 +126,6 @@ class _Signup extends State<Signup> {
                     fieldType: 'confirmPassword',
                     isPassword: true,
                     passwordController: _passwordController,
-                    textInputAction: TextInputAction.done,
                   ),
                   SizedBox(height: 24.h),
                   CustomTextField(
@@ -119,39 +137,9 @@ class _Signup extends State<Signup> {
                     keyboardType: TextInputType.phone,
                   ),
                   SizedBox(height: 48.h),
-                  CustomButton(
-                    text: 'Sign Up',
-                    fontSize: 16.sp,
-                    onPressed: _submitForm,
-                    height: 56.h,
-                    width: 0.9.sw,
-                  ),
+                  _buildSignUpButton(),
                   SizedBox(height: 36.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Have an account?',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/login');
-                        },
-                        child: Text(
-                          '  Log in',
-                          style: TextStyle(
-                            color: kMainColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildLoginRow(),
                 ],
               ),
             ),
@@ -161,86 +149,91 @@ class _Signup extends State<Signup> {
     );
   }
 
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-
-      try {
-        final prefs = await SharedPreferences.getInstance();
-
-        // Check for existing users
-        List<Map<String, dynamic>> usersList = [];
-        String? existingUsersString = prefs.getString('users_list');
-
-        if (existingUsersString != null) {
-          // Parse existing users
-          usersList =
-              List<Map<String, dynamic>>.from(json.decode(existingUsersString));
-
-          // Check for duplicate email
-          if (usersList.any((user) =>
-              user['email'].toString().toLowerCase() ==
-              _emailController.text.toLowerCase())) {
-            if (!mounted) return;
-
-            CustomSnackBar.showError(
-              context: context,
-              message: 'This email is already registered',
-            );
-            return;
-          } else if (_phoneNumberController.text.trim().isNotEmpty &&
-              usersList.any((user) =>
-                  user['phone']?.toString().toLowerCase() ==
-                  _phoneNumberController.text.trim().toLowerCase())) {
-            if (!mounted) return;
-
-            CustomSnackBar.showError(
-              context: context,
-              message: 'This phone number is already registered',
-            );
-            return;
-          }
+  Widget _buildSignUpButton() {
+    return BlocConsumer<SignUpBloc, SignUpStates>(
+      listener: (context, state) {
+        if (state is SignUpLoadingState) {
+          CustomSnackBar.showInfo(
+            context: context,
+            message: state.loadingMessage,
+            duration: const Duration(milliseconds: 1500),
+          );
         }
+        if (state is SignUpErrorState) {
+          CustomSnackBar.showError(
+            context: context,
+            message: state.errorMessage,
+          );
+        }
+        if (state is SignUpSuccessState) {
+          CustomSnackBar.showSuccess(
+            context: context,
+            message: state.succssesMessage,
+          );
+          Navigator.pushNamed(context, '/home');
+        }
+      },
+      builder: (context, state) {
+        return CustomButton(
+          text: 'Sign Up',
+          fontSize: 16.sp,
+          isLoading: state is SignUpLoadingState,
+          onPressed: state is SignUpLoadingState
+              ? null
+              : () {
+            final confirmPasswordState =
+                _confirmPasswordFieldKey.currentState;
+            final bool isConfirmPasswordValid =
+                confirmPasswordState?.isFieldValid() ?? false;
 
-        // Create new user data
-        Map<String, dynamic> newUser = {
-          'id': DateTime.now().millisecondsSinceEpoch.toString(), // Unique ID
-          'name': _nameController.text,
-          'email': _emailController.text.toLowerCase(),
-          'password': _passwordController.text,
-          'phone': _phoneNumberController.text,
-          'registrationDate': DateTime.now().toIso8601String(),
-        };
+            if (_validateFields()) {
+              if (!isConfirmPasswordValid) {
+                CustomSnackBar.showError(
+                  context: context,
+                  message: 'Passwords do not match',
+                );
+                return;
+              }
 
-        // Add new user to the list
-        usersList.add(newUser);
-
-        // Save updated users list
-        await prefs.setString('users_list', json.encode(usersList));
-
-        // Save current user for session
-        await prefs.setString('current_user', json.encode(newUser));
-        await prefs.setBool('isLoggedIn', true);
-
-        debugPrint('Users List: ${prefs.getString('users_list')}');
-        debugPrint('Current User: ${prefs.getString('current_user')}');
-
-        if (!mounted) return;
-
-        CustomSnackBar.showSuccess(
-          context: context,
-          message: 'Registration successful!',
+              SignUpBloc.get(context).add(RegiesterEvent(
+                email: _emailController.text.trim(),
+                name: _nameController.text.trim(),
+                password: _passwordController.text,
+                confPassword: _confirmPasswordController.text,
+                phone: _phoneNumberController.text.trim(),
+              ));
+            }
+          },
+          height: 56.h,
+          width: 0.9.sw,
         );
+      },
+    );
+  }
 
-        // Navigate directly to HomePage after successful signup
-        Navigator.pushNamed(context, '/login');
-      } catch (e) {
-        debugPrint('Error during registration: $e');
-        CustomSnackBar.showError(
-          context: context,
-          message: 'Registration failed: ${e.toString()}',
-        );
-      }
-    }
+  Widget _buildLoginRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Have an account?',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 14.sp,
+          ),
+        ),
+        GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/login'),
+          child: Text(
+            '  Log in',
+            style: TextStyle(
+              color: kMainColor,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/utils/user_manager.dart';
-import '../../core/widgets/custom_button.dart';
-import '../../core/widgets/custom_text_form_field.dart';
+import 'package:tourist_guide/bloc/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/widgets/custom_button.dart';
+import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
+import 'package:tourist_guide/core/widgets/custom_text_form_field.dart';
 
 class EditProfile extends StatefulWidget {
   final String name;
@@ -47,7 +50,7 @@ class _EditProfile extends State<EditProfile> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext cont) {
     // Get screen dimensions
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -56,8 +59,9 @@ class _EditProfile extends State<EditProfile> {
     final verticalSpacing = screenHeight * 0.03; // 3% of screen height
     final horizontalPadding = screenWidth * 0.04; // 4% of screen width
 
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -80,9 +84,9 @@ class _EditProfile extends State<EditProfile> {
                           child: Text(
                             'Edit Profile !',
                             style: TextStyle(
-                              color: CupertinoColors.black,
                               fontSize: 29.sp,
                               fontWeight: FontWeight.bold,
+                              color: isDarkMode ? kWhite : kBlack,
                             ),
                           ),
                         ),
@@ -141,21 +145,29 @@ class _EditProfile extends State<EditProfile> {
                   ),
                   SizedBox(height: 24.h),
                   //CustomButton widget for Sign Up
-                  CustomButton(
-                    text: 'Save',
-                    fontSize: 50.sp, // 4% of screen width
-                    onPressed: () {
-                      UserManager().saveEdits(
-                          context,
-                          _formKey,
-                          _nameController,
-                          _emailController,
-                          _passwordController,
-                          _phoneNumberController);
-                    },
-                    height: 56.h,
-                    width: 0.9.sw,
-                  ),
+                  BlocBuilder<EditProfileBloc, EditProfileState>(
+                      builder: (context, state) {
+                    if (state is EditLoading) {
+                      return CircularProgressIndicator();
+                    }
+                    return CustomButton(
+                      text: 'Save',
+                      fontSize: 50.sp, // 4% of screen width
+                      onPressed: () {
+                        // dispatch SaveEdits event to the Bloc
+                        context.read<EditProfileBloc>().add(SaveEdits(
+                              context: cont,
+                              formKey: _formKey,
+                              name: _nameController.text,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              phoneNumber: _phoneNumberController.text,
+                            ));
+                      },
+                      height: 56.h,
+                      width: 0.9.sw,
+                    );
+                  })
                 ],
               ),
             ),

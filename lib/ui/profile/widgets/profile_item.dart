@@ -16,6 +16,8 @@ class ProfileItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return ListTile(
       title: Text(
         isObscure == true ? txt : txt.replaceAll(RegExp(r"."), "*"),
@@ -28,11 +30,11 @@ class ProfileItem extends StatelessWidget {
         padding: EdgeInsets.all(9).w,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: kMainColor,
+          color: isDarkMode ? kMainColorDark : kMainColor,
         ),
         child: Icon(
           icon,
-          color: Colors.white,
+          color: kWhite,
         ),
       ),
     );

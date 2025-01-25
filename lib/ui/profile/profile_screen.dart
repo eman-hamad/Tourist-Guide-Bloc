@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tourist_guide/bloc/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
+import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
 import 'package:tourist_guide/ui/profile/widgets/profile_image.dart';
@@ -28,9 +31,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     // get user's data and load img
-    context.read<ProfileBloc>().add(GetData());
+    context.read<ProfileBloc>().add(LoadProfile());
     context.read<ProfileBloc>().add(LoadSavedImage());
     context.read<ProfileBloc>().add(LoadHeaderData());
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SafeArea(
         child: Scaffold(
@@ -40,11 +44,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: Column(
                   children: [
-                    Text("My Profile",
-                        style: TextStyle(
-                            fontSize: 28.sp, fontWeight: FontWeight.bold)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("My Profile",
+                            style: TextStyle(
+                                fontSize: 28.sp,
+                                fontWeight: FontWeight.bold,
+                                color: isDarkMode ? kWhite : kBlack)),
+                        SizedBox(
+                          width: 190.w,
+                        ),
+                        BlocBuilder<SettingsBlocBloc, SettingsBlocState>(
+                          builder: (context, state) {
+                            return GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<SettingsBlocBloc>()
+                                    .add(ToggleTheme());
+                              },
+                              child: Icon(
+                                state is SettingsBlocThemeLight
+                                    ? Icons.dark_mode
+                                    : Icons.sunny,
+                                color: isDarkMode ? kDarkTexe : kBlack,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                     SizedBox(
-                      height: 10.h,
+                      height: 40.h,
                     ),
                     // listen to states and rebuild ui
                     BlocConsumer<ProfileBloc, ProfileState>(
@@ -132,7 +163,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: context.read<ProfileBloc>().user.phone,
+                                    txt: context
+                                            .read<ProfileBloc>()
+                                            .user
+                                            .phone
+                                            .isEmpty
+                                        ? 'N/A'
+                                        : context
+                                            .read<ProfileBloc>()
+                                            .user
+                                            .phone,
                                     icon: Icons.phone_android_outlined,
                                   ),
                                   GestureDetector(
@@ -143,9 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       icon: Icons.logout_outlined,
                                     ),
                                   ),
-                                  // SizedBox(
-                                  //   height: 60.h,
-                                  // ),
+                                  SizedBox(height: 30.h),
                                   CustomButton(
                                       text: "Edit Profile   ✍️",
                                       fontSize: 36,
@@ -155,23 +193,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (con) => EditProfile(
-                                              name: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .name,
-                                              email: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .email,
-                                              password: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .password,
-                                              phone: context
-                                                  .read<ProfileBloc>()
-                                                  .user
-                                                  .phone,
+                                            builder: (con) => BlocProvider(
+                                              create: (context) =>
+                                                  EditProfileBloc(),
+                                              child: EditProfile(
+                                                name: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .name,
+                                                email: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .email,
+                                                password: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .password,
+                                                phone: context
+                                                    .read<ProfileBloc>()
+                                                    .user
+                                                    .phone,
+                                              ),
                                             ),
                                           ),
                                         );

@@ -5,8 +5,8 @@ abstract class ProfileEvent {}
 
 class LoadSavedImage extends ProfileEvent {}
 
-class GetData extends ProfileEvent {}
+class LoadProfile extends ProfileEvent {}
 
-class PickImage extends ProfileEvent {}
+class UpdateAvatar extends ProfileEvent {}
 
 class LoadHeaderData extends ProfileEvent {}

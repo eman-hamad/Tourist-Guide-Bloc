@@ -66,6 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
 // Builds the curved navigation bar with icons for different screens. It allows
 // the user to switch between screens using a tap, and it animates the page transition.
   _curvedNavBar() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return SizedBox(
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -73,12 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
           CurvedNavigationBar(
             index: pageIndex,
             backgroundColor: Colors.transparent,
-            color: kMainColor,
+            color: isDarkMode ? kMainColorDark : kMainColor,
             items: [
-              Icon(Icons.home_rounded, size: 30, color: kWhite),
-              Icon(Icons.place_rounded, size: 30, color: kWhite),
-              Icon(Icons.favorite_rounded, size: 30, color: kWhite),
-              Icon(Icons.person_rounded, size: 30, color: kWhite),
+              Icon(Icons.home_rounded, size: 30),
+              Icon(Icons.place_rounded, size: 30),
+              Icon(Icons.favorite_rounded, size: 30),
+              Icon(Icons.person_rounded, size: 30),
             ],
             onTap: (index) {
               _pageController.animateToPage(

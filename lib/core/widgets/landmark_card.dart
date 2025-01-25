@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/widgets/custom_page_route.dart';
 import 'package:tourist_guide/core/widgets/favoriteButton.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
+import 'package:tourist_guide/ui/landmarks/details_screen.dart';
 
 class LandmarkCard extends StatefulWidget {
   final LandMark place;
@@ -17,30 +19,48 @@ class LandmarkCard extends StatefulWidget {
 class _LandmarkCardState extends State<LandmarkCard> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: ScreenUtil().screenWidth / 2 - 8,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        child: Stack(
-          children: [
-            _cardImg(),
-            Padding(
-              padding: EdgeInsets.all(10.0.r),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FavoriteButton(place: widget.place, refresh: widget.refresh),
-                  const Expanded(child: SizedBox()),
-                  _aboutPlace(
-                    widget.place.name,
-                    widget.place.governorate,
-                    widget.place.rate,
-                  ),
-                ],
-              ),
-            )
-          ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          CustomPageRoute(
+            child: DetailsScreen(
+              place: widget.place,
+            ),
+            type: PageTransitionType.slideRight,
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeInOutCubic,
+          ),
+        );
+      },
+      child: SizedBox(
+        width: ScreenUtil().screenWidth / 2 - 8,
+        child: Card(
+          elevation: 5,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          child: Stack(
+            children: [
+              _cardImg(),
+              Padding(
+                padding: EdgeInsets.all(10.0.r),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FavoriteButton(
+                      place: widget.place,
+                      refresh: widget.refresh,
+                    ),
+                    const Expanded(child: SizedBox()),
+                    _aboutPlace(
+                      widget.place.name,
+                      widget.place.governorate,
+                      widget.place.rate,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -49,19 +69,13 @@ class _LandmarkCardState extends State<LandmarkCard> {
 // Displays the image of the place inside a ClipRRect widget with a rounded border.
 // Tapping on the image navigates to the place details page.
   Widget _cardImg() {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, '/details',
-            arguments: {'landMark': widget.place});
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image(
-          image: widget.place.imgPath[0].image,
-          height: 1.sh,
-          width: 1.sw,
-          fit: BoxFit.cover,
-        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Image(
+        image: widget.place.imgPath[0].image,
+        height: 1.sh,
+        width: 1.sw,
+        fit: BoxFit.cover,
       ),
     );
   }

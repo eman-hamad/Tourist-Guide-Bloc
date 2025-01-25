@@ -1,3 +1,4 @@
+import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/landmark_card.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
 import 'package:tourist_guide/data/places_data/places_data.dart';
@@ -17,11 +18,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return SafeArea(
       child: Scaffold(
         // Checks if the favorite places list is empty
         body: PlacesData().favoritePlaces().isEmpty
-            ? _noFav() // Display placeholder if no favorites
+            ? _noFav(isDarkMode) // Display placeholder if no favorites
             : SizedBox(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +35,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       child: Text(
                         "Favorite Places",
                         style: TextStyle(
-                            fontSize: 28.sp, fontWeight: FontWeight.bold),
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? kWhite : kBlack),
                       ),
                     ),
                     Flexible(
@@ -69,20 +74,21 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   // Widget displayed when there are no favorite places
-  Widget _noFav() {
+  Widget _noFav(bool isDarkMode) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.favorite_outline,
-            color: Color.fromARGB(170, 222, 114, 84),
+            color:
+                isDarkMode ? kMainColorDark : Color.fromARGB(170, 222, 114, 84),
             size: 150,
           ),
           Text(
             "Add Your Favorite Places",
             style: TextStyle(
-              color: Colors.black,
+              color: isDarkMode ? kDarkTexe : Color.fromARGB(170, 222, 114, 84),
               fontWeight: FontWeight.w500,
               fontSize: 18.sp,
             ),

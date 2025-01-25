@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/governorate_card.dart';
 import 'package:tourist_guide/data/places_data/governorate_data.dart';
 
@@ -8,6 +9,8 @@ class GovernorateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return SafeArea(
       child: Padding(
         padding: REdgeInsets.only(bottom: 20, left: 10, right: 10),
@@ -19,6 +22,7 @@ class GovernorateScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 28.sp,
                 fontWeight: FontWeight.bold,
+                color: isDarkMode ? kWhite : kBlack,
               ),
             ),
             SizedBox(height: 0.02.sh),
