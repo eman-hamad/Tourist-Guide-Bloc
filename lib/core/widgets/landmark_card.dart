@@ -16,6 +16,11 @@ class LandmarkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => DetailsScreen(landMark: place),
+        //     ));
         Navigator.of(context).push(
           CustomPageRoute(
             child: DetailsScreen(

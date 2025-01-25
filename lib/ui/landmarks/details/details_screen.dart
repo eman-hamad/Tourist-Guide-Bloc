@@ -38,7 +38,7 @@ class DetailsScreen extends StatelessWidget {
                 SizedBox(height: 16.h),
                 _buildAnimatedDetails(landMark),
                 SizedBox(height: 16.h),
-                _buildAnimatedText(landMark),
+                _buildAnimatedDescription(landMark),
                 _buildNearbyPlaces(landMark),
               ],
             ),
@@ -78,7 +78,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedText(LandMark landMark) {
+  Widget _buildAnimatedDescription(LandMark landMark) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         return AnimatedOpacity(
@@ -88,7 +88,7 @@ class DetailsScreen extends StatelessWidget {
           child: Container(
             padding: REdgeInsets.all(12),
             decoration: BoxDecoration(
-                border: Border.all(width: 1.w, color: Colors.black),
+                border: Border.all(width: 1.w, color: kMainColor),
                 borderRadius: BorderRadius.circular(20.r)),
             child: Text(
               textAlign: TextAlign.center,
