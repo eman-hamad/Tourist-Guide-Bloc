@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserManager {
-  static const String USERS_KEY = 'users_list';
-  static const String CURRENT_USER_KEY = 'current_user';
-  static const String IS_LOGGED_IN_KEY = 'isLoggedIn';
+  static const String kUsersKey = 'users_list';
+  static const String kCurrentUserKey = 'current_user';
+  static const String kIsLoggedInKey = 'isLoggedIn';
 
   static late SharedPreferences prefs;
   static const String kFavListKey = 'fav';
@@ -19,7 +19,7 @@ class UserManager {
 
   // Get all users
   static Future<List<Map<String, dynamic>>> getAllUsers() async {
-    final usersString = prefs.getString(USERS_KEY);
+    final usersString = prefs.getString(kUsersKey);
     if (usersString != null) {
       return List<Map<String, dynamic>>.from(json.decode(usersString));
     }
@@ -28,7 +28,7 @@ class UserManager {
 
   // Get current user
   static Future<Map<String, dynamic>?> getCurrentUser() async {
-    final userString = prefs.getString(CURRENT_USER_KEY);
+    final userString = prefs.getString(kCurrentUserKey);
     if (userString != null) {
       return json.decode(userString);
     }
@@ -44,12 +44,12 @@ class UserManager {
           usersList.indexWhere((user) => user['id'] == updatedUser['id']);
       if (index != -1) {
         usersList[index] = updatedUser;
-        await prefs.setString(USERS_KEY, json.encode(usersList));
+        await prefs.setString(kUsersKey, json.encode(usersList));
 
         // Update current user if it's the same user
         final currentUser = await getCurrentUser();
         if (currentUser != null && currentUser['id'] == updatedUser['id']) {
-          await prefs.setString(CURRENT_USER_KEY, json.encode(updatedUser));
+          await prefs.setString(kCurrentUserKey, json.encode(updatedUser));
         }
         return true;
       }
@@ -66,7 +66,7 @@ class UserManager {
       List<Map<String, dynamic>> usersList = await getAllUsers();
 
       usersList.removeWhere((user) => user['id'] == userId);
-      await prefs.setString(USERS_KEY, json.encode(usersList));
+      await prefs.setString(kUsersKey, json.encode(usersList));
 
       // Logout if current user is deleted
       final currentUser = await getCurrentUser();
@@ -82,8 +82,8 @@ class UserManager {
 
   // Logout
   static Future<void> logout() async {
-    await prefs.remove(CURRENT_USER_KEY);
-    await prefs.setBool(IS_LOGGED_IN_KEY, false);
+    await prefs.remove(kCurrentUserKey);
+    await prefs.setBool(kIsLoggedInKey, false);
   }
 
   // Clear all data
@@ -105,12 +105,12 @@ class UserManager {
   }
 
 // Saves a list of favorite place IDs to SharedPreferences.
-  Future<void> setFavPlaces({required List<String> ids}) async {
+  Future<void> setFavPlacesIds({required List<String> ids}) async {
     await prefs.setStringList(kFavListKey, ids);
   }
 
 // Retrieves the list of favorite place IDs.
-  List<String> getFavPlaces() {
+  List<String> getFavPlacesIds() {
     return prefs.getStringList(kFavListKey)!;
   }
 

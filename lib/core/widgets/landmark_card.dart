@@ -1,87 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/core/widgets/custom_page_route.dart';
-import 'package:tourist_guide/core/widgets/favoriteButton.dart';
+import 'package:tourist_guide/core/widgets/favorite_button.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
-import 'package:tourist_guide/ui/landmarks/details_screen.dart';
 
-class LandmarkCard extends StatefulWidget {
+class LandmarkCard extends StatelessWidget {
   final LandMark place;
-  final VoidCallback? refresh;
+  final bool isFavs;
 
-  const LandmarkCard({super.key, required this.place, this.refresh});
+  const LandmarkCard({super.key, required this.place, this.isFavs = false});
 
-  @override
-  State<LandmarkCard> createState() => _LandmarkCardState();
-}
-
-class _LandmarkCardState extends State<LandmarkCard> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          CustomPageRoute(
-            child: DetailsScreen(
-              place: widget.place,
-            ),
-            type: PageTransitionType.slideRight,
-            duration: const Duration(seconds: 2),
-            curve: Curves.easeInOutCubic,
-          ),
-        );
-      },
-      child: SizedBox(
-        width: ScreenUtil().screenWidth / 2 - 8,
-        child: Card(
-          elevation: 5,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          child: Stack(
-            children: [
-              _cardImg(),
-              Padding(
-                padding: EdgeInsets.all(10.0.r),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FavoriteButton(
-                      place: widget.place,
-                      refresh: widget.refresh,
-                    ),
-                    const Expanded(child: SizedBox()),
-                    _aboutPlace(
-                      widget.place.name,
-                      widget.place.governorate,
-                      widget.place.rate,
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+    return SizedBox(
+      width: ScreenUtil().screenWidth / 2 - 8,
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        child: Stack(
+          children: [
+            _cardImg(context),
+            Padding(
+              padding: EdgeInsets.all(10.0.r),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FavoriteButton(place: place, isFavs: isFavs),
+                  const Expanded(child: SizedBox()),
+                  _aboutPlace(
+                    place.name,
+                    place.governorate,
+                    place.rate,
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
-// Displays the image of the place inside a ClipRRect widget with a rounded border.
-// Tapping on the image navigates to the place details page.
-  Widget _cardImg() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Image(
-        image: widget.place.imgPath[0].image,
-        height: 1.sh,
-        width: 1.sw,
-        fit: BoxFit.cover,
+  Widget _cardImg(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/details', arguments: place);
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image(
+          image: place.imgPath[0].image,
+          height: 1.sh,
+          width: 1.sw,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
 
-// Displays the name, governorate, and rating of the place in a card format,
-// with appropriate icons for location and rating.
   Widget _aboutPlace(String name, String gov, String rate) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -133,7 +109,6 @@ class _LandmarkCardState extends State<LandmarkCard> {
                       Icons.star_rounded,
                       color: kLightBlack,
                       size: 0.020.sh,
-                      // 18,
                     ),
                     SizedBox(width: 4.w),
                     Text(

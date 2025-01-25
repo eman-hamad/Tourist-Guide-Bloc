@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tourist_guide/bloc/home_cubit/home_cubit.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 
 class Header extends StatelessWidget {
@@ -21,7 +23,7 @@ class Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Hi,  👋',
+                'Hi, $name 👋',
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
@@ -37,16 +39,17 @@ class Header extends StatelessWidget {
             ],
           ),
           GestureDetector(
-            onTap: () {
-              // widget.onNavigate!(3);
-            },
+            onTap: () => context.read<HomeCubit>().navigateToPage(3),
             child: ClipOval(
               child: Container(
                 height: 0.05.sh,
                 width: 0.05.sh,
                 color: kGrey,
                 child: imgPath != ''
-                    ? Image.file(File(imgPath))
+                    ? Image.file(
+                        File(imgPath),
+                        fit: BoxFit.fill,
+                      )
                     : Image.asset(
                         'assets/images/card_bg.png',
                         fit: BoxFit.fill,

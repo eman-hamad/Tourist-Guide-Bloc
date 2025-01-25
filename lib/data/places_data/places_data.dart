@@ -3,7 +3,18 @@ import 'package:tourist_guide/data/models/landmark_model.dart';
 import 'package:tourist_guide/gen/assets.gen.dart';
 
 class PlacesData {
-  static List<String> favPlaces = UserManager().getFavPlaces();
+  static List<String> favPlaces = UserManager().getFavPlacesIds();
+
+  // Dummy Data for Skeletonizer Loading Style
+  static final kDummyData = LandMark(
+    id: '0',
+    imgPath: [Assets.images.cardBg.image()],
+    name: 'Sphinx',
+    governorate: 'Giza',
+    rate: '5.0',
+    fav: true,
+    description: '',
+  );
 
   static List<LandMark> kLandmarks = [
     LandMark(
@@ -164,14 +175,16 @@ The Karnak Temple Complex, commonly known as Karnak, comprises a vast mix of tem
     return popularPlaces;
   }
 
-  List<LandMark> favoritePlaces() {
-    List<LandMark> favoritePlaces = [];
-    for (int i = 0; i < kLandmarks.length; i++) {
-      if (kLandmarks[i].fav) {
-        favoritePlaces.add(kLandmarks[i]);
-      }
+  List<LandMark> favoritePlaces({List<String>? ids}) {
+    // Get favIds list
+    var favIds = ids ?? UserManager().getFavPlacesIds();
+
+    List<LandMark> favs = [];
+
+    for (var id in favIds) {
+      favs.add(kLandmarks[int.parse(id)]);
     }
-    return favoritePlaces;
+    return favs;
   }
 
   List<LandMark> nearbyPlaces(LandMark landmark) {
@@ -191,5 +204,25 @@ The Karnak Temple Complex, commonly known as Karnak, comprises a vast mix of tem
         )
         .toList();
     return list;
+  }
+
+  // Get the governorates
+  List<Map<String, dynamic>> govs() {
+    // Create a list to store the gov's name to check on it
+    List names = [];
+    // Create a list of map to store the gove with its image
+    List<Map<String, dynamic>> govs = [];
+    // Loop the list of the places
+    for (var gov in kLandmarks) {
+      // Check if this gov has added to names
+      if (!names.contains(gov.governorate)) {
+        // If not then add it
+        names.add(gov.governorate);
+        // And add the required data to list of the govs
+        govs.add({'name': gov.governorate, 'img': gov.imgPath[0]});
+      }
+    }
+    // Then the return the list of govs
+    return govs;
   }
 }

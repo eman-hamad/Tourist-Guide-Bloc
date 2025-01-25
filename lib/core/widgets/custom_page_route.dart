@@ -88,12 +88,6 @@ class CustomPageRoute extends PageRouteBuilder {
                     child: child,
                   ),
                 );
-
-              default:
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
             }
           },
         );
