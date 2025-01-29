@@ -33,9 +33,9 @@ class DetailsList extends StatelessWidget {
               enabled: loading,
               enableSwitchAnimation: loading,
               child: SizedBox(
-                width: 0.85.sw,
-                child: LandmarkCard(place: places[index], isFavs: true),
-              ),
+                  // width: 0.85.sw,
+                  // child: LandmarkCard(place: places[index], isFavs: true),
+                  ),
             ),
           );
         },

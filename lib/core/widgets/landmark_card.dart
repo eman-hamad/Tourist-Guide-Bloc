@@ -1,13 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/custom_page_route.dart';
 import 'package:tourist_guide/core/widgets/favorite_button.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:tourist_guide/ui/landmarks/details/details_screen.dart';
 
 class LandmarkCard extends StatelessWidget {
-  final LandMark place;
+  final FSLandMark place;
   final bool isFavs;
 
   const LandmarkCard({super.key, required this.place, this.isFavs = false});
@@ -16,16 +17,16 @@ class LandmarkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          CustomPageRoute(
-            child: DetailsScreen(
-              landMark: place,
-            ),
-            type: PageTransitionType.slideRight,
-            duration: const Duration(seconds: 2),
-            curve: Curves.easeInOutCubic,
-          ),
-        );
+        // Navigator.of(context).push(
+        //   CustomPageRoute(
+        //     child: DetailsScreen(
+        //       landMark: place,
+        //     ),
+        //     type: PageTransitionType.slideRight,
+        //     duration: const Duration(seconds: 2),
+        //     curve: Curves.easeInOutCubic,
+        //   ),
+        // );
       },
       child: SizedBox(
         width: ScreenUtil().screenWidth / 2 - 8,
@@ -41,12 +42,12 @@ class LandmarkCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FavoriteButton(place: place, isFavs: isFavs),
+                    // FavoriteButton(place: place, isFavs: isFavs),
                     const Expanded(child: SizedBox()),
                     _aboutPlace(
                       place.name,
                       place.governorate,
-                      place.rate,
+                      place.rate.toString(),
                       context,
                     ),
                   ],
@@ -62,8 +63,12 @@ class LandmarkCard extends StatelessWidget {
   Widget _cardImg(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
-      child: Image(
-        image: place.imgPath[0].image,
+      child: CachedNetworkImage(
+        imageUrl: place.imgUrls[0],
+        placeholder: (context, url) => Center(
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
         height: 1.sh,
         width: 1.sw,
         fit: BoxFit.cover,
@@ -73,8 +78,6 @@ class LandmarkCard extends StatelessWidget {
 
   Widget _aboutPlace(
       String name, String gov, String rate, BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
@@ -92,7 +95,7 @@ class LandmarkCard extends StatelessWidget {
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   overflow: TextOverflow.ellipsis,
-                  color:kBlack),
+                  color: kBlack),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

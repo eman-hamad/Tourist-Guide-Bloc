@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'places_data_bloc.dart';
 
 @immutable
@@ -9,8 +8,8 @@ class PlacesDataInitial extends PlacesState {}
 class PlacesLoadingState extends PlacesState {}
 
 class PlacesLoadedState extends PlacesState {
-  final List<LandMark> sugPlaces;
-  final List<LandMark> popPlaces;
+  final List<FSLandMark> sugPlaces;
+  final List<FSLandMark> popPlaces;
   final bool isLoadingMore;
   final bool hasMore;
 
@@ -22,8 +21,8 @@ class PlacesLoadedState extends PlacesState {
   });
 
   PlacesLoadedState copyWith({
-    List<LandMark>? sugPlaces,
-    List<LandMark>? popPlaces,
+    List<FSLandMark>? sugPlaces,
+    List<FSLandMark>? popPlaces,
     bool? isLoadingMore,
     bool? hasMore,
   }) {
@@ -37,7 +36,7 @@ class PlacesLoadedState extends PlacesState {
 }
 
 class PlacesLoaded extends PlacesState {
-  final List<LandMark> places;
+  final List<FSLandMark> places;
   PlacesLoaded({required this.places});
 }
 

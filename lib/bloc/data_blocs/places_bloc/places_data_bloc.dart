@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
-import 'package:tourist_guide/data/places_data/places_data.dart';
+import 'package:tourist_guide/data/firebase/places_services.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 
 part 'places_data_event.dart';
 part 'places_data_state.dart';
@@ -11,6 +11,7 @@ part 'places_data_state.dart';
 class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
   int _page = 0;
   final int _pageSize = 4;
+  List<FSLandMark> places = [];
 
   PlacesBloc() : super(PlacesDataInitial()) {
     on<LoadPlacesEvent>(_getPlaces);
@@ -24,9 +25,17 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
     _page = 0;
     try {
       emit(PlacesLoadingState());
+      places = await PlacesServices().getPlaces();
+
       final sugPlaces = _getPaginatedSuggestedPlaces();
-      final popPlaces = PlacesData().popularPlaces();
-      await Future.delayed(Duration(seconds: 2));
+      List<FSLandMark> popPlaces = [];
+
+      for (int i = 0; i < places.length; i++) {
+        if (i.isOdd) {
+          popPlaces.add(places[i]);
+        }
+      }
+
       emit(PlacesLoadedState(
         sugPlaces: sugPlaces,
         popPlaces: popPlaces,
@@ -46,7 +55,6 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
 
     try {
       emit(currentState.copyWith(isLoadingMore: true));
-      await Future.delayed(Duration(seconds: 1));
 
       _page++;
       final newPlaces = _getPaginatedSuggestedPlaces();
@@ -61,14 +69,13 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
     }
   }
 
-  List<LandMark> _getPaginatedSuggestedPlaces() {
-    final allPlaces = PlacesData.kLandmarks;
+  List<FSLandMark> _getPaginatedSuggestedPlaces() {
     final startIndex = _page * _pageSize;
-    if (startIndex >= allPlaces.length) return [];
-    return allPlaces.sublist(
+    if (startIndex >= places.length) return [];
+    return places.sublist(
       startIndex,
-      startIndex + _pageSize > allPlaces.length
-          ? allPlaces.length
+      startIndex + _pageSize > places.length
+          ? places.length
           : startIndex + _pageSize,
     );
   }

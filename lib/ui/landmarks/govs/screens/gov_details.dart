@@ -18,30 +18,30 @@ class GovernorateDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Header(title: 'Land Marks in $govName', showBackBtn: true),
-          BlocBuilder<GovScreenCubit, GovScreenState>(
-            builder: (context, state) {
-              if (state is GovDetailsLoading) {
-                return DetailsList(
-                  loading: true,
-                  itemsCount: 4,
-                  places: List.filled(4, PlacesData.kDummyData),
-                );
-              } //
-              else if (state is GovDetailsLoaded) {
-                return DetailsList(
-                  loading: false,
-                  itemsCount: state.govs.length,
-                  places: state.govs,
-                );
-              } //
-              else if (state is GovDetailsError) {
-                return Center(child: Text(state.errorMsg));
-              } //
-              else {
-                return Center(child: Text('Error'));
-              }
-            },
-          ),
+          // BlocBuilder<GovScreenCubit, GovScreenState>(
+          //   builder: (context, state) {
+          //     if (state is GovDetailsLoading) {
+          //       return DetailsList(
+          //         loading: true,
+          //         itemsCount: 4,
+          //         places: List.filled(4, PlacesData.kDummyData),
+          //       );
+          //     } //
+          //     else if (state is GovDetailsLoaded) {
+          //       return DetailsList(
+          //         loading: false,
+          //         itemsCount: state.govs.length,
+          //         places: state.govs,
+          //       );
+          //     } //
+          //     else if (state is GovDetailsError) {
+          //       return Center(child: Text(state.errorMsg));
+          //     } //
+          //     else {
+          //       return Center(child: Text('Error'));
+          //     }
+          //   },
+          // ),
         ],
       ),
     );

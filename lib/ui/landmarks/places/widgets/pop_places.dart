@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tourist_guide/core/widgets/landmark_card.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 
 class PopPlaces extends StatelessWidget {
   final bool loading;
   final int itemCount;
-  final List<LandMark> places;
+  final List<FSLandMark> places;
   const PopPlaces({
     super.key,
     required this.loading,

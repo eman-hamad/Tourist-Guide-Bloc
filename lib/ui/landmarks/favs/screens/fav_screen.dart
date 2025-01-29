@@ -16,30 +16,30 @@ class FavoritesScreen extends StatelessWidget {
     return Column(
       children: [
         Header(title: 'Favorite Places'),
-        BlocBuilder<FavScreenCubit, FavScreenState>(
-          builder: (context, state) {
-            if (state is FavScreenLoading) {
-              return FavsList(
-                loading: true,
-                itemsCount: 4,
-                places: List.filled(4, PlacesData.kDummyData),
-              );
-            } //
-            else if (state is FavScreenLoaded) {
-              return state.favs.isEmpty
-                  ? const EmptyFavs()
-                  : FavsList(
-                      loading: false,
-                      itemsCount: state.favs.length,
-                      places: state.favs,
-                    );
-            } //
-            else if (state is FavScreenError) {
-              return Center(child: Text(state.errorMsg));
-            }
-            return const SizedBox.shrink();
-          },
-        )
+        // BlocBuilder<FavScreenCubit, FavScreenState>(
+        //   builder: (context, state) {
+        //     if (state is FavScreenLoading) {
+        //       return FavsList(
+        //         loading: true,
+        //         itemsCount: 4,
+        //         places: List.filled(4, PlacesData.kDummyData),
+        //       );
+        //     } //
+        //     else if (state is FavScreenLoaded) {
+        //       return state.favs.isEmpty
+        //           ? const EmptyFavs()
+        //           : FavsList(
+        //               loading: false,
+        //               itemsCount: state.favs.length,
+        //               places: state.favs,
+        //             );
+        //     } //
+        //     else if (state is FavScreenError) {
+        //       return Center(child: Text(state.errorMsg));
+        //     }
+        //     return const SizedBox.shrink();
+        //   },
+        // )
       ],
     );
   }

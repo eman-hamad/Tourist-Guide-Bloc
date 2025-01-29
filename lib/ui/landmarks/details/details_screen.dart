@@ -140,9 +140,10 @@ class DetailsScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return SizedBox(
                       width: 200.w,
-                      child: LandmarkCard(
-                        place: PlacesData().nearbyPlaces(landMark)[index],
-                      ),
+                      child: SizedBox(),
+                      //  LandmarkCard(
+                      //   place: PlacesData().nearbyPlaces(landMark)[index],
+                      // ),
                     );
                   },
                 ),
