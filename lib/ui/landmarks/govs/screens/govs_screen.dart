@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourist_guide/bloc/data_blocs/gov_screen/gov_screen_cubit.dart';
-import 'package:tourist_guide/gen/assets.gen.dart';
+import 'package:tourist_guide/data/models/fire_store_goverorate_model.dart';
 import 'package:tourist_guide/ui/landmarks/common/header.dart';
 import 'package:tourist_guide/ui/landmarks/govs/widgets/govs_grid.dart';
 
@@ -10,8 +10,6 @@ class GovernorateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // context.read<GovScreenCubit>().loadGovernorates();
-
     return Column(
       children: [
         Header(title: 'Governorates'),
@@ -41,8 +39,10 @@ class GovernorateScreen extends StatelessWidget {
     );
   }
 
-  static final _dummyData = {
-    'name': 'Cairo',
-    'img': Assets.images.cairoTower.image()
-  };
+  static final _dummyData = GovernorateModel(
+    name: 'Cairo',
+    placesIds: [],
+    coverImgUrl:
+        'https://drive.google.com/uc?id=1pVNGXFANQGB_DnXsmfgnxbP6aZobXtsi',
+  );
 }

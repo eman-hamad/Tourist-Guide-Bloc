@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
+import 'package:tourist_guide/bloc/data_blocs/gov_details_cubit/gov_details_cubit.dart';
 import 'package:tourist_guide/bloc/data_blocs/gov_screen/gov_screen_cubit.dart';
 import 'package:tourist_guide/bloc/login_bloc/login_bloc.dart';
 import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
   Widget _govDetails() {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => GovScreenCubit()),
+        BlocProvider(create: (context) => GovDetailsCubit()),
         BlocProvider(create: (context) => FavBloc()),
       ],
       child: const GovernorateDetails(),

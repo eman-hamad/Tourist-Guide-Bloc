@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:tourist_guide/data/models/fire_store_goverorate_model.dart';
 import 'package:tourist_guide/ui/landmarks/govs/widgets/govs_card.dart';
 
 class GovsGrid extends StatelessWidget {
   final bool loading;
   final int itemCount;
-  final List<Map<String, dynamic>> govs;
+  final List<GovernorateModel> govs;
   const GovsGrid({
     super.key,
     required this.loading,

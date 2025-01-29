@@ -104,7 +104,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       if (imagePath != null && File(imagePath).existsSync()) {
         headerImage = File(imagePath);
       }
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(milliseconds: 500));
       emit(HeaderLoaded(firstName: firstName, image: headerImage));
     } on Exception catch (e) {
       emit(HeaderDataError(e.toString()));

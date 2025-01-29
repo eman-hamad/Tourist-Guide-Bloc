@@ -61,7 +61,7 @@ class Header extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_rounded),
+          icon: Icon(Icons.arrow_back_ios_rounded, color: kBlack, size: 20.sp),
         ),
       ),
     );

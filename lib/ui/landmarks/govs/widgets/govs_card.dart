@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/data/models/fire_store_goverorate_model.dart';
 
 class GovernorateCard extends StatelessWidget {
-  final Map<String, dynamic> gov;
+  final GovernorateModel gov;
   const GovernorateCard({super.key, required this.gov});
 
   @override
@@ -15,8 +17,8 @@ class GovernorateCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         child: Stack(
           children: [
-            _cardImg(context, gov['name']),
-            _aboutGov(gov['name']),
+            _cardImg(context, gov.name),
+            _aboutGov(gov.name),
           ],
         ),
       ),
@@ -31,8 +33,12 @@ class GovernorateCard extends StatelessWidget {
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Image(
-          image: gov['img'].image,
+        child: CachedNetworkImage(
+          imageUrl: gov.coverImgUrl,
+          placeholder: (context, url) => Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
           height: 1.sh,
           width: 1.sw,
           fit: BoxFit.cover,
