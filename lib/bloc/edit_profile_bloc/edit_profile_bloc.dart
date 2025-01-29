@@ -49,7 +49,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         final myUser = prefs.getString('current_user');
         if (myUser != null) {
           Map<String, dynamic> map = jsonDecode(myUser);
-          var user1 = User.fromJson(map);
+          var user1 = UserModel.fromJson(map);
           UserManager.deleteUser(user1.id);
         }
         List<Map<String, dynamic>> usersList = [];

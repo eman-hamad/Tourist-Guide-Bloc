@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:76823012149:android:ed8c99cbd8c95b18e0a27c",
+        "android_client_info": {
+          "package_name": "com.example.tourist_guide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxQxDyNsrGMmUQuXjzeJ4T4K4WI1SOsfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:76823012149:android:858fa71b9bc24d2ae0a27c",
         "android_client_info": {
           "package_name": "com.touristGuide.app"

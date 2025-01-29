@@ -16,7 +16,8 @@ class SignUpLoadingState extends SignUpStates {
 
 class SignUpSuccessState extends SignUpStates {
   final String succssesMessage;
-  SignUpSuccessState({required this.succssesMessage});
+  final FSUser user;
+  SignUpSuccessState({required this.succssesMessage, required this.user});
 }
 
 class SignUpErrorState extends SignUpStates {

@@ -17,7 +17,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<LoadHeaderData>(getHeaderData);
   }
 
-  User user = User(email: "", id: "", name: "", password: "", phone: "");
+  UserModel user = UserModel(email: "", id: "", name: "", password: "", phone: "");
   File image = File("");
   String firstName = "";
   File headerImage = File("");
@@ -47,7 +47,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
       if (existingUserString != null) {
         final userData = jsonDecode(existingUserString);
-        user = User.fromJson(userData);
+        user = UserModel.fromJson(userData);
       }
 
       emit(ProfileLoaded(user: user, image: image));
@@ -86,14 +86,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       LoadHeaderData event, Emitter<ProfileState> emit) async {
     try {
       emit(ProfileLoading());
-      User currentUser =
-          User(email: "", id: "", name: "", password: "", phone: "");
+      UserModel currentUser =
+      UserModel(email: "", id: "", name: "", password: "", phone: "");
       SharedPreferences? prefs = await SharedPreferences.getInstance();
       final existingUserString = prefs.getString('current_user');
 
       if (existingUserString != null) {
         final userData = jsonDecode(existingUserString);
-        currentUser = User.fromJson(userData);
+        currentUser = UserModel.fromJson(userData);
         String fullName = currentUser.name;
         List<String> nameParts = fullName.split(" ");
         firstName = nameParts[0];

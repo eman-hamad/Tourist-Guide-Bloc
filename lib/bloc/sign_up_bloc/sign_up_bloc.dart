@@ -1,20 +1,49 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 import 'package:tourist_guide/data/models/user_model.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   static SignUpBloc get(context) => BlocProvider.of(context);
 
   SignUpBloc() : super(SignUpInitialState()) {
     on<RegiesterEvent>(_handleRegister);
     on<ValidateFieldsEvent>(_handleValidateFields);
+  }
+
+  // Add methods to check for existing name and phone
+  Future<bool> isNameTaken(String name) async {
+    final QuerySnapshot result = await _firestore
+        .collection('Users')
+        .where('name', isEqualTo: name.trim())
+        .get();
+    return result.docs.isNotEmpty;
+  }
+
+  Future<bool> isPhoneTaken(String phone) async {
+    if (phone.isEmpty) return false;
+    final QuerySnapshot result = await _firestore
+        .collection('Users')
+        .where('phone', isEqualTo: phone.trim())
+        .get();
+    return result.docs.isNotEmpty;
+  }
+
+  bool isValidPhone(String phone) {
+    if (phone.isEmpty) return true;
+    return RegExp(r'^\+?[\d\s-]{10,}$').hasMatch(phone.trim());
   }
 
   void _handleRegister(RegiesterEvent event, Emitter<SignUpStates> emit) async {
@@ -68,28 +97,17 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
   }) {
     List<String> emptyFields = [];
 
-    if (name.trim().isEmpty) {
-      emptyFields.add('Full Name');
-    }
-    if (email.trim().isEmpty) {
-      emptyFields.add('Email');
-    }
-    if (password.isEmpty) {
-      emptyFields.add('Password');
-    }
-    if (confPassword.isEmpty) {
-      emptyFields.add('Confirm Password');
-    }
+    if (name.trim().isEmpty) emptyFields.add('Full Name');
+    if (email.trim().isEmpty) emptyFields.add('Email');
+    if (password.isEmpty) emptyFields.add('Password');
+    if (confPassword.isEmpty) emptyFields.add('Confirm Password');
 
     return emptyFields;
   }
 
   String _getEmptyFieldsMessage(List<String> emptyFields) {
     if (emptyFields.isEmpty) return '';
-
-    if (emptyFields.length == 1) {
-      return 'Please enter your ${emptyFields[0]}';
-    }
+    if (emptyFields.length == 1) return 'Please enter your ${emptyFields[0]}';
 
     String message = 'Please enter: ';
     for (int i = 0; i < emptyFields.length; i++) {
@@ -104,74 +122,109 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
     return message;
   }
 
-  Future<void> regis(
-      {required String email,
-      required String phone,
-      required String name,
-      required String password,
-      required String confPassword,
-      required Emitter<SignUpStates> emit}) async {
+  Future<void> regis({
+    required String email,
+    required String phone,
+    required String name,
+    required String password,
+    required String confPassword,
+    required Emitter<SignUpStates> emit,
+  }) async {
     try {
-      emit(SignUpLoadingState(loadingMessage: 'Registering...'));
-// Add a small delay to show the loading message
-      await Future.delayed(const Duration(milliseconds: 1500));
-      final prefs = await SharedPreferences.getInstance();
+      //emit(SignUpLoadingState(loadingMessage: 'Checking username availability...'));
 
-      // Check for existing users
-      List<User> usersList = [];
-      String? existingUsersString = prefs.getString('users_list');
+      // Validate name length
+      if (name.trim().length < 3 || name.trim().length > 30) {
+        emit(SignUpErrorState(
+          errorMessage: 'Name must be between 3 and 30 characters',
+        ));
+        return;
+      }
 
-      if (existingUsersString != null) {
-        // Parse existing users
-        List<dynamic> rawList = json.decode(existingUsersString);
-        usersList = rawList.map((userJson) => User.fromJson(userJson)).toList();
+      // Check for duplicate name
+      if (await isNameTaken(name)) {
+        emit(SignUpErrorState(
+          errorMessage: 'This Full Name is already taken. Please choose another one.',
+        ));
+        return;
+      }
 
-        // Check for duplicate email
-        if (usersList
-            .any((user) => user.email.toLowerCase() == email.toLowerCase())) {
+      // Validate and check phone if provided
+      if (phone.isNotEmpty) {
+       // emit(SignUpLoadingState(loadingMessage: 'Checking phone number...'));
+
+        if (!isValidPhone(phone)) {
           emit(SignUpErrorState(
-              errorMessage: 'This email is already registered'));
+            errorMessage: 'Please enter a valid phone number',
+          ));
           return;
-        } else if (phone.trim().isNotEmpty &&
-            usersList.any((user) =>
-                user.phone.toLowerCase() == phone.trim().toLowerCase())) {
+        }
+
+        if (await isPhoneTaken(phone)) {
           emit(SignUpErrorState(
-              errorMessage: 'This phone number is already registered'));
+            errorMessage: 'This phone number is already registered.',
+          ));
           return;
         }
       }
 
-      // Create new user instance
-      User newUser = User(
-        id: DateTime.now().millisecondsSinceEpoch.toString(), // Unique ID
-        name: name,
-        email: email.toLowerCase(),
+      emit(SignUpLoadingState(loadingMessage: 'Creating your account...'));
+
+      // Verify passwords match
+      if (password != confPassword) {
+        emit(SignUpErrorState(errorMessage: 'Passwords do not match'));
+        return;
+      }
+
+      // Create user with email and password
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email.trim(),
         password: password,
-        phone: phone,
       );
 
-      // Add new user to the list
-      usersList.add(newUser);
+      if (userCredential.user != null) {
+        // Create FSUser instance
+        FSUser newUser = FSUser(
+          uid: userCredential.user!.uid,
+          name: name.trim(),
+          email: email.toLowerCase().trim(),
+          phone: phone.trim(),
+          favPlacesIds: [],
+        );
 
-      // Save updated users list
-      await prefs.setString('users_list',
-          json.encode(usersList.map((user) => user.toJson()).toList()));
+        // Save user data to Firestore
+        await _firestore
+            .collection('Users')
+            .doc(userCredential.user!.uid)
+            .set(newUser.toFirestore());
 
-      // Save current user for session
-      await prefs.setString('current_user', json.encode(newUser.toJson()));
-      await prefs.setBool('isLoggedIn', true);
-
-      debugPrint('Users List: ${prefs.getString('users_list')}');
-      debugPrint('Current User: ${prefs.getString('current_user')}');
-
-      emit(SignUpSuccessState(succssesMessage: 'Registration successful!'));
-
-      // Navigate directly to HomePage after successful signup
+        emit(SignUpSuccessState(
+          succssesMessage: 'Welcome ${newUser.name}!',
+          user: newUser,
+        ));
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      switch (e.code) {
+        case 'email-already-in-use':
+          errorMessage = 'This email is already registered';
+          break;
+        case 'invalid-email':
+          errorMessage = 'The email address is not valid';
+          break;
+        case 'operation-not-allowed':
+          errorMessage = 'Email/password accounts are not enabled';
+          break;
+        case 'weak-password':
+          errorMessage = 'The password provided is too weak';
+          break;
+        default:
+          errorMessage = 'Registration failed: ${e.message}';
+      }
+      emit(SignUpErrorState(errorMessage: errorMessage));
     } catch (e) {
-      debugPrint('Error during registration: $e');
-
       emit(SignUpErrorState(
-          errorMessage: 'Registration failed: ${e.toString()}'));
+          errorMessage: 'An unexpected error occurred: ${e.toString()}'));
     }
   }
 }

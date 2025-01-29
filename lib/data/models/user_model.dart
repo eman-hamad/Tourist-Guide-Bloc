@@ -1,12 +1,12 @@
 // user model to retrive data from shared preferences
-class User {
+class UserModel {
   String id;
   String name;
   String email;
   String password;
   String phone;
 
-  User({
+  UserModel({
     required this.id,
     required this.name,
     required this.email,
@@ -14,7 +14,7 @@ class User {
     required this.phone,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
         name: json["name"],
         email: json["email"],
