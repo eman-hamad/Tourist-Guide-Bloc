@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,16 +9,24 @@ import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
 import 'package:tourist_guide/bloc/sign_up_bloc/sign_up_bloc.dart';
 import 'package:tourist_guide/bloc/splash_bloc/splash_bloc.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
+import 'package:tourist_guide/data/models/fire_store_goverorate_model.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
+import 'package:tourist_guide/data/models/fire_store_user_model.dart';
+import 'package:tourist_guide/data/places_data/places_data.dart';
 import 'package:tourist_guide/ui/auth/login.dart';
 import 'package:tourist_guide/ui/landmarks/govs/screens/gov_details.dart';
 import 'package:tourist_guide/ui/home/home.dart';
 import 'package:tourist_guide/ui/auth/signup.dart';
 import 'package:tourist_guide/ui/splash/splash.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UserManager().init();
-  runApp(const MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {

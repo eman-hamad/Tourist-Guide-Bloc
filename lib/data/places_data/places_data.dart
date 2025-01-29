@@ -1,4 +1,6 @@
 import 'package:tourist_guide/core/utils/user_manager.dart';
+import 'package:tourist_guide/data/models/fire_store_goverorate_model.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
 import 'package:tourist_guide/gen/assets.gen.dart';
 
@@ -15,7 +17,6 @@ class PlacesData {
     fav: true,
     description: '',
   );
-
   static List<LandMark> kLandmarks = [
     LandMark(
         id: '0',
