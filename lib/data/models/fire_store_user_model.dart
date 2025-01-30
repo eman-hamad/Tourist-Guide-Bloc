@@ -21,7 +21,7 @@ class FSUser {
         name: data['name'],
         email: data['email'],
         phone: data['phone'],
-        favPlacesIds: data['favPlacesIds']);
+        favPlacesIds: (data['favPlacesIds'] as List<dynamic>?)?.map((e) => e.toString()).toList() );
   }
 
   Map<String, dynamic> toFirestore() => {
