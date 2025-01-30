@@ -33,4 +33,5 @@ class DetailsScreenState {
       showFourth: showFourth ?? this.showFourth,
     );
   }
-}
+
+ }

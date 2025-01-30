@@ -5,7 +5,7 @@ import 'package:tourist_guide/core/colors/colors.dart';
 class PlaceDetails extends StatelessWidget {
   final String name;
   final String gov;
-  final String rate;
+  final double rate;
   const PlaceDetails({
     super.key,
     required this.name,
@@ -42,7 +42,7 @@ class PlaceDetails extends StatelessWidget {
             Icon(Icons.star,
                 color: isDarkMode ? kMainColorDark : kMainColor, size: 30),
             Text(
-              rate,
+              rate.toString(),
               style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w700,

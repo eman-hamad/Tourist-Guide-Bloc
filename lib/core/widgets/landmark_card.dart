@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/custom_page_route.dart';
-import 'package:tourist_guide/core/widgets/favorite_button.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:tourist_guide/ui/landmarks/details/details_screen.dart';
 
@@ -17,16 +16,16 @@ class LandmarkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.of(context).push(
-        //   CustomPageRoute(
-        //     child: DetailsScreen(
-        //       landMark: place,
-        //     ),
-        //     type: PageTransitionType.slideRight,
-        //     duration: const Duration(seconds: 2),
-        //     curve: Curves.easeInOutCubic,
-        //   ),
-        // );
+        Navigator.of(context).push(
+          CustomPageRoute(
+            child: DetailsScreen(
+              landMark: place,
+            ),
+            type: PageTransitionType.slideRight,
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeInOutCubic,
+          ),
+        );
       },
       child: SizedBox(
         width: ScreenUtil().screenWidth / 2 - 8,

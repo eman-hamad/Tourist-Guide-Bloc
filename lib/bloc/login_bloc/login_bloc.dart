@@ -1,11 +1,8 @@
 // login_bloc.dart
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tourist_guide/data/models/fire_store_user_model.dart';
-import 'package:tourist_guide/data/models/user_model.dart';
 
 import 'login_event.dart';
 import 'login_state.dart';

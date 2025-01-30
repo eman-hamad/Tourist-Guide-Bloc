@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
 import 'package:tourist_guide/bloc/details_screen/details_screen_cubit.dart';
+import 'package:tourist_guide/bloc/details_screen/nearbyPlacesCubit/nearby_places_cubit.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/landmark_card.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
-import 'package:tourist_guide/data/places_data/places_data.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:tourist_guide/ui/landmarks/details/widgets/cover_img.dart';
 import 'package:tourist_guide/ui/landmarks/details/widgets/detailsBar.dart';
 
 // ignore: must_be_immutable
 class DetailsScreen extends StatelessWidget {
-  LandMark landMark;
+  FSLandMark landMark;
   DetailsScreen({super.key, required this.landMark});
 
   @override
@@ -28,6 +29,10 @@ class DetailsScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => DetailsScreenCubit(),
         ),
+        BlocProvider(
+          create: (context) =>
+              NearbyPlacesCubit()..getNearbyPlaces(landamark: landMark),
+        )
       ],
       child: Scaffold(
         body: Padding(
@@ -51,7 +56,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedCoverImage(LandMark landMark) {
+  Widget _buildAnimatedCoverImage(FSLandMark landMark) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         return AnimatedOpacity(
@@ -64,7 +69,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedDetails(LandMark landMark) {
+  Widget _buildAnimatedDetails(FSLandMark landMark) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         return AnimatedOpacity(
@@ -81,7 +86,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedDescription(LandMark landMark, bool isDarkMode) {
+  Widget _buildAnimatedDescription(FSLandMark landMark, bool isDarkMode) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         return AnimatedOpacity(
@@ -97,7 +102,7 @@ class DetailsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r)),
             child: Text(
               textAlign: TextAlign.center,
-              landMark.description!,
+              landMark.description,
               overflow: TextOverflow.fade,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
@@ -110,7 +115,7 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNearbyPlaces(LandMark landMark, isDarkMode) {
+  Widget _buildNearbyPlaces(FSLandMark landMark, isDarkMode) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         if (!state.showFourth) return const SizedBox.shrink();
@@ -134,19 +139,31 @@ class DetailsScreen extends StatelessWidget {
               SizedBox(height: 5.h),
               SizedBox(
                 height: 250.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: PlacesData().nearbyPlaces(landMark).length,
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                      width: 200.w,
-                      child: SizedBox(),
-                      //  LandmarkCard(
-                      //   place: PlacesData().nearbyPlaces(landMark)[index],
-                      // ),
+                child: BlocBuilder<NearbyPlacesCubit, NearbyPlacesState>(
+                    builder: (context, state) {
+                  if (state is NearbyPlacesLoaded) {
+                    return ListView.separated(
+                      separatorBuilder: (context, index) => SizedBox(
+                        width: 10,
+                      ),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.nearbyPlaces.length,
+                      itemBuilder: (context, index) {
+                        return LandmarkCard(place: state.nearbyPlaces[index]);
+                      },
                     );
-                  },
-                ),
+                  }
+                  if (state is NearbyPlacesError) {
+                    return Text(state.errorMsg);
+                  }
+
+                  return Skeletonizer(
+                      child: Container(
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                    width: 200,
+                  ));
+                }),
               ),
               SizedBox(height: 20.h),
             ],
