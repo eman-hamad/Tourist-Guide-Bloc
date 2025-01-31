@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/widgets/favorite_button.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 
 class CoverImg extends StatelessWidget {
@@ -49,11 +50,11 @@ class CoverImg extends StatelessWidget {
         ),
         _backBtn(context,
             isDarkMode), // Back button to navigate to the previous screen.
-        // Positioned(
-        //   right: 15,
-        //   bottom: 10,
-        //   child: FavoriteButton(place: landMark),
-        // ),
+        Positioned(
+          right: 15,
+          bottom: 10,
+          child: FavoriteButton(place: landMark),
+        ),
       ],
     );
   }

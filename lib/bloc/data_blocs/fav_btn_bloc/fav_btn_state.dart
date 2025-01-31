@@ -7,13 +7,8 @@ class FavInitial extends FavState {}
 
 class FavLoading extends FavState {}
 
-class FavLoaded extends FavState {
-  final List<LandMark> favs;
-  FavLoaded({required this.favs});
-}
-
 class FavoriteToggled extends FavState {
-  final bool isFav;
+  final List<String> isFav;
   FavoriteToggled({required this.isFav});
 }
 

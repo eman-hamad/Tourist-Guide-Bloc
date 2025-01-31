@@ -3,13 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 
 class FavoriteButton extends StatelessWidget {
-  final LandMark place;
-  final bool isFavs;
+  final FSLandMark place;
 
-  const FavoriteButton({super.key, required this.place, this.isFavs = false});
+  const FavoriteButton({super.key, required this.place});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,11 @@ class FavoriteButton extends StatelessWidget {
             child: Center(
               child: BlocBuilder<FavBloc, FavState>(
                 builder: (context, state) {
-                  final isFavorite = place.fav;
+                  bool isFavorite = false;
+                  if (state is FavoriteToggled) {
+                    isFavorite = state.isFav.contains(place.id);
+                  }
+
                   return IconButton(
                     icon: Icon(
                       isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -36,7 +39,7 @@ class FavoriteButton extends StatelessWidget {
                     color: kMainColor,
                     onPressed: () {
                       context.read<FavBloc>().add(
-                            ToggleFavoriteEvent(placeId: int.parse(place.id)),
+                            ToggleFavoriteEvent(placeId: place.id),
                           );
                     },
                   );

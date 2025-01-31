@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/core/utils/user_manager.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
-import 'package:tourist_guide/data/places_data/places_data.dart';
+import 'package:tourist_guide/data/firebase/auth_services.dart';
+import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 
 part 'fav_btn_event.dart';
 part 'fav_btn_state.dart';
@@ -17,27 +16,27 @@ class FavBloc extends Bloc<FavEvent, FavState> {
     Emitter<FavState> emit,
   ) async {
     try {
-      // Get the list of favorite places ids
-      final ids = UserManager().getFavPlacesIds();
+      // Get the current User data
+      FSUser? user = await FirebaseService()
+          .getUserData(FirebaseService().currentUser!.uid);
+      if (user == null) {
+        emit(FavError(errorMsg: "User not found"));
+        return;
+      }
+      // Get the current User Fav List
+      List<String> updatedFavorites = List.from(user.favPlacesIds ?? []);
 
-      // Check if ids contains the current id
-      final isFav = ids.contains(event.placeId.toString());
+      if (updatedFavorites.contains(event.placeId)) {
+        updatedFavorites.remove(event.placeId);
+      } else {
+        updatedFavorites.add(event.placeId.toString());
+      }
 
-      // If current id exists, remove it. Otherwise add it
-      isFav
-          ? ids.remove(event.placeId.toString())
-          : ids.add(event.placeId.toString());
+      // Update User data (fav List)
+      await FirebaseService()
+          .updateUserData({"favPlacesIds": updatedFavorites});
 
-      // Update the fav ids list in shared prefs
-      UserManager().setFavPlacesIds(ids: ids);
-
-      // Update PlacesData
-      PlacesData.kLandmarks[event.placeId].fav = !isFav;
-
-      // Emit success state
-      emit(FavoriteToggled(isFav: !isFav));
-
-      debugPrint('=====\n$ids\n=====');
+      emit(FavoriteToggled(isFav: updatedFavorites));
     } catch (e) {
       emit(FavError(errorMsg: e.toString()));
     }

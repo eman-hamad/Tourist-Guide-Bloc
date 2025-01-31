@@ -107,7 +107,7 @@ class FirebaseService {
   }
 
   // Update user data
-  Future<void> updateUserData(Map<String, String?> user,
+  Future<void> updateUserData(Map<String, dynamic> user,
       {String? password}) async {
     try {
       final currentUser = FirebaseService().currentUser;
