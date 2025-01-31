@@ -12,7 +12,7 @@ import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/ui/landmarks/favs/screens/fav_screen.dart';
 import 'package:tourist_guide/ui/landmarks/govs/screens/govs_screen.dart';
 import 'package:tourist_guide/ui/landmarks/places/screen/places_screen.dart';
-import 'package:tourist_guide/ui/profile/profile_screen.dart';
+import 'package:tourist_guide/ui/profile/profile.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

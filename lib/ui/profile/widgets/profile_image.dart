@@ -20,7 +20,7 @@ class ProfileImage extends StatelessWidget {
         child: Material(
           child: InkWell(
             onTap: () {
-              // call pickImage from bloc to upload img
+              // call updateAvatar from bloc to upload img
               context.read<ProfileBloc>().add(UpdateAvatar());
             },
             child:

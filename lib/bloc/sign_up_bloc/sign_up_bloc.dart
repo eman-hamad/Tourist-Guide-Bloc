@@ -144,14 +144,15 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
       // Check for duplicate name
       if (await isNameTaken(name)) {
         emit(SignUpErrorState(
-          errorMessage: 'This Full Name is already taken. Please choose another one.',
+          errorMessage:
+              'This Full Name is already taken. Please choose another one.',
         ));
         return;
       }
 
       // Validate and check phone if provided
       if (phone.isNotEmpty) {
-       // emit(SignUpLoadingState(loadingMessage: 'Checking phone number...'));
+        // emit(SignUpLoadingState(loadingMessage: 'Checking phone number...'));
 
         if (!isValidPhone(phone)) {
           emit(SignUpErrorState(
@@ -177,7 +178,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
       }
 
       // Create user with email and password
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
@@ -187,8 +189,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
         FSUser newUser = FSUser(
           uid: userCredential.user!.uid,
           name: name.trim(),
+          password: password.trim(),
           email: email.toLowerCase().trim(),
           phone: phone.trim(),
+        
           favPlacesIds: [],
         );
 

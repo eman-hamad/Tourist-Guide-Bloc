@@ -7,6 +7,8 @@ import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
+import 'package:tourist_guide/data/firebase/auth_services.dart';
+import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 import 'package:tourist_guide/ui/profile/widgets/profile_image.dart';
 import 'edit_profile.dart';
 import 'widgets/profile_item.dart';
@@ -30,11 +32,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // get user's data and load img
-    context.read<ProfileBloc>().add(LoadProfile());
+    // load data from firebase
     context.read<ProfileBloc>().add(LoadSavedImage());
     context.read<ProfileBloc>().add(LoadHeaderData());
-    //check the theme 
+    context.read<ProfileBloc>().add(LoadProfile());
+
+    //check the theme
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SafeArea(
@@ -146,18 +149,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: context.read<ProfileBloc>().user.name,
+                                    txt: context
+                                        .read<ProfileBloc>()
+                                        .firebaseUser!
+                                        .name,
                                     icon: Icons.person_2_outlined,
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: context.read<ProfileBloc>().user.email,
+                                    txt: context
+                                        .read<ProfileBloc>()
+                                        .firebaseUser!
+                                        .email,
                                     icon: Icons.email_outlined,
                                   ),
                                   ProfileItem(
                                     txt: context
                                         .read<ProfileBloc>()
-                                        .user
+                                        .firebaseUser!
                                         .password,
                                     isObscure: false,
                                     icon: Icons.lock_open_outlined,
@@ -166,13 +175,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     isObscure: true,
                                     txt: context
                                             .read<ProfileBloc>()
-                                            .user
+                                            .firebaseUser!
                                             .phone
                                             .isEmpty
                                         ? 'N/A'
                                         : context
                                             .read<ProfileBloc>()
-                                            .user
+                                            .firebaseUser!
                                             .phone,
                                     icon: Icons.phone_android_outlined,
                                   ),
@@ -200,19 +209,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               child: EditProfile(
                                                 name: context
                                                     .read<ProfileBloc>()
-                                                    .user
+                                                    .firebaseUser!
                                                     .name,
                                                 email: context
                                                     .read<ProfileBloc>()
-                                                    .user
+                                                    .firebaseUser!
                                                     .email,
                                                 password: context
                                                     .read<ProfileBloc>()
-                                                    .user
+                                                    .firebaseUser!
                                                     .password,
                                                 phone: context
                                                     .read<ProfileBloc>()
-                                                    .user
+                                                    .firebaseUser!
                                                     .phone,
                                               ),
                                             ),

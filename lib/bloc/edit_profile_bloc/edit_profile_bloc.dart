@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
-import 'package:tourist_guide/data/models/user_model.dart';
+import 'package:tourist_guide/data/firebase/auth_services.dart';
 import 'package:tourist_guide/ui/home/home.dart';
 
 part 'edit_profile_event.dart';
@@ -45,29 +42,14 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       try {
-        final prefs = await SharedPreferences.getInstance();
-        final myUser = prefs.getString('current_user');
-        if (myUser != null) {
-          Map<String, dynamic> map = jsonDecode(myUser);
-          var user1 = UserModel.fromJson(map);
-          UserManager.deleteUser(user1.id);
-        }
-        List<Map<String, dynamic>> usersList = [];
-        String? existingUsersString = prefs.getString('users_list');
-        if (existingUsersString != null) {
-          usersList =
-              List<Map<String, dynamic>>.from(json.decode(existingUsersString));
-        }
-        Map<String, dynamic> newUser = {
-          'id': DateTime.now().millisecondsSinceEpoch.toString(),
+        // update data in firebase
+        FirebaseService().updateUserData({
           'name': name,
-          'email': email.toLowerCase(),
-          'password': password,
+          'email': email,
           'phone': phoneNumber,
-          'registrationDate': DateTime.now().toIso8601String(),
-        };
-        usersList.add(newUser);
-        await prefs.setString('current_user', json.encode(newUser));
+          'password': password
+        });
+
         if (!context.mounted) return;
         CustomSnackBar.showSuccess(
             context: context, message: 'Edited successfully!');

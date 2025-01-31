@@ -33,6 +33,7 @@ class FirebaseService {
         FSUser fsUser = FSUser(
           uid: user.uid,
           name: name,
+          password: password,
           email: email,
           phone: phone,
           favPlacesIds: [],
@@ -68,10 +69,8 @@ class FirebaseService {
 
       if (user != null) {
         // Fetch user data from Firestore
-        DocumentSnapshot doc = await _firestore
-            .collection('Users')
-            .doc(user.uid)
-            .get();
+        DocumentSnapshot doc =
+            await _firestore.collection('Users').doc(user.uid).get();
 
         return FSUser.fromFirestore(doc);
       }
@@ -95,10 +94,8 @@ class FirebaseService {
   // Get user data
   Future<FSUser?> getUserData(String uid) async {
     try {
-      DocumentSnapshot doc = await _firestore
-          .collection('Users')
-          .doc(uid)
-          .get();
+      DocumentSnapshot doc =
+          await _firestore.collection('Users').doc(uid).get();
 
       if (doc.exists) {
         return FSUser.fromFirestore(doc);
@@ -111,12 +108,10 @@ class FirebaseService {
   }
 
   // Update user data
-  Future<void> updateUserData(FSUser user) async {
+  Future<void> updateUserData(Map<String, String?> user) async {
     try {
-      await _firestore
-          .collection('Users')
-          .doc(user.uid)
-          .update(user.toFirestore());
+      final currentUser = FirebaseService().currentUser;
+      await _firestore.collection('Users').doc(currentUser!.uid).update(user);
     } catch (e) {
       print('Error updating user data: $e');
       rethrow;

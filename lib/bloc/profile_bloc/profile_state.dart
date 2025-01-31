@@ -8,7 +8,7 @@ class ProfileInitial extends ProfileState {}
 class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
-  final UserModel? user;
+  final FSUser? user;
   final File? image;
   ProfileLoaded({this.user, this.image});
 }
