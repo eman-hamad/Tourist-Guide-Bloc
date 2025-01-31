@@ -5,6 +5,7 @@ class FSUser {
   String name;
   String email;
   String phone;
+  String image;
   List<String>? favPlacesIds;
 
   FSUser(
@@ -12,6 +13,7 @@ class FSUser {
       required this.name,
       required this.email,
       required this.phone,
+      this.image = '',
       this.favPlacesIds});
 
   factory FSUser.fromFirestore(DocumentSnapshot doc) {
@@ -21,6 +23,7 @@ class FSUser {
         name: data['name'],
         email: data['email'],
         phone: data['phone'],
+        image: data['image'] ?? '',
         favPlacesIds: (data['favPlacesIds'] as List<dynamic>?)
             ?.map((e) => e.toString())
             .toList());
@@ -31,6 +34,7 @@ class FSUser {
         "name": name,
         "email": email,
         "phone": phone,
+        "image": image,
         "favPlacesIds": favPlacesIds
       };
 }

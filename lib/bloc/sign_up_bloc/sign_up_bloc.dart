@@ -1,13 +1,13 @@
-import 'dart:convert';
+
 import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:tourist_guide/data/models/fire_store_user_model.dart';
-import 'package:tourist_guide/data/models/user_model.dart';
+
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';
@@ -191,6 +191,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
           name: name.trim(),
           email: email.toLowerCase().trim(),
           phone: phone.trim(),
+          image: '',
           favPlacesIds: [],
         );
 
