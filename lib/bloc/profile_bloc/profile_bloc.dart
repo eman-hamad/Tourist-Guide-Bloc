@@ -29,7 +29,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     uid: "",
     email: "",
     name: "",
-    password: "",
     phone: "",
   );
 // func to load image from firebase

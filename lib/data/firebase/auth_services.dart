@@ -33,7 +33,6 @@ class FirebaseService {
         FSUser fsUser = FSUser(
           uid: user.uid,
           name: name,
-          password: password,
           email: email,
           phone: phone,
           favPlacesIds: [],
@@ -108,10 +107,11 @@ class FirebaseService {
   }
 
   // Update user data
-  Future<void> updateUserData(Map<String, String?> user) async {
+  Future<void> updateUserData(Map<String, String?> user , String password) async {
     try {
       final currentUser = FirebaseService().currentUser;
       await _firestore.collection('Users').doc(currentUser!.uid).update(user);
+       await currentUser.updatePassword(password);
     } catch (e) {
       print('Error updating user data: $e');
       rethrow;

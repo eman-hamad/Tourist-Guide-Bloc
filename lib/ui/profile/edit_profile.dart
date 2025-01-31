@@ -11,13 +11,11 @@ import 'package:tourist_guide/core/widgets/custom_text_form_field.dart';
 class EditProfile extends StatefulWidget {
   final String name;
   final String email;
-  final String password;
   final String phone;
   const EditProfile(
       {super.key,
       required this.name,
       required this.email,
-      required this.password,
       required this.phone});
 
   @override
@@ -45,7 +43,6 @@ class _EditProfile extends State<EditProfile> {
     super.initState();
     _nameController.text = widget.name;
     _emailController.text = widget.email;
-    _passwordController.text = widget.password;
     _phoneNumberController.text = widget.phone;
   }
 

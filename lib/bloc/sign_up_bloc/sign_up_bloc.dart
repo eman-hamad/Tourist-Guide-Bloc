@@ -189,10 +189,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpStates> {
         FSUser newUser = FSUser(
           uid: userCredential.user!.uid,
           name: name.trim(),
-          password: password.trim(),
           email: email.toLowerCase().trim(),
           phone: phone.trim(),
-        
           favPlacesIds: [],
         );
 

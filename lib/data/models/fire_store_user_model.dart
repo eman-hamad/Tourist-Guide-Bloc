@@ -4,7 +4,6 @@ class FSUser {
   String uid;
   String name;
   String email;
-  String password;
   String phone;
   List<String>? favPlacesIds;
 
@@ -12,7 +11,6 @@ class FSUser {
       {required this.uid,
       required this.name,
       required this.email,
-      required this.password,
       required this.phone,
       this.favPlacesIds});
 
@@ -22,17 +20,15 @@ class FSUser {
         uid: doc.id,
         name: data['name'],
         email: data['email'],
-        password: data['password'],
         phone: data['phone'],
-
-        favPlacesIds: (data['favPlacesIds'] as List<dynamic>?)?.map((e) => e.toString()).toList() );
-
+        favPlacesIds: (data['favPlacesIds'] as List<dynamic>?)
+            ?.map((e) => e.toString())
+            .toList());
   }
 
   Map<String, dynamic> toFirestore() => {
         "Uid": uid,
         "name": name,
-        "password": password,
         "email": email,
         "phone": phone,
         "favPlacesIds": favPlacesIds

@@ -164,10 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     icon: Icons.email_outlined,
                                   ),
                                   ProfileItem(
-                                    txt: context
-                                        .read<ProfileBloc>()
-                                        .firebaseUser!
-                                        .password,
+                                    txt: '888888888',
                                     isObscure: false,
                                     icon: Icons.lock_open_outlined,
                                   ),
@@ -215,10 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     .read<ProfileBloc>()
                                                     .firebaseUser!
                                                     .email,
-                                                password: context
-                                                    .read<ProfileBloc>()
-                                                    .firebaseUser!
-                                                    .password,
+                                               
                                                 phone: context
                                                     .read<ProfileBloc>()
                                                     .firebaseUser!
