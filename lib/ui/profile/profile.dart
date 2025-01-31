@@ -163,11 +163,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         .email,
                                     icon: Icons.email_outlined,
                                   ),
-                                  // ProfileItem(
-                                  //   txt: '888888888',
-                                  //   isObscure: false,
-                                  //   icon: Icons.lock_open_outlined,
-                                  // ),
+                                   ProfileItem(
+                                     txt: '888888888',
+                                     isObscure: false,
+                                     icon: Icons.lock_open_outlined,
+                                  ),
                                   ProfileItem(
                                     isObscure: true,
                                     txt: context
