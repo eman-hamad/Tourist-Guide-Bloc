@@ -47,8 +47,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           'name': name,
           'email': email,
           'phone': phoneNumber,
-          
-        }, password);
+        }, password: password);
 
         if (!context.mounted) return;
         CustomSnackBar.showSuccess(
