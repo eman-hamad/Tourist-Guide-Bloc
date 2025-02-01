@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/custom_text_field_bloc/custom_text_field_bloc.dart';
@@ -167,10 +166,10 @@ class CustomTextFieldState extends State<CustomTextField> {
                     borderRadius: BorderRadius.circular(30.0.r),
                     borderSide: BorderSide(
                       color: showError
-                          ? Colors.redAccent 
+                          ? Colors.redAccent
                           : isDarkMode
-                              ? kMainColorDark 
-                              : kMainColor, 
+                              ? kMainColorDark
+                              : kMainColor,
                       width: 2.0.w,
                     ),
                   ),

@@ -8,6 +8,7 @@ import 'package:tourist_guide/bloc/splash_bloc/splash_state.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/custom_page_route.dart';
 import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
+import 'package:tourist_guide/data/firebase/auth_services.dart';
 import 'package:tourist_guide/ui/auth/login.dart';
 import 'package:tourist_guide/ui/home/home.dart';
 
@@ -16,6 +17,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseService().getUserData(FirebaseService().currentUser!.uid);
+
     return BlocProvider(
       create: (_) => SplashScreenBloc()..add(CheckLoginStatusEvent()),
       child: Scaffold(
@@ -26,7 +29,8 @@ class SplashScreen extends StatelessWidget {
               if (state is SplashScreenNavigationState) {
                 Navigator.of(context).pushReplacement(
                   CustomPageRoute(
-                    child: state.isLoggedIn ? const HomeScreen() : const Login(),
+                    child:
+                        state.isLoggedIn ? const HomeScreen() : const Login(),
                     type: PageTransitionType.slideUp,
                     duration: const Duration(seconds: 3),
                     curve: Curves.easeInOutCubic,

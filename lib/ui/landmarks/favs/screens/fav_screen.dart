@@ -11,8 +11,6 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // context.read<FavScreenCubit>().loadFavorites();
-
     return Column(
       children: [
         Header(title: 'Favorite Places'),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/data/firebase/auth_services.dart';
-import 'package:tourist_guide/data/models/fire_store_user_model.dart';
+import 'package:tourist_guide/data/firebase/places_services.dart';
+import 'package:tourist_guide/data/models/landmark_model.dart';
 
 part 'fav_btn_event.dart';
 part 'fav_btn_state.dart';
@@ -16,27 +16,10 @@ class FavBloc extends Bloc<FavEvent, FavState> {
     Emitter<FavState> emit,
   ) async {
     try {
-      // Get the current User data
-      FSUser? user = await FirebaseService()
-          .getUserData(FirebaseService().currentUser!.uid);
-      if (user == null) {
-        emit(FavError(errorMsg: "User not found"));
-        return;
-      }
-      // Get the current User Fav List
-      List<String> updatedFavorites = List.from(user.favPlacesIds ?? []);
+      final isFav = await PlacesServices().updateFavPlaces(event.placeId);
 
-      if (updatedFavorites.contains(event.placeId)) {
-        updatedFavorites.remove(event.placeId);
-      } else {
-        updatedFavorites.add(event.placeId.toString());
-      }
-
-      // Update User data (fav List)
-      await FirebaseService()
-          .updateUserData({"favPlacesIds": updatedFavorites});
-
-      emit(FavoriteToggled(isFav: updatedFavorites));
+      // Emit success state
+      emit(FavoriteToggled(isFav: isFav));
     } catch (e) {
       emit(FavError(errorMsg: e.toString()));
     }

@@ -5,6 +5,7 @@ import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static FSUser? cUser;
 
   // Get current user
   User? get currentUser => _auth.currentUser;
@@ -92,12 +93,14 @@ class FirebaseService {
 
   // Get user data
   Future<FSUser?> getUserData(String uid) async {
+    if (cUser != null) return cUser;
+
     try {
       DocumentSnapshot doc =
           await _firestore.collection('Users').doc(uid).get();
 
       if (doc.exists) {
-        return FSUser.fromFirestore(doc);
+        return cUser = FSUser.fromFirestore(doc);
       }
       return null;
     } catch (e) {

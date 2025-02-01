@@ -23,9 +23,7 @@ class DetailsScreen extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) => FavBloc(),
-        ),
+        BlocProvider(create: (_) => FavBloc()),
         BlocProvider(
           create: (context) => DetailsScreenCubit(),
         ),

@@ -1,32 +1,32 @@
-part of 'places_data_bloc.dart';
+part of 'places_screen_cubit.dart';
 
 @immutable
-abstract class PlacesState {}
+abstract class PlacesScreenState {}
 
-class PlacesDataInitial extends PlacesState {}
+class PlacesScreenInitial extends PlacesScreenState {}
 
-class PlacesLoadingState extends PlacesState {}
+class PlacesScreenLoadingState extends PlacesScreenState {}
 
-class PlacesLoadedState extends PlacesState {
+class PlacesScreenLoadedState extends PlacesScreenState {
   final List<FSLandMark> sugPlaces;
   final List<FSLandMark> popPlaces;
   final bool isLoadingMore;
   final bool hasMore;
 
-  PlacesLoadedState({
+  PlacesScreenLoadedState({
     required this.sugPlaces,
     required this.popPlaces,
     this.isLoadingMore = false,
     this.hasMore = true,
   });
 
-  PlacesLoadedState copyWith({
+  PlacesScreenLoadedState copyWith({
     List<FSLandMark>? sugPlaces,
     List<FSLandMark>? popPlaces,
     bool? isLoadingMore,
     bool? hasMore,
   }) {
-    return PlacesLoadedState(
+    return PlacesScreenLoadedState(
       sugPlaces: sugPlaces ?? this.sugPlaces,
       popPlaces: popPlaces ?? this.popPlaces,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
@@ -35,12 +35,7 @@ class PlacesLoadedState extends PlacesState {
   }
 }
 
-class PlacesLoaded extends PlacesState {
-  final List<FSLandMark> places;
-  PlacesLoaded({required this.places});
-}
-
-class PlacesError extends PlacesState {
+class PlacesScreenErrorState extends PlacesScreenState {
   final String errorMsg;
-  PlacesError({required this.errorMsg});
+  PlacesScreenErrorState({required this.errorMsg});
 }

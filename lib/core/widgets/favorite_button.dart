@@ -26,20 +26,15 @@ class FavoriteButton extends StatelessWidget {
             child: Center(
               child: BlocBuilder<FavBloc, FavState>(
                 builder: (context, state) {
-                  bool isFavorite = false;
-                  if (state is FavoriteToggled) {
-                    isFavorite = state.isFav.contains(place.id);
-                  }
-
                   return IconButton(
                     icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      place.isFav ? Icons.favorite : Icons.favorite_border,
                       size: 0.025.sh,
                     ),
                     color: kMainColor,
                     onPressed: () {
                       context.read<FavBloc>().add(
-                            ToggleFavoriteEvent(placeId: place.id),
+                            ToggleFavoriteEvent(placeId: place.id!),
                           );
                     },
                   );

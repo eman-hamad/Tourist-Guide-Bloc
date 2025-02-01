@@ -7,6 +7,7 @@ class FSLandMark {
   String governorate;
   double rate;
   String description;
+  bool isFav;
 
   FSLandMark({
     this.id,
@@ -15,6 +16,7 @@ class FSLandMark {
     required this.governorate,
     required this.rate,
     required this.description,
+    this.isFav = false,
   });
 
   factory FSLandMark.fromFirestore(DocumentSnapshot doc) {

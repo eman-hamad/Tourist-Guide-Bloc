@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_screen_cubit/fav_screen_cubit.dart';
 import 'package:tourist_guide/bloc/data_blocs/gov_screen/gov_screen_cubit.dart';
-import 'package:tourist_guide/bloc/data_blocs/places_bloc/places_data_bloc.dart';
+import 'package:tourist_guide/bloc/data_blocs/places_screen/places_screen_cubit.dart';
 import 'package:tourist_guide/bloc/home_cubit/home_cubit.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
@@ -63,8 +63,11 @@ class _HomeViewState extends State<_HomeView> {
       children: [
         MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => PlacesBloc()),
             BlocProvider(create: (context) => FavBloc()),
+            BlocProvider(
+              create: (context) =>
+                  PlacesScreenCubit(favBloc: context.read<FavBloc>()),
+            ),
             BlocProvider(create: (context) => ProfileBloc()),
           ],
           child: const PlacesScreen(),

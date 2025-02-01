@@ -2,11 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tourist_guide/bloc/splash_bloc/splash_event.dart';
 import 'package:tourist_guide/bloc/splash_bloc/splash_state.dart';
-import 'package:tourist_guide/data/models/fire_store_user_model.dart';
-
 
 class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -26,10 +23,8 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
 
       if (currentUser != null && !currentUser.isAnonymous) {
         // Verify if user data exists in Firestore
-        DocumentSnapshot userDoc = await _firestore
-            .collection('Users')
-            .doc(currentUser.uid)
-            .get();
+        DocumentSnapshot userDoc =
+            await _firestore.collection('Users').doc(currentUser.uid).get();
 
         if (userDoc.exists) {
           emit(SplashScreenLoggedInState());
@@ -54,10 +49,8 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
 
       if (isLoggedIn) {
         // Verify if user data exists in Firestore
-        DocumentSnapshot userDoc = await _firestore
-            .collection('Users')
-            .doc(currentUser.uid)
-            .get();
+        DocumentSnapshot userDoc =
+            await _firestore.collection('Users').doc(currentUser.uid).get();
 
         if (userDoc.exists) {
           emit(SplashScreenNavigationState(true));

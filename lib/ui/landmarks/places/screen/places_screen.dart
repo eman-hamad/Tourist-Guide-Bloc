@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:tourist_guide/bloc/data_blocs/places_bloc/places_data_bloc.dart';
+import 'package:tourist_guide/bloc/data_blocs/places_screen/places_screen_cubit.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/data/places_data/places_data.dart';
@@ -16,7 +16,7 @@ class PlacesScreen extends StatelessWidget {
 
   void _triggerLoadingDataEvents(BuildContext context) {
     context.read<ProfileBloc>().add(LoadHeaderData());
-    context.read<PlacesBloc>().add(LoadPlacesEvent());
+    // context.read<PlacesBloc>().add(LoadPlacesEvent());
   }
 
 // The main UI of the PlacesScreen is built with padding and two main components:
@@ -108,10 +108,10 @@ class PlacesScreen extends StatelessWidget {
           SizedBox(height: 0.01.sh),
 
           // Load the data from the PlacesBloc using a BlocBuilder
-          BlocBuilder<PlacesBloc, PlacesState>(
+          BlocBuilder<PlacesScreenCubit, PlacesScreenState>(
             builder: (context, state) {
               // In loading state show a loading widget
-              if (state is PlacesLoadingState) {
+              if (state is PlacesScreenLoadingState) {
                 return SugPlaces(
                   loading: true,
                   itemCount: 4,
@@ -121,7 +121,7 @@ class PlacesScreen extends StatelessWidget {
                 );
               }
               // In loaded state show the data
-              else if (state is PlacesLoadedState) {
+              else if (state is PlacesScreenLoadedState) {
                 return SugPlaces(
                   loading: false,
                   itemCount: state.sugPlaces.length,
@@ -129,12 +129,12 @@ class PlacesScreen extends StatelessWidget {
                   hasMore: state.hasMore,
                   onLoadMore: () {
                     // Trigger the Bloc event to load more places
-                    context.read<PlacesBloc>().add(LoadMorePlacesEvent());
+                    context.read<PlacesScreenCubit>().loadMorePlaces();
                   },
                 );
               }
               // In Error state show the error msg
-              else if (state is PlacesError) {
+              else if (state is PlacesScreenErrorState) {
                 return Expanded(child: Text(state.errorMsg));
               }
               // If something wrong happend show an error msg
@@ -172,10 +172,10 @@ class PlacesScreen extends StatelessWidget {
           SizedBox(height: 0.01.sh),
 
           // Load the data from the PlacesBloc using a BlocBuilder
-          BlocBuilder<PlacesBloc, PlacesState>(
+          BlocBuilder<PlacesScreenCubit, PlacesScreenState>(
             builder: (context, state) {
               // In loading state show a loading widget
-              if (state is PlacesLoadingState) {
+              if (state is PlacesScreenLoadingState) {
                 return PopPlaces(
                   loading: true,
                   itemCount: 4,
@@ -183,7 +183,7 @@ class PlacesScreen extends StatelessWidget {
                 );
               }
               // In loaded state show the data
-              else if (state is PlacesLoadedState) {
+              else if (state is PlacesScreenLoadedState) {
                 return PopPlaces(
                   loading: false,
                   itemCount: state.popPlaces.length,
@@ -191,7 +191,7 @@ class PlacesScreen extends StatelessWidget {
                 );
               }
               // In Error state show the error msg
-              else if (state is PlacesError) {
+              else if (state is PlacesScreenErrorState) {
                 return Expanded(child: Text(state.errorMsg));
               }
               // If something wrong happend show an error msg

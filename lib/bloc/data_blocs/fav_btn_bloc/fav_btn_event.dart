@@ -4,6 +4,6 @@ part of 'fav_btn_bloc.dart';
 abstract class FavEvent {}
 
 class ToggleFavoriteEvent extends FavEvent {
-  final String? placeId;
+  final String placeId;
   ToggleFavoriteEvent({required this.placeId});
 }

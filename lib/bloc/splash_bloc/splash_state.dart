@@ -1,6 +1,5 @@
 // splash_screen_state.dart
-import 'package:meta/meta.dart';
-import 'package:tourist_guide/data/models/fire_store_user_model.dart';
+import 'package:flutter/material.dart';
 
 @immutable
 // Update splash_state.dart to include user data
