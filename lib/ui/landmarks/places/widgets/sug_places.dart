@@ -9,7 +9,7 @@ class SugPlaces extends StatelessWidget {
   final List<FSLandMark> places;
   final bool hasMore;
   final VoidCallback onLoadMore;
-  const SugPlaces({
+  const  SugPlaces({
     super.key,
     required this.loading,
     required this.itemCount,

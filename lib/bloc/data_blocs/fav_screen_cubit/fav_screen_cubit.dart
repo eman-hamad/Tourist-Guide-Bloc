@@ -1,9 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
-import 'package:tourist_guide/core/utils/user_manager.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
-import 'package:tourist_guide/data/places_data/places_data.dart';
+import 'package:tourist_guide/data/firebase/auth_services.dart';
+import 'package:tourist_guide/data/firebase/places_services.dart';
+import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
+import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 
 part 'fav_screen_state.dart';
 
@@ -15,7 +16,7 @@ class FavScreenCubit extends Cubit<FavScreenState> {
     loadFavorites();
 
     // Listen to FavBloc to reload when a favorite is toggled
-    favBloc.stream.listen((state) {
+    favBloc.stream.distinct().listen((state) {
       if (state is FavoriteToggled) {
         loadFavorites();
       }
@@ -37,16 +38,28 @@ class FavScreenCubit extends Cubit<FavScreenState> {
     emit(FavScreenLoading());
 
     try {
+      PlacesServices.places.clear();
+
+      List<FSLandMark> land = await PlacesServices().getPlaces();
+      //Get the curret user
+      FSUser? user = await FirebaseService()
+          .getUserData(FirebaseService().currentUser!.uid);
+      if (user == null) {
+        emit(FavScreenError("User not found"));
+        return;
+      }
+
       // Add a delay before emitting the data
       // Assign the future to track it
-      _loadFavsFuture = await Future.delayed(Duration(seconds: 3), () {
+      _loadFavsFuture = await Future.delayed(Duration(seconds: 1), () {
         // Check if cubit is still active before emitting
         if (!isClosed) {
-          // Fetch favorites directly from PlacesData
-          final ids = UserManager().getFavPlacesIds();
-          final favs = PlacesData.kLandmarks
-              .where((place) => ids.contains(place.id))
-              .toList();
+          // Get the fav place for the current user
+          Set<String> favoritesList = Set.from(user.favPlacesIds ?? []);
+
+          // Get the fav places withe the id
+          List<FSLandMark> favs =
+              land.where((place) => favoritesList.contains(place.id)).toList();
 
           emit(FavScreenLoaded(favs: favs));
         }

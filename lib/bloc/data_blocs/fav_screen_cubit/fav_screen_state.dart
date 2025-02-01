@@ -8,7 +8,7 @@ class FavScreenInitial extends FavScreenState {}
 class FavScreenLoading extends FavScreenState {}
 
 class FavScreenLoaded extends FavScreenState {
-  final List<LandMark> favs;
+  final List<FSLandMark> favs;
   FavScreenLoaded({required this.favs});
 }
 
