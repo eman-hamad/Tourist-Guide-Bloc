@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseService().getUserData(FirebaseService().currentUser!.uid);
+   
 
     return BlocProvider(
       create: (_) => SplashScreenBloc()..add(CheckLoginStatusEvent()),
