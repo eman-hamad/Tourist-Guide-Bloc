@@ -14,14 +14,23 @@ part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(ProfileInitial()) {
-    on<LoadSavedImage>(loadSavedImage);
-    on<LoadProfile>(loadProfile);
     on<UpdateAvatar>(updateAvatar);
     on<LoadHeaderData>(getHeaderData);
+    on<SubscribeProfile>(_subscribeProfile);
+    on<ProfileUpdated>((event, emit) {
+      emit(ProfileLoaded(user: event.user, image: image));
+    });
+    on<ProfileSubscriptionError>((event, emit) {
+      emit(ProfileError(event.errorMessage));
+    });
+    on<ImageUpdated>((event, emit) {
+      emit(ProfileImageLoaded(image: event.image));
+    });
   }
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final currentUser = FirebaseService().currentUser;
-
+  FSUser? cUser;
   File image = File("");
   String firstName = "";
   File headerImage = File("");
@@ -31,46 +40,48 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     name: "",
     phone: "",
   );
-// func to load image from firebase
-  void loadSavedImage(LoadSavedImage event, Emitter<ProfileState> emit) async {
+  StreamSubscription<FSUser?>? _userSubscription;
+  void _subscribeProfile(SubscribeProfile event, Emitter<ProfileState> emit) {
     if (currentUser == null) {
       print("No user found");
       return;
     }
-    try {
-      emit(ProfileLoading());
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(currentUser!.uid)
-          .get();
-      if (doc.exists) {
-        String imagePath = doc.get('image');
-        image = File(imagePath);
 
-        emit(ProfileImageLoaded(image: File(imagePath)));
-      } else {
-        emit(ProfileInitial());
-      }
-    } catch (e) {
-      emit(ProfileImageError('Failed to load saved image: ${e.toString()}'));
-    }
+    _userSubscription?.cancel();
+    _userSubscription = getUserDataStream(currentUser!.uid).listen(
+      (user) {
+        if (user != null) {
+          firebaseUser = user;
+
+          String fullName = user.name;
+          List<String> nameParts = fullName.split(" ");
+          firstName = nameParts[0];
+          image = File(user.image);
+
+          add(ProfileUpdated(user: user));
+          add(ImageUpdated(image: image));
+        } else {
+          add(ProfileSubscriptionError("User data not found"));
+        }
+      },
+      onError: (error) {
+        add(ProfileSubscriptionError(error.toString()));
+      },
+    );
   }
 
-// func to get user data from firebase
-  Future<void> loadProfile(
-      LoadProfile event, Emitter<ProfileState> emit) async {
-    if (currentUser == null) {
-      print("No user found");
-      return;
-    }
-    try {
-      emit(ProfileLoading());
-      firebaseUser = await FirebaseService().getUserData(currentUser!.uid);
-
-      emit(ProfileLoaded(user: firebaseUser, image: image));
-    } on Exception catch (e) {
-      emit(ProfileError(e.toString()));
-    }
+  Stream<FSUser?> getUserDataStream(String uid) {
+    return _firestore
+        .collection('Users')
+        .doc(uid)
+        .snapshots()
+        .map((DocumentSnapshot doc) {
+      if (doc.exists) {
+        cUser = FSUser.fromFirestore(doc);
+        return cUser;
+      }
+      return null;
+    });
   }
 
 // func to pick image from gallery and emit states when all is done
@@ -106,6 +117,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
   }
 
+  
 // get header data from firebase
   Future<void> getHeaderData(
       LoadHeaderData event, Emitter<ProfileState> emit) async {
@@ -140,5 +152,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } on Exception catch (e) {
       emit(HeaderDataError(e.toString()));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _userSubscription?.cancel();
+    return super.close();
   }
 }
