@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,15 +29,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       (Route<dynamic> route) => false,
     );
   }
+ 
+
 
   @override
   Widget build(BuildContext context) {
-    // load data from firebase
-    context.read<ProfileBloc>().add(LoadSavedImage());
-    context.read<ProfileBloc>().add(LoadHeaderData());
-    context.read<ProfileBloc>().add(LoadProfile());
-
-    //check the theme
+   
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SafeArea(
@@ -106,6 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
 
                         if (state is ProfileImageLoaded) {
+                        
                           return ProfileImage(
                               img: CircleAvatar(
                                   radius: 50.r,
@@ -132,6 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             return Center(child: CircularProgressIndicator());
                           }
                           if (state is ProfileLoaded) {
+                            final user = state.user;
                             return Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -139,6 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       padding: REdgeInsets.only(top: 8.h),
                                       child: Text(
                                           context.read<ProfileBloc>().firstName,
+                                       
                                           style: TextStyle(
                                               fontSize: 21.sp,
                                               fontWeight: FontWeight.bold))),
@@ -147,18 +149,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: context
-                                        .read<ProfileBloc>()
-                                        .firebaseUser!
-                                        .name,
+                                    txt:user!.name,
+                                 
                                     icon: Icons.person_2_outlined,
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: context
-                                        .read<ProfileBloc>()
-                                        .firebaseUser!
-                                        .email,
+                                    txt: user.email,
+                                   
                                     icon: Icons.email_outlined,
                                   ),
                                    ProfileItem(
@@ -168,11 +166,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: context
-                                            .read<ProfileBloc>()
-                                            .firebaseUser!
-                                            .phone
-                                            .isEmpty
+                                    txt: 
+                                    user.phone.isEmpty
+                                
                                         ? 'N/A'
                                         : context
                                             .read<ProfileBloc>()
@@ -202,18 +198,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               create: (context) =>
                                                   EditProfileBloc(),
                                               child: EditProfile(
-                                                name: context
-                                                    .read<ProfileBloc>()
-                                                    .firebaseUser!
-                                                    .name,
-                                                email: context
-                                                    .read<ProfileBloc>()
-                                                    .firebaseUser!
-                                                    .email,
-                                                phone: context
-                                                    .read<ProfileBloc>()
-                                                    .firebaseUser!
-                                                    .phone,
+                                                name: user.name,
+                                                
+                                                email: user.email,
+                                              
+                                                phone:user.phone
+                                             
                                               ),
                                             ),
                                           ),
