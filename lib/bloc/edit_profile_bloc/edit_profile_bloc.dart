@@ -36,7 +36,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     GlobalKey<FormState> formKey,
     String name,
     String email,
-    String password,
+    String? password,
     String phoneNumber,
   ) async {
     if (formKey.currentState!.validate()) {
@@ -47,7 +47,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           'name': name,
           'email': email,
           'phone': phoneNumber,
-        }, password: password);
+        }, password: password );
 
         if (!context.mounted) return;
         CustomSnackBar.showSuccess(

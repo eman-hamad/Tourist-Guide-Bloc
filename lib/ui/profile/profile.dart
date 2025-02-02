@@ -7,8 +7,6 @@ import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
-import 'package:tourist_guide/data/firebase/auth_services.dart';
-import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 import 'package:tourist_guide/ui/profile/widgets/profile_image.dart';
 import 'edit_profile.dart';
 import 'widgets/profile_item.dart';

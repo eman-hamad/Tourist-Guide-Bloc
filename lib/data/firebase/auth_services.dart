@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 
 class FirebaseService {
@@ -116,6 +117,10 @@ class FirebaseService {
       final currentUser = FirebaseService().currentUser;
       await _firestore.collection('Users').doc(currentUser!.uid).update(user);
       if (password != null) {
+        debugPrint("==========================");
+        debugPrint("entered");
+        debugPrint("=============================");
+
         await currentUser.updatePassword(password);
       }
     } catch (e) {

@@ -153,13 +153,14 @@ class _EditProfile extends State<EditProfile> {
                       onPressed: () {
                         // dispatch SaveEdits event to the Bloc
                         context.read<EditProfileBloc>().add(SaveEdits(
-                              context: cont,
-                              formKey: _formKey,
-                              name: _nameController.text,
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                              phoneNumber: _phoneNumberController.text,
-                            ));
+                            context: cont,
+                            formKey: _formKey,
+                            name: _nameController.text,
+                            email: _emailController.text,
+                            phoneNumber: _phoneNumberController.text,
+                            password: _passwordController.text.isEmpty
+                                ? null
+                                : _passwordController.text));
                       },
                       height: 56.h,
                       width: 0.9.sw,

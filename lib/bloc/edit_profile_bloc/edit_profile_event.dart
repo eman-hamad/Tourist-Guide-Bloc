@@ -8,7 +8,7 @@ class SaveEdits extends EditProfileEvent {
   final GlobalKey<FormState> formKey;
   final String name;
   final String email;
-  final String password;
+  final String? password;
   final String phoneNumber;
 
   SaveEdits({
@@ -16,7 +16,7 @@ class SaveEdits extends EditProfileEvent {
     required this.formKey,
     required this.name,
     required this.email,
-    required this.password,
+    this.password,
     required this.phoneNumber,
   });
 }
