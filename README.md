@@ -1,16 +1,19 @@
 # Tourist Guide
 
-Tourist Guide is a mobile application built using **Flutter and Bloc state management** that serves as a travel and tourism guide. The app allows users to explore various places, save their favorite spots, and interact with a variety of travel-related features. It leverages **SharedPreferences** for local data storage, and various UI components to enhance user experience  and bloc to manage states .It separates business logic from the UI, making the app more scalable, testable, and easier to maintain.
+# Tourist Guide
+
+Tourist Guide is a mobile application built using **Flutter and Bloc state management** that serves as a travel and tourism guide. The app allows users to explore various places, save their favorite spots, and interact with a variety of travel-related features. It leverages **Firebase Firestore** for real-time data storage, **Firebase Authentication** for secure user authentication, and **SharedPreferences** for local data storage. The app also uses various UI components to enhance user experience and Bloc to manage states, separating business logic from the UI, making the app more scalable, testable, and easier to maintain.
 
 ---
 
 ## Features
 
-- **Theme Customization**: Toggle between dark and light modes to customize the visual experience. Dark mode is perfect for low-light environments, while light mode ensures clarity during the day. This app can also adapt to device's system settings.
-- **User Authentication**: Sign up and login to save your preferences, such as favorite places and profile images.
-- **Place Details**: Browse through a list of places, view details, and add them to favorites.
+- **Theme Customization**: Toggle between dark and light modes to customize the visual experience. Dark mode is perfect for low-light environments, while light mode ensures clarity during the day. This app can also adapt to the device's system settings.
+- **User Authentication**: Secure sign-up and login using **Firebase Authentication** to save user preferences, such as favorite places and profile images.
+- **Real-Time Data Sync**: **Firebase Firestore** is used to store and sync user data, favorite places, and place details in real-time.
+- **Place Details**: Browse through a list of places, view details, and add them to favorites. Favorite places are synced across devices using Firestore.
 - **Custom Widgets**: Reusable and customizable widgets for a consistent and easy-to-use UI.
-- **Data Persistence**: SharedPreferences are used for storing user data and preferences locally.
+- **Data Persistence**: **SharedPreferences** are used for storing user data and preferences locally, while **Firestore** handles cloud-based data storage and synchronization.
 
 ---
 
@@ -18,7 +21,9 @@ Tourist Guide is a mobile application built using **Flutter and Bloc state manag
 
 - **Flutter**: For building a responsive UI.
 - **Dart**: Programming language used for the app logic.
-- **Bloc State Management**: State Management used for to managing states and separating business logic from the UI.
+- **Bloc State Management**: State Management used for managing states and separating business logic from the UI.
+- **Firebase Firestore**: Real-time NoSQL database for storing and syncing user data and place details.
+- **Firebase Authentication**: Secure user authentication for sign-up and login.
 - **SharedPreferences**: Local storage for saving user preferences.
 - **Material Design**: UI components that follow Material Design guidelines for a consistent and modern design.
 
@@ -27,8 +32,8 @@ Tourist Guide is a mobile application built using **Flutter and Bloc state manag
 ## Project Structure
 
 ### Bloc
-- **Blocs**:  Contains the **Bloc** (Business Logic Components) classes responsible for managing the application's state and handling business logic, each **Bloc** listens to specific events and emits corresponding states. 
-- **Blocs**: Splash Bloc , Sign Up Bloc , Login Bloc , Settings BlocBloc , Profile Bloc , Edit Profile Bloc , Custom TextField Bloc , Data Blocs
+- **Blocs**: Contains the **Bloc** (Business Logic Components) classes responsible for managing the application's state and handling business logic. Each **Bloc** listens to specific events and emits corresponding states.
+- **Blocs**: Splash Bloc, Sign Up Bloc, Login Bloc, Settings Bloc, Profile Bloc, Edit Profile Bloc, Custom TextField Bloc, Data Blocs.
 
 ### Core
 
@@ -37,13 +42,46 @@ Tourist Guide is a mobile application built using **Flutter and Bloc state manag
 
 ### Data
 
-- **Models**: Defines data models such as `User`, `Place`, and others for easy data handling.
+- **Models**: Defines data models such as `User`, `Place`, and others for easy data handling. Includes `FSUser`, `FSLandMark`, and `GovernorateModel` for Firestore integration.
 - **Places**: Stores the list of places and other related data.
+- **Firebase Services**: Contains services for interacting with Firebase Firestore and Authentication, including user sign-up, login, and data retrieval.
 
 ### UI
 
-- **Widgets**: Custom widgets that used throughout the app for consistency and reusability.
+- **Widgets**: Custom widgets used throughout the app for consistency and reusability.
 - **Screens**: Various screens in the app such as the login screen, place details screen, and home screen.
+
+---
+
+## Firebase Integration
+
+### Authentication
+- **Sign Up**: Users can create an account using their email and password. The app uses **Firebase Authentication** to securely handle user registration.
+- **Login**: Users can log in using their registered email and password. Firebase Authentication ensures secure login and session management.
+- **Password Reset**: Users can reset their password via email using Firebase's password reset functionality.
+
+### Firestore
+- **User Data Storage**: User data, including profile information and favorite places, is stored in **Firestore**. This allows for real-time synchronization across devices.
+- **Places Data**: Information about tourist places, including images, descriptions, and ratings, is stored in Firestore. Users can browse and favorite these places.
+- **Favorite Places**: Users can add or remove places from their favorites list, which is stored in Firestore and synced across all their devices.
+
+### Real-Time Updates
+- **Favorite Places Sync**: When a user adds or removes a place from their favorites, the change is immediately reflected in Firestore and synced across all devices.
+- **User Profile Updates**: Any changes to the user's profile, such as updating their name or phone number, are saved in Firestore and updated in real-time.
+
+---
+
+## Getting Started
+
+To get started with the Tourist Guide app, follow these steps:
+
+1. **Clone the Repository**: Clone this repository to your local machine.
+2. **Set Up Firebase**: 
+   - Create a Firebase project on the [Firebase Console](https://console.firebase.google.com/).
+   - Add an Android/iOS app to your Firebase project and follow the setup instructions.
+   - Download the `google-services.json` file for Android or `GoogleService-Info.plist` for iOS and place it in the appropriate directory in your Flutter project.
+3. **Install Dependencies**: Run `flutter pub get` to install all the required dependencies.
+4. **Run the App**: Use `flutter run` to launch the app on your preferred device or emulator.
 
 ---
 
