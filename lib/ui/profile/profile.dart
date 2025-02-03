@@ -29,12 +29,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       (Route<dynamic> route) => false,
     );
   }
- 
 
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<ProfileBloc>().add(SubscribeProfile());
+  }
 
   @override
   Widget build(BuildContext context) {
-   
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SafeArea(
@@ -105,7 +109,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
 
                         if (state is ProfileImageLoaded) {
-                        
                           return ProfileImage(
                               img: CircleAvatar(
                                   radius: 50.r,
@@ -140,7 +143,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       padding: REdgeInsets.only(top: 8.h),
                                       child: Text(
                                           context.read<ProfileBloc>().firstName,
-                                       
                                           style: TextStyle(
                                               fontSize: 21.sp,
                                               fontWeight: FontWeight.bold))),
@@ -149,26 +151,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt:user!.name,
-                                 
+                                    txt: user!.name,
                                     icon: Icons.person_2_outlined,
                                   ),
                                   ProfileItem(
                                     isObscure: true,
                                     txt: user.email,
-                                   
                                     icon: Icons.email_outlined,
                                   ),
-                                   ProfileItem(
-                                     txt: '888888888',
-                                     isObscure: false,
-                                     icon: Icons.lock_open_outlined,
+                                  ProfileItem(
+                                    txt: '888888888',
+                                    isObscure: false,
+                                    icon: Icons.lock_open_outlined,
                                   ),
                                   ProfileItem(
                                     isObscure: true,
-                                    txt: 
-                                    user.phone.isEmpty
-                                
+                                    txt: user.phone.isEmpty
                                         ? 'N/A'
                                         : context
                                             .read<ProfileBloc>()
@@ -198,13 +196,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               create: (context) =>
                                                   EditProfileBloc(),
                                               child: EditProfile(
-                                                name: user.name,
-                                                
-                                                email: user.email,
-                                              
-                                                phone:user.phone
-                                             
-                                              ),
+                                                  name: user.name,
+                                                  email: user.email,
+                                                  phone: user.phone),
                                             ),
                                           ),
                                         );
