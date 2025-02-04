@@ -62,16 +62,16 @@ class PlacesScreen extends StatelessWidget {
           if (state is ProfileLoading) {
             return Skeletonizer(
               enabled: true,
-              child: Header(name: 'User', imgPath: ''),
+              child: Header(name: 'User', imgPath: null),
             );
           }
           // In loaded state show the real data
           else if (state is HeaderLoaded) {
-            return Header(name: state.firstName, imgPath: state.image.path);
+            return Header(name: state.firstName, imgPath: state.image);
           }
           // Otherwise show the default data
           else {
-            return Header(name: 'User', imgPath: '');
+            return Header(name: 'User', imgPath: null);
           }
         },
       ),

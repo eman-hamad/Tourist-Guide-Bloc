@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tourist_guide/data/firebase/auth_services.dart';
 import 'package:tourist_guide/data/models/fire_store_user_model.dart';
-import 'package:tourist_guide/data/models/user_model.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
@@ -31,9 +29,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final currentUser = FirebaseService().currentUser;
   FSUser? cUser;
-  File image = File("");
+  Uint8List? image;
   String firstName = "";
-  File headerImage = File("");
+  Uint8List? headerImage;
   FSUser? firebaseUser = FSUser(
     uid: "",
     email: "",
@@ -56,7 +54,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           String fullName = user.name;
           List<String> nameParts = fullName.split(" ");
           firstName = nameParts[0];
-          image = File(user.image);
+
+          // Decode the Base64 string back to Uint8List
+          if (user.image.isNotEmpty) {
+            image = base64Decode(user.image);
+          }
 
           add(ProfileUpdated(user: user));
           add(ImageUpdated(image: image));
@@ -97,27 +99,29 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final XFile? pickedFile =
           await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        final directory = await getApplicationDocumentsDirectory();
+        File imagePath = File(pickedFile.path);
+        Uint8List? imageBytes = await imagePath.readAsBytes();
 
-        final String newPath = '${directory.path}/${pickedFile.name}';
-        final File savedImage = await File(pickedFile.path).copy(newPath);
+        // Encode from Uint8List to Base64
+        String encodedImage = base64Encode(imageBytes);
 
         // Save user image to Firestore
         await _firestore
             .collection('Users')
             .doc(currentUser!.uid)
-            .set({'image': savedImage.path}, SetOptions(merge: true));
+            .set({'image': encodedImage}, SetOptions(merge: true));
 
-        image = savedImage;
-        emit(ProfileImageLoaded(image: savedImage));
-        emit(ProfileImageUploaded(image: savedImage));
+        // image = savedImage;
+        image = imageBytes;
+
+        emit(ProfileImageLoaded(image: Uint8List.fromList(imageBytes)));
+        emit(ProfileImageUploaded(image: Uint8List.fromList(imageBytes)));
       }
     } on Exception catch (e) {
       emit(ProfileImageError(e.toString()));
     }
   }
 
-  
 // get header data from firebase
   Future<void> getHeaderData(
       LoadHeaderData event, Emitter<ProfileState> emit) async {
@@ -143,7 +147,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
         if (doc.exists) {
           String imagePath = doc.get('image');
-          headerImage = File(imagePath);
+          if (imagePath.isNotEmpty) {
+            headerImage = base64Decode(imagePath);
+          }
         }
       }
 

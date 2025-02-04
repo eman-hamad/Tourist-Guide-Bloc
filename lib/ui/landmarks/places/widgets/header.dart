@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,7 @@ import 'package:tourist_guide/core/colors/colors.dart';
 
 class Header extends StatelessWidget {
   final String name;
-  final String imgPath;
+  final Uint8List? imgPath;
   const Header({super.key, required this.name, required this.imgPath});
 
   @override
@@ -50,9 +51,9 @@ class Header extends StatelessWidget {
                 height: 0.05.sh,
                 width: 0.05.sh,
                 color: kGrey,
-                child: imgPath != ''
-                    ? Image.file(
-                        File(imgPath),
+                child: imgPath != null
+                    ? Image.memory(
+                        imgPath!,
                         fit: BoxFit.fill,
                       )
                     : Image.asset(

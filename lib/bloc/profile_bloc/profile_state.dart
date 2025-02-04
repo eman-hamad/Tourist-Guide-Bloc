@@ -9,7 +9,7 @@ class ProfileLoading extends ProfileState {}
 
 class ProfileLoaded extends ProfileState {
   final FSUser? user;
-  final File? image;
+  final Uint8List? image;
   ProfileLoaded({this.user, this.image});
 }
 
@@ -21,12 +21,12 @@ class ProfileError extends ProfileState {
 class ProfileImageLoading extends ProfileState {}
 
 class ProfileImageLoaded extends ProfileState {
-  final File image;
+  final Uint8List? image;
   ProfileImageLoaded({required this.image});
 }
 
 class ProfileImageUploaded extends ProfileState {
-  final File image;
+  final Uint8List image;
   ProfileImageUploaded({required this.image});
 }
 
@@ -36,7 +36,7 @@ class ProfileImageError extends ProfileState {
 }
 
 class HeaderLoaded extends ProfileState {
-  final File image;
+  final Uint8List? image;
   final String firstName;
   HeaderLoaded({required this.image, required this.firstName});
 }

@@ -16,7 +16,7 @@ class ProfileUpdated extends ProfileEvent {
 }
 
 class ImageUpdated extends ProfileEvent {
-  final File image;
+  final Uint8List? image;
 
   ImageUpdated({required this.image});
 }

@@ -111,8 +111,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         if (state is ProfileImageLoaded) {
                           return ProfileImage(
                               img: CircleAvatar(
-                                  radius: 50.r,
-                                  backgroundImage: FileImage(state.image)));
+                            radius: 50.r,
+                            backgroundImage: state.image != null
+                                ? MemoryImage(state.image!)
+                                : const AssetImage("assets/images/profile.png")
+                                    as ImageProvider,
+                          ));
                         }
 
                         if (state is ProfileImageError) {
