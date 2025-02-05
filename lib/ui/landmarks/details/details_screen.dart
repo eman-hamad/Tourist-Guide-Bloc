@@ -6,10 +6,12 @@ import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
 import 'package:tourist_guide/bloc/details_screen/details_screen_cubit.dart';
 import 'package:tourist_guide/bloc/details_screen/nearbyPlacesCubit/nearby_places_cubit.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
 import 'package:tourist_guide/core/widgets/landmark_card.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:tourist_guide/ui/landmarks/details/widgets/cover_img.dart';
 import 'package:tourist_guide/ui/landmarks/details/widgets/detailsBar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class DetailsScreen extends StatelessWidget {
@@ -44,6 +46,17 @@ class DetailsScreen extends StatelessWidget {
                 SizedBox(height: 16.h),
                 _buildAnimatedDetails(landMark),
                 SizedBox(height: 16.h),
+                InkWell(
+                  onTap: () {
+                    openGoogleMaps(
+                      context,
+                      landMark.location.latitude,
+                      landMark.location.longitude,
+                    );
+                  },
+                  child: Icon(Icons.place_rounded, color: kMainColor, size: 50),
+                ),
+                SizedBox(height: 16.h),
                 _buildAnimatedDescription(landMark, isDarkMode),
                 _buildNearbyPlaces(landMark, isDarkMode),
               ],
@@ -52,6 +65,19 @@ class DetailsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void openGoogleMaps(context, double latitude, double longitude) async {
+    final Uri url = Uri.parse(
+      'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude',
+    );
+
+    if (!await launchUrl(url)) {
+      CustomSnackBar.showError(
+        context: context,
+        message: 'Could\'nt launch the map',
+      );
+    }
   }
 
   Widget _buildAnimatedCoverImage(FSLandMark landMark) {

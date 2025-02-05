@@ -7,6 +7,7 @@ class FSLandMark {
   String governorate;
   double rate;
   String description;
+  GeoPoint location;
   bool isFav;
 
   FSLandMark({
@@ -16,6 +17,7 @@ class FSLandMark {
     required this.governorate,
     required this.rate,
     required this.description,
+    required this.location,
     this.isFav = false,
   });
 
@@ -28,6 +30,7 @@ class FSLandMark {
       governorate: data['governorate'],
       rate: data['rate'],
       description: data['description'],
+      location: data['location'],
     );
   }
 
@@ -37,5 +40,6 @@ class FSLandMark {
         'governorate': governorate,
         'rate': rate,
         'description': description,
+        'location': location,
       };
 }

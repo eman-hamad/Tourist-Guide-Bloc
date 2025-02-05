@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:tourist_guide/data/models/landmark_model.dart';
@@ -17,6 +18,7 @@ class PlacesData {
     rate: 5.0,
     // fav: true,
     description: '',
+    location: GeoPoint(0, 0),
   );
   static List<LandMark> kLandmarks = [
     LandMark(
