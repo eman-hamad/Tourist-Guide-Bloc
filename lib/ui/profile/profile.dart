@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +36,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
 
     context.read<ProfileBloc>().add(SubscribeProfile());
+  }
+
+  void removeImage() {
+    context.read<ProfileBloc>().add(ImageRemoved());
   }
 
   @override
@@ -85,13 +90,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // listen to states and rebuild ui
                     BlocConsumer<ProfileBloc, ProfileState>(
                       buildWhen: (context, state) =>
-                          state is ProfileImageLoaded,
+                          state is ProfileImageLoaded ||
+                          state is ProfileImageRemoved,
                       listener: (context, state) {
                         if (state is ProfileImageUploaded) {
                           ScaffoldMessenger.of(context).clearSnackBars();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text("Image Uploaded Successfully")),
+                          );
+                        }
+
+                        if (state is ProfileImageRemoved) {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Image Removed Successfully")),
                           );
                         }
 
@@ -109,14 +123,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
 
                         if (state is ProfileImageLoaded) {
+                          return Stack(alignment: Alignment.center, children: [
+                            ProfileImage(
+                                img: CircleAvatar(
+                              radius: 50.r,
+                              backgroundImage: state.image != null
+                                  ? MemoryImage(state.image!)
+                                  : const AssetImage(
+                                          "assets/images/profile.png")
+                                      as ImageProvider,
+                            )),
+
+                            if (state.image != null)
+                              Positioned(
+                                bottom: -12.h,
+                                left: 65.w,
+                                right: 0.w,
+                                child: IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text("Remove Profile Picture"),
+                                        content: Text(
+                                            "Are you sure you want to remove your profile picture?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text("Cancel",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: kBlack)),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              removeImage();
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("Remove",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: kMainColor)),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.delete_rounded,
+                                    size: 38.w,
+                                  ),
+                                  color: kMainColor,
+                                ),
+                              ),
+                            // )
+                          ]);
+                        }
+
+                        if (state is ProfileImageRemoved) {
                           return ProfileImage(
                               img: CircleAvatar(
-                            radius: 50.r,
-                            backgroundImage: state.image != null
-                                ? MemoryImage(state.image!)
-                                : const AssetImage("assets/images/profile.png")
-                                    as ImageProvider,
-                          ));
+                                  radius: 50.r,
+                                  backgroundImage: const AssetImage(
+                                      "assets/images/profile.png")));
                         }
 
                         if (state is ProfileImageError) {

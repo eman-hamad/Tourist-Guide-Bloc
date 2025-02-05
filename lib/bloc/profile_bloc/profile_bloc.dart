@@ -15,6 +15,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<UpdateAvatar>(updateAvatar);
     on<LoadHeaderData>(getHeaderData);
     on<SubscribeProfile>(_subscribeProfile);
+    on<ImageRemoved>((removeImage));
+
     on<ProfileUpdated>((event, emit) {
       emit(ProfileLoaded(user: event.user, image: image));
     });
@@ -158,6 +160,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } on Exception catch (e) {
       emit(HeaderDataError(e.toString()));
     }
+  }
+
+  // remove profile pic
+  Future<void> removeImage(
+      ImageRemoved event, Emitter<ProfileState> emit) async {
+    await FirebaseService().removeImageField();
+    emit(ProfileImageRemoved());
   }
 
   @override

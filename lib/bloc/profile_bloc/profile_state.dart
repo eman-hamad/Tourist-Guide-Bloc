@@ -30,6 +30,10 @@ class ProfileImageUploaded extends ProfileState {
   ProfileImageUploaded({required this.image});
 }
 
+class ProfileImageRemoved extends ProfileState {
+  ProfileImageRemoved();
+}
+
 class ProfileImageError extends ProfileState {
   final String errorMessage;
   ProfileImageError(this.errorMessage);

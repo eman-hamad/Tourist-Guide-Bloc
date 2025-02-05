@@ -129,6 +129,16 @@ class FirebaseService {
     }
   }
 
+// func to remove profile picture
+  Future<void> removeImageField() async {
+    await _firestore
+        .collection('Users')
+        .doc(currentUser!.uid)
+        .update({'image': FieldValue.delete()}).whenComplete(() {
+      debugPrint('Field Deleted');
+    });
+  }
+
   // Reset password
   Future<void> resetPassword(String email) async {
     try {

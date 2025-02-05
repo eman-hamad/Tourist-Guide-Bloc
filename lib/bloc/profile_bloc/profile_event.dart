@@ -21,6 +21,10 @@ class ImageUpdated extends ProfileEvent {
   ImageUpdated({required this.image});
 }
 
+class ImageRemoved extends ProfileEvent {
+  ImageRemoved();
+}
+
 class ProfileSubscriptionError extends ProfileEvent {
   final String errorMessage;
   ProfileSubscriptionError(this.errorMessage);
