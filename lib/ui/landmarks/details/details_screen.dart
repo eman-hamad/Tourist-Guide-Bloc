@@ -45,9 +45,9 @@ class DetailsScreen extends StatelessWidget {
                 SizedBox(height: 16.h),
                 _buildAnimatedDetails(landMark),
                 SizedBox(height: 16.h),
-                _buildAnimatedMaps(landMark, isDarkMode),
-                SizedBox(height: 16.h),
                 _buildAnimatedDescription(landMark, isDarkMode),
+                SizedBox(height: 16.h),
+                _buildAnimatedMaps(landMark, isDarkMode),
                 _buildNearbyPlaces(landMark, isDarkMode),
               ],
             ),
@@ -91,7 +91,7 @@ class DetailsScreen extends StatelessWidget {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
         return AnimatedOpacity(
-          opacity: state.showSecond ? 1.0 : 0.0,
+          opacity: state.showFourth ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
           child: MapsWidget(
@@ -111,19 +111,22 @@ class DetailsScreen extends StatelessWidget {
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
           child: Container(
+            height: 250.h,
             padding: REdgeInsets.all(12),
             decoration: BoxDecoration(
                 border: Border.all(
                     width: 2.w,
                     color: isDarkMode ? kMainColorDark : kMainColor),
                 borderRadius: BorderRadius.circular(20.r)),
-            child: Text(
-              textAlign: TextAlign.center,
-              landMark.description,
-              overflow: TextOverflow.fade,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18.sp,
+            child: SingleChildScrollView(
+              child: Text(
+                textAlign: TextAlign.center,
+                landMark.description,
+                overflow: TextOverflow.fade,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.sp,
+                ),
               ),
             ),
           ),
@@ -135,7 +138,7 @@ class DetailsScreen extends StatelessWidget {
   Widget _buildNearbyPlaces(FSLandMark landMark, isDarkMode) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
-        if (!state.showFourth) return const SizedBox.shrink();
+        if (!state.showFifth) return const SizedBox.shrink();
 
         return AnimatedOpacity(
           opacity: state.showFourth ? 1.0 : 0.0,
