@@ -10,7 +10,6 @@ class DetailsScreenCubit extends Cubit<DetailsScreenState> {
   }
 
   void _initializeAnimations() async {
-    // await Future.delayed(Duration(milliseconds: 1500));
     Timer(const Duration(milliseconds: 1500),
         () => emit(state.copyWith(showFirst: true)));
     Timer(const Duration(milliseconds: 2500),

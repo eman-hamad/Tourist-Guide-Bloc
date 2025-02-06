@@ -2,14 +2,12 @@
 
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
-import 'package:tourist_guide/data/models/landmark_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapsWidget extends StatelessWidget {

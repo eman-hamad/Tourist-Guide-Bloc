@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/custom_page_route.dart';
 import 'package:tourist_guide/core/widgets/favorite_button.dart';
@@ -65,7 +66,12 @@ class LandmarkCard extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: place.imgUrls[0],
         placeholder: (context, url) => Center(
-          child: CircularProgressIndicator(),
+          child: Skeletonizer(
+              child: Container(
+            color: Colors.grey[700],
+            width: 1.sw,
+            height: 1.sh,
+          )),
         ),
         errorWidget: (context, url, error) => Icon(Icons.error),
         height: 1.sh,
