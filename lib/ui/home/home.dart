@@ -9,6 +9,9 @@ import 'package:tourist_guide/bloc/data_blocs/places_screen/places_screen_cubit.
 import 'package:tourist_guide/bloc/home_cubit/home_cubit.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/widgets/auth_dialog.dart';
+import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
+import 'package:tourist_guide/data/biometric_auth_service.dart';
 import 'package:tourist_guide/ui/landmarks/favs/screens/fav_screen.dart';
 import 'package:tourist_guide/ui/landmarks/govs/screens/govs_screen.dart';
 import 'package:tourist_guide/ui/landmarks/places/screen/places_screen.dart';
@@ -34,7 +37,41 @@ class _HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<_HomeView> {
   final PageController _pageController = PageController();
+  final BiometricAuth _biometricAuth = BiometricAuth();
 
+  Future<bool> _authenticateForProfile() async {
+    try {
+      bool isAvailable = await _biometricAuth.isBiometricAvailable();
+
+      if (!isAvailable) {
+        CustomSnackBar.showError(
+          context: context,
+          message: 'Biometric authentication is not available on this device',
+          duration: const Duration(seconds: 3),
+        );
+        return false;
+      }
+
+      bool isAuthenticated = await _biometricAuth.authenticate();
+
+      if (isAuthenticated) {
+        CustomSnackBar.showSuccess(
+          context: context,
+          message: 'Authentication successful',
+          duration: const Duration(seconds: 2),
+        );
+      }
+
+      return isAuthenticated;
+    } catch (e) {
+      CustomSnackBar.showError(
+        context: context,
+        message: 'Authentication error: ${e.toString()}',
+        duration: const Duration(seconds: 3),
+      );
+      return false;
+    }
+  }
 // Constructs the Home screen UI, which includes a body with
 // a PageView and a bottom curved navigation bar.
   @override
@@ -110,14 +147,21 @@ class _HomeViewState extends State<_HomeView> {
                 index: pageIndex,
                 backgroundColor: Colors.transparent,
                 color: isDarkMode ? kMainColorDark : kMainColor,
-                items: [
+                items: const [
                   Icon(Icons.home_rounded, size: 30),
                   Icon(Icons.place_rounded, size: 30),
                   Icon(Icons.favorite_rounded, size: 30),
                   Icon(Icons.person_rounded, size: 30),
                 ],
-                onTap: (index) {
-                  context.read<HomeCubit>().navigateToPage(index);
+                onTap: (index) async {
+                  if (index == 3) { // Profile page
+                    bool authenticated = await _authenticateForProfile();
+                    if (authenticated) {
+                      context.read<HomeCubit>().navigateToPage(index);
+                    }
+                  } else {
+                    context.read<HomeCubit>().navigateToPage(index);
+                  }
                 },
               );
             },

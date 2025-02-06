@@ -49,3 +49,9 @@ class HeaderDataError extends ProfileState {
   final String errorMessage;
   HeaderDataError(this.errorMessage);
 }
+class BiometricAuthenticationRequired extends ProfileState {}
+class BiometricAuthenticationSuccess extends ProfileState {}
+class BiometricAuthenticationFailure extends ProfileState {
+  final String errorMessage;
+  BiometricAuthenticationFailure(this.errorMessage);
+}

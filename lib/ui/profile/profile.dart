@@ -10,6 +10,7 @@ import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/utils/user_manager.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
+import 'package:tourist_guide/data/biometric_auth_service.dart';
 import 'package:tourist_guide/ui/profile/widgets/profile_image.dart';
 import 'edit_profile.dart';
 import 'widgets/profile_item.dart';
@@ -22,6 +23,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
   void _logout() async {
     UserManager.logout();
     Navigator.pushNamedAndRemoveUntil(
@@ -34,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-
+    // Trigger biometric authentication
     context.read<ProfileBloc>().add(SubscribeProfile());
   }
 

@@ -29,3 +29,4 @@ class ProfileSubscriptionError extends ProfileEvent {
   final String errorMessage;
   ProfileSubscriptionError(this.errorMessage);
 }
+class AuthenticateWithBiometrics extends ProfileEvent {}

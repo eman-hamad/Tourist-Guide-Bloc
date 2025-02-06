@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tourist_guide/data/biometric_auth_service.dart';
 import 'package:tourist_guide/data/firebase/auth_services.dart';
 import 'package:tourist_guide/data/models/fire_store_user_model.dart';
 part 'profile_event.dart';
@@ -16,6 +17,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<LoadHeaderData>(getHeaderData);
     on<SubscribeProfile>(_subscribeProfile);
     on<ImageRemoved>((removeImage));
+    on<AuthenticateWithBiometrics>(_authenticateWithBiometrics);
 
     on<ProfileUpdated>((event, emit) {
       emit(ProfileLoaded(user: event.user, image: image));
@@ -41,6 +43,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     phone: "",
   );
   StreamSubscription<FSUser?>? _userSubscription;
+  final BiometricAuth _biometricAuth = BiometricAuth();
   void _subscribeProfile(SubscribeProfile event, Emitter<ProfileState> emit) {
     if (currentUser == null) {
       print("No user found");
@@ -72,6 +75,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         add(ProfileSubscriptionError(error.toString()));
       },
     );
+  }
+  Future<void> _authenticateWithBiometrics(
+      AuthenticateWithBiometrics event, Emitter<ProfileState> emit) async {
+    emit(BiometricAuthenticationRequired());
+
+    bool isAvailable = await _biometricAuth.isBiometricAvailable();
+    if (!isAvailable) {
+      emit(BiometricAuthenticationFailure(
+          'Biometric authentication not available.'));
+      return;
+    }
+
+    bool isAuthenticated = await _biometricAuth.authenticate();
+    if (isAuthenticated) {
+      emit(BiometricAuthenticationSuccess());
+    } else {
+      emit(BiometricAuthenticationFailure('Authentication failed.'));
+    }
   }
 
   Stream<FSUser?> getUserDataStream(String uid) {
