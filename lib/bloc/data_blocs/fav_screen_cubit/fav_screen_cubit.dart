@@ -25,11 +25,14 @@ class FavScreenCubit extends Cubit<FavScreenState> {
     // Emit data loading state
     emit(FavScreenLoading());
     try {
-      final favPlaces = await PlacesServices().favPlaces();
-
-      emit(FavScreenLoaded(favs: favPlaces));
+      if (!isClosed) {
+        final favPlaces = await PlacesServices().favPlaces();
+        emit(FavScreenLoaded(favs: favPlaces));
+      }
     } catch (e) {
-      emit(FavScreenError(e.toString()));
+      if (!isClosed) {
+        emit(FavScreenError(e.toString()));
+      }
     }
   }
 }
