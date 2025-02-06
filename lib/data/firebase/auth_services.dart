@@ -134,9 +134,7 @@ class FirebaseService {
     await _firestore
         .collection('Users')
         .doc(currentUser!.uid)
-        .update({'image': FieldValue.delete()}).whenComplete(() {
-      debugPrint('Field Deleted');
-    });
+        .update({'image': FieldValue.delete()}).whenComplete(() {});
   }
 
   // Reset password

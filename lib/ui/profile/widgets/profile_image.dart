@@ -6,8 +6,8 @@ import 'package:tourist_guide/core/colors/colors.dart';
 
 // image's profile component
 class ProfileImage extends StatelessWidget {
-  Widget? img;
-  ProfileImage({super.key, required this.img});
+  Widget? widg;
+  ProfileImage({super.key, required this.widg});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ProfileImage extends StatelessWidget {
               context.read<ProfileBloc>().add(UpdateAvatar());
             },
             child:
-                Container(color: isDarkMode ? kDarkBody : kWhite, child: img),
+                Container(color: isDarkMode ? kDarkBody : kWhite, child: widg),
           ),
         ),
       ),

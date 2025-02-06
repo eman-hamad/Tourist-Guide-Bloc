@@ -125,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         if (state is ProfileImageLoaded) {
                           return Stack(alignment: Alignment.center, children: [
                             ProfileImage(
-                                img: CircleAvatar(
+                                widg: CircleAvatar(
                               radius: 50.r,
                               backgroundImage: state.image != null
                                   ? MemoryImage(state.image!)
@@ -135,46 +135,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
 
                             if (state.image != null)
-                              Positioned(
-                                bottom: -12.h,
-                                left: 65.w,
-                                right: 0.w,
-                                child: IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: Text("Remove Profile Picture"),
-                                        content: Text(
-                                            "Are you sure you want to remove your profile picture?"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: Text("Cancel",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: kBlack)),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              removeImage();
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text("Remove",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: kMainColor)),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.delete_rounded,
-                                    size: 38.w,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(25.r),
+                                child: Container(
+                                  width: 40.w,
+                                  height: 50.h,
+                                  margin: EdgeInsets.only(top: 50.h),
+                                  padding: EdgeInsets.all(0),
+                                  color: Colors.transparent,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text("Remove Profile Picture"),
+                                          content: Text(
+                                              "Are you sure you want to remove your profile picture?"),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text("Cancel",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: kBlack)),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                removeImage();
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text("Remove",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: kMainColor)),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.delete_rounded,
+                                      size: 30.w,
+                                    ),
+                                    color: kMainColor,
                                   ),
-                                  color: kMainColor,
                                 ),
                               ),
                             // )
@@ -183,7 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                         if (state is ProfileImageRemoved) {
                           return ProfileImage(
-                              img: CircleAvatar(
+                              widg: CircleAvatar(
                                   radius: 50.r,
                                   backgroundImage: const AssetImage(
                                       "assets/images/profile.png")));
@@ -194,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
 
                         return ProfileImage(
-                          img: CircleAvatar(
+                          widg: CircleAvatar(
                               radius: 50.r,
                               backgroundImage: const AssetImage(
                                   "assets/images/profile.png")),
