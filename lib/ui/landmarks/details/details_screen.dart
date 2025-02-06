@@ -11,6 +11,7 @@ import 'package:tourist_guide/core/widgets/landmark_card.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:tourist_guide/ui/landmarks/details/widgets/cover_img.dart';
 import 'package:tourist_guide/ui/landmarks/details/widgets/detailsBar.dart';
+import 'package:tourist_guide/ui/landmarks/details/widgets/maps_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
@@ -46,16 +47,7 @@ class DetailsScreen extends StatelessWidget {
                 SizedBox(height: 16.h),
                 _buildAnimatedDetails(landMark),
                 SizedBox(height: 16.h),
-                InkWell(
-                  onTap: () {
-                    openGoogleMaps(
-                      context,
-                      landMark.location.latitude,
-                      landMark.location.longitude,
-                    );
-                  },
-                  child: Icon(Icons.place_rounded, color: kMainColor, size: 50),
-                ),
+                _buildAnimatedMaps(landMark, isDarkMode),
                 SizedBox(height: 16.h),
                 _buildAnimatedDescription(landMark, isDarkMode),
                 _buildNearbyPlaces(landMark, isDarkMode),
@@ -65,19 +57,6 @@ class DetailsScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void openGoogleMaps(context, double latitude, double longitude) async {
-    final Uri url = Uri.parse(
-      'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude',
-    );
-
-    if (!await launchUrl(url)) {
-      CustomSnackBar.showError(
-        context: context,
-        message: 'Could\'nt launch the map',
-      );
-    }
   }
 
   Widget _buildAnimatedCoverImage(FSLandMark landMark) {
@@ -110,6 +89,22 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildAnimatedMaps(FSLandMark landMark, bool isDarkMode) {
+    return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
+      builder: (context, state) {
+        return AnimatedOpacity(
+          opacity: state.showSecond ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeIn,
+          child: MapsWidget(
+            landmMark: landMark,
+            isDarkMode: isDarkMode,
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildAnimatedDescription(FSLandMark landMark, bool isDarkMode) {
     return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
       builder: (context, state) {
@@ -121,7 +116,7 @@ class DetailsScreen extends StatelessWidget {
             padding: REdgeInsets.all(12),
             decoration: BoxDecoration(
                 border: Border.all(
-                    width: 1.w,
+                    width: 2.w,
                     color: isDarkMode ? kMainColorDark : kMainColor),
                 borderRadius: BorderRadius.circular(20.r)),
             child: Text(

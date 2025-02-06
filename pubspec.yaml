@@ -42,6 +42,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^9.0.0
   flutter_screenutil: ^5.9.3
+  google_maps_flutter: ^2.10.0
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^4.1.0
   lottie: ^3.3.0

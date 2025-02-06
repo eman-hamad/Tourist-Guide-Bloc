@@ -13,11 +13,13 @@ class DetailsScreenCubit extends Cubit<DetailsScreenState> {
     // await Future.delayed(Duration(milliseconds: 1500));
     Timer(const Duration(milliseconds: 1500),
         () => emit(state.copyWith(showFirst: true)));
-    Timer(const Duration(milliseconds: 2000),
+    Timer(const Duration(milliseconds: 2500),
         () => emit(state.copyWith(showSecond: true)));
-    Timer(const Duration(milliseconds: 3000),
+    Timer(const Duration(milliseconds: 3500),
         () => emit(state.copyWith(showThird: true)));
-    Timer(const Duration(milliseconds: 4000),
+    Timer(const Duration(milliseconds: 4500),
         () => emit(state.copyWith(showFourth: true)));
+    Timer(const Duration(milliseconds: 5500),
+        () => emit(state.copyWith(showFifth: true)));
   }
 }
