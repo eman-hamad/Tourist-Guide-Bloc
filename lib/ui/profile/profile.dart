@@ -23,7 +23,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   void _logout() async {
     UserManager.logout();
     Navigator.pushNamedAndRemoveUntil(
@@ -135,17 +134,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           "assets/images/profile.png")
                                       as ImageProvider,
                             )),
-
                             if (state.image != null)
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(25.r),
-                                child: Container(
-                                  width: 40.w,
-                                  height: 50.h,
-                                  margin: EdgeInsets.only(top: 50.h),
-                                  padding: EdgeInsets.all(0),
-                                  color: Colors.transparent,
-                                  child: IconButton(
+                              Positioned(
+                                bottom: -12.h,
+                                left: 65.w,
+                                right: 0.w,
+                                child: IconButton(
                                     onPressed: () {
                                       showDialog(
                                         context: context,
@@ -182,11 +176,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       Icons.delete_rounded,
                                       size: 30.w,
                                     ),
-                                    color: kMainColor,
-                                  ),
-                                ),
+                                    color: isDarkMode ? kWhite : kMainColor),
                               ),
-                            // )
                           ]);
                         }
 
