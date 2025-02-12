@@ -9,7 +9,7 @@ Tourist Guide is a mobile application built using **Flutter and Bloc state manag
 ## Features
 
 - **Theme Customization**: Toggle between dark and light modes to customize the visual experience. Dark mode is perfect for low-light environments, while light mode ensures clarity during the day. This app can also adapt to the device's system settings.
-- **User Authentication**: Secure sign-up and login using **Firebase Authentication** to save user preferences, such as favorite places and profile images.
+- **User Authentication**: Secure sign-up and login using **Firebase Authentication** to save user preferences, such as favorite places and profile images **Biometric Authentication** biometric authentication to restrict access to the Profile Page.
 - **Real-Time Data Sync**: **Firebase Firestore** is used to store and sync user data, favorite places, and place details in real-time.
 - **Place Details**: Browse through a list of places, view details, and add them to favorites. Favorite places are synced across devices using Firestore.
 - **Custom Widgets**: Reusable and customizable widgets for a consistent and easy-to-use UI.
