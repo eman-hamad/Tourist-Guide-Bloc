@@ -154,14 +154,14 @@ class _HomeViewState extends State<_HomeView> {
                   Icon(Icons.person_rounded, size: 30),
                 ],
                 onTap: (index) async {
-                  if (index == 3) { // Profile page
-                    bool authenticated = await _authenticateForProfile();
-                    if (authenticated) {
-                      context.read<HomeCubit>().navigateToPage(index);
-                    }
-                  } else {
+                  // if (index == 3) { // Profile page
+                  //   bool authenticated = await _authenticateForProfile();
+                  //   if (authenticated) {
+                  //     context.read<HomeCubit>().navigateToPage(index);
+                  //   }
+                  // } else {
                     context.read<HomeCubit>().navigateToPage(index);
-                  }
+                  //}
                 },
               );
             },

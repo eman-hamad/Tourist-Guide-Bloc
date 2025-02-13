@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
-import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
 import 'package:tourist_guide/core/widgets/custom_text_form_field.dart';
 
 class EditProfile extends StatefulWidget {

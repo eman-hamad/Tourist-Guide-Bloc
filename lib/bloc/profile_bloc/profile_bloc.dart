@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tourist_guide/data/biometric_auth_service.dart';
@@ -76,6 +77,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       },
     );
   }
+
   Future<void> _authenticateWithBiometrics(
       AuthenticateWithBiometrics event, Emitter<ProfileState> emit) async {
     emit(BiometricAuthenticationRequired());
@@ -188,6 +190,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       ImageRemoved event, Emitter<ProfileState> emit) async {
     await FirebaseService().removeImageField();
     emit(ProfileImageRemoved());
+  }
+// logout
+  void logout(BuildContext context) {
+    FirebaseService().signOut();
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/login',
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override

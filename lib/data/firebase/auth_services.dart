@@ -86,8 +86,9 @@ class FirebaseService {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      debugPrint("sign out successfully");
     } catch (e) {
-      print('Error during sign out: $e');
+      debugPrint('Error during sign out: $e');
       rethrow;
     }
   }

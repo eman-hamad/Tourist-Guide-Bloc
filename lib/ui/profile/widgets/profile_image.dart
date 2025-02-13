@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/utils/profile_manager.dart';
 
-// image's profile component
+// profile image component
 class ProfileImage extends StatelessWidget {
-  Widget? widg;
-  ProfileImage({super.key, required this.widg});
+  ImageProvider<Object>? img;
+  ProfileImage({super.key, required this.img});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +20,11 @@ class ProfileImage extends StatelessWidget {
           child: InkWell(
             onTap: () {
               // call updateAvatar from bloc to upload img
-              context.read<ProfileBloc>().add(UpdateAvatar());
+              ProfileManager().uploadImage(context);
             },
-            child:
-                Container(color: isDarkMode ? kDarkBody : kWhite, child: widg),
+            child: Container(
+                color: isDarkMode ? kDarkBody : kWhite,
+                child: CircleAvatar(radius: 50.r, backgroundImage: img)),
           ),
         ),
       ),
