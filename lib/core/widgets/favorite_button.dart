@@ -25,6 +25,7 @@ class FavoriteButton extends StatelessWidget {
             ),
             child: Center(
               child: BlocBuilder<FavBloc, FavState>(
+                bloc: FavBloc.getInstance(),
                 builder: (context, state) {
                   return IconButton(
                     icon: Icon(
@@ -33,9 +34,9 @@ class FavoriteButton extends StatelessWidget {
                     ),
                     color: kMainColor,
                     onPressed: () {
-                      context.read<FavBloc>().add(
-                            ToggleFavoriteEvent(placeId: place.id!),
-                          );
+                      FavBloc.getInstance().add(
+                        ToggleFavoriteEvent(placeId: place.id!),
+                      );
                     },
                   );
                 },

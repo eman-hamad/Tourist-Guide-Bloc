@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => GovDetailsCubit()),
-        BlocProvider(create: (context) => FavBloc()),
+        BlocProvider(create: (context) => FavBloc.getInstance()),
       ],
       child: const GovernorateDetails(),
     );

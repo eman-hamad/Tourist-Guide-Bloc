@@ -22,7 +22,7 @@ class FavoritesScreen extends StatelessWidget {
                 itemsCount: 4,
                 places: List.filled(4, PlacesData.kDummyData),
               );
-            } //
+            } 
             else if (state is FavScreenLoaded) {
               return state.favs.isEmpty
                   ? const EmptyFavs()
@@ -31,7 +31,7 @@ class FavoritesScreen extends StatelessWidget {
                       itemsCount: state.favs.length,
                       places: state.favs,
                     );
-            } //
+            } 
             else if (state is FavScreenError) {
               return Center(child: Text(state.errorMsg));
             }

@@ -7,7 +7,7 @@ import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 part 'fav_screen_state.dart';
 
 class FavScreenCubit extends Cubit<FavScreenState> {
-  final FavBloc favBloc;
+  FavBloc favBloc = FavBloc.getInstance();
 
   FavScreenCubit({required this.favBloc}) : super(FavScreenInitial()) {
     // Load favorites when the cubit initializes

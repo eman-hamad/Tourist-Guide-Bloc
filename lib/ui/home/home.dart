@@ -100,7 +100,7 @@ class _HomeViewState extends State<_HomeView> {
       children: [
         MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => FavBloc()),
+            BlocProvider(create: (context) => FavBloc.getInstance()),
             BlocProvider(
               create: (context) =>
                   PlacesScreenCubit(favBloc: context.read<FavBloc>()),
@@ -115,7 +115,7 @@ class _HomeViewState extends State<_HomeView> {
         ),
         MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => FavBloc()),
+            BlocProvider(create: (context) => FavBloc.getInstance()),
             BlocProvider(
               create: (context) => FavScreenCubit(
                 favBloc: context.read<FavBloc>(),
