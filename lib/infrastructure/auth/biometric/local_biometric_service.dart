@@ -1,31 +1,35 @@
-import 'package:flutter/services.dart';
+// lib/infrastructure/auth/biometric/local_biometric_service.dart
+
 import 'package:local_auth/local_auth.dart';
+import '../../../domain/auth/interfaces/biometric_service.dart';
 
-class BiometricAuth {
-  final LocalAuthentication _localAuth = LocalAuthentication();
+class LocalBiometricService implements IBiometricService {
+  static final LocalBiometricService _instance = LocalBiometricService._internal();
 
-  // Check if biometric authentication is available
-  Future<bool> isBiometricAvailable() async {
+  factory LocalBiometricService() => _instance;
+
+  final LocalAuthentication _localAuth;
+
+  LocalBiometricService._internal() : _localAuth = LocalAuthentication();
+
+  @override
+  Future<bool> isAvailable() async {
     try {
-      // First check if device supports biometrics
       bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
       if (!canCheckBiometrics) return false;
 
-      // Get available biometrics
       List<BiometricType> availableBiometrics =
       await _localAuth.getAvailableBiometrics();
 
-      // Check if specific biometrics are available
       return availableBiometrics.contains(BiometricType.fingerprint) ||
           availableBiometrics.contains(BiometricType.strong) ||
           availableBiometrics.contains(BiometricType.face);
-    } on PlatformException catch (e) {
-      print("Error checking biometric availability: $e");
+    } catch (e) {
       return false;
     }
   }
 
-  // Authenticate user using biometrics
+  @override
   Future<bool> authenticate() async {
     try {
       return await _localAuth.authenticate(
@@ -36,8 +40,7 @@ class BiometricAuth {
           useErrorDialogs: true,
         ),
       );
-    } on PlatformException catch (e) {
-      print("Error during authentication: $e");
+    } catch (e) {
       return false;
     }
   }

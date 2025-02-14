@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/bloc/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
+import 'package:tourist_guide/core/widgets/auth_text_field.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
-import 'package:tourist_guide/core/widgets/custom_text_form_field.dart';
 
 class EditProfile extends StatefulWidget {
   final String name;
@@ -101,7 +101,7 @@ class _EditProfile extends State<EditProfile> {
                   ),
                   SizedBox(height: 30.h),
                   //CustomTextField widget for Full Name
-                  CustomTextField(
+                  AuthTextField(
                     labelText: 'Full Name',
                     hintText: 'Enter your full name',
                     prefixIcon: Icons.person,
@@ -111,7 +111,7 @@ class _EditProfile extends State<EditProfile> {
                   ),
                   SizedBox(height: 24.h),
                   //CustomTextField widget for Email
-                  CustomTextField(
+                  AuthTextField(
                     labelText: 'Email',
                     hintText: 'Enter your email',
                     prefixIcon: Icons.email,
@@ -121,7 +121,7 @@ class _EditProfile extends State<EditProfile> {
                   ),
                   SizedBox(height: 24.h),
                   //CustomTextField widget for Password
-                  CustomTextField(
+                  AuthTextField(
                     labelText: 'Password',
                     hintText: 'Enter your password',
                     prefixIcon: Icons.lock,
@@ -131,7 +131,7 @@ class _EditProfile extends State<EditProfile> {
                   ),
                   SizedBox(height: 24.h),
                   //CustomTextField widget for Confirm Password
-                  CustomTextField(
+                  AuthTextField(
                     labelText: 'Phone Number (optional)',
                     hintText: 'Enter your phone number',
                     prefixIcon: CupertinoIcons.phone,

@@ -1,24 +1,36 @@
-// splash_screen_state.dart
-import 'package:flutter/material.dart';
+// lib/application/splash/splash_state.dart
 
-@immutable
-// Update splash_state.dart to include user data
-abstract class SplashScreenState {}
+import 'package:equatable/equatable.dart';
 
-class SplashScreenInitialState extends SplashScreenState {}
+abstract class SplashState extends Equatable {
+  const SplashState();
 
-class SplashScreenLoadingState extends SplashScreenState {}
-
-class SplashScreenLoggedInState extends SplashScreenState {}
-
-class SplashScreenLoggedOutState extends SplashScreenState {}
-
-class SplashScreenErrorState extends SplashScreenState {
-  final String error;
-  SplashScreenErrorState({required this.error});
+  @override
+  List<Object?> get props => [];
 }
 
-class SplashScreenNavigationState extends SplashScreenState {
+class SplashInitialState extends SplashState {}
+
+class SplashLoadingState extends SplashState {}
+
+class SplashLoggedInState extends SplashState {}
+
+class SplashLoggedOutState extends SplashState {}
+
+class SplashNavigationState extends SplashState {
   final bool isLoggedIn;
-  SplashScreenNavigationState(this.isLoggedIn);
+
+  const SplashNavigationState(this.isLoggedIn);
+
+  @override
+  List<Object?> get props => [isLoggedIn];
+}
+
+class SplashErrorState extends SplashState {
+  final String error;
+
+  const SplashErrorState({required this.error});
+
+  @override
+  List<Object?> get props => [error];
 }

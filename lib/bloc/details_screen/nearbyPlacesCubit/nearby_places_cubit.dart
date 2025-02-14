@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
-import 'package:tourist_guide/data/firebase/places_services.dart';
+import 'package:tourist_guide/data/services/places_services.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 
 part 'nearby_places_state.dart';

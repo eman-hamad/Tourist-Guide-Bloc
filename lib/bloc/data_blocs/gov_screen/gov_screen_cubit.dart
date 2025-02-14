@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:tourist_guide/data/firebase/places_services.dart';
+import 'package:tourist_guide/data/services/places_services.dart';
 import 'package:tourist_guide/data/models/fire_store_goverorate_model.dart';
 
 part 'gov_screen_state.dart';

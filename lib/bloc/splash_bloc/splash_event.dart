@@ -1,9 +1,14 @@
-// splash_screen_event.dart
-import 'package:meta/meta.dart';
+// lib/application/splash/splash_event.dart
 
-@immutable
-abstract class SplashScreenEvent {}
+import 'package:equatable/equatable.dart';
 
-class CheckLoginStatusEvent extends SplashScreenEvent {}
+abstract class SplashEvent extends Equatable {
+  const SplashEvent();
 
-class NavigateToNextScreenEvent extends SplashScreenEvent {}
+  @override
+  List<Object?> get props => [];
+}
+
+class CheckLoginStatusEvent extends SplashEvent {}
+
+class NavigateToNextScreenEvent extends SplashEvent {}

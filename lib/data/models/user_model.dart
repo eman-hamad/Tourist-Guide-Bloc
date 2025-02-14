@@ -1,4 +1,6 @@
 // user model to retrive data from shared preferences
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   String id;
   String name;
@@ -29,4 +31,27 @@ class UserModel {
         "password": password,
         "phone": phone,
       };
+
+  // Convert UserModel to Map for Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      'name': name,
+      'email': email,
+      "password": password,
+      'phone': phone,
+    };
+  }
+
+  // Create UserModel from Firestore document
+  factory UserModel.fromFirestore(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return UserModel(
+      id: data['id'] ?? '',
+      name: data['name'] ?? '',
+      email: data['email'] ?? '',
+      password: data['password'] ?? '',
+      phone: data['phone'] ?? '',
+    );
+  }
 }

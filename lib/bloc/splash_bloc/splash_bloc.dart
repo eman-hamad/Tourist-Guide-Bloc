@@ -1,69 +1,62 @@
-// splash_screen_bloc.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// lib/application/splash/splash_bloc.dart
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/bloc/splash_bloc/splash_event.dart';
-import 'package:tourist_guide/bloc/splash_bloc/splash_state.dart';
+import '../../domain/auth/interfaces/auth_service.dart';
+import '../../domain/auth/interfaces/user_repository.dart';
+import 'splash_event.dart';
+import 'splash_state.dart';
 
-class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+class SplashBloc extends Bloc<SplashEvent, SplashState> {
+  final IAuthService _authService;
+  final IUserRepository _userRepository;
 
-  SplashScreenBloc() : super(SplashScreenInitialState()) {
-    on<CheckLoginStatusEvent>(_onCheckLoginStatus);
-    on<NavigateToNextScreenEvent>(_onNavigateToNextScreen);
+  SplashBloc({
+    required IAuthService authService,
+    required IUserRepository userRepository,
+  })  : _authService = authService,
+        _userRepository = userRepository,
+        super(SplashInitialState()) {
+    on<CheckLoginStatusEvent>(_handleCheckLoginStatus);
+    on<NavigateToNextScreenEvent>(_handleNavigateToNextScreen);
   }
 
-  Future<void> _onCheckLoginStatus(
-      CheckLoginStatusEvent event, Emitter<SplashScreenState> emit) async {
-    emit(SplashScreenLoadingState());
+  Future<void> _handleCheckLoginStatus(
+      CheckLoginStatusEvent event,
+      Emitter<SplashState> emit,
+      ) async {
+    emit(SplashLoadingState());
 
     try {
-      User? currentUser = _auth.currentUser;
+      bool isAuthenticated = await _authService.authStateChanges.first;
 
-      if (currentUser != null && !currentUser.isAnonymous) {
-        // Verify if user data exists in Firestore
-        DocumentSnapshot userDoc =
-            await _firestore.collection('Users').doc(currentUser.uid).get();
-
-        if (userDoc.exists) {
-          emit(SplashScreenLoggedInState());
-        } else {
-          await _auth.signOut();
-          emit(SplashScreenLoggedOutState());
-        }
+      if (isAuthenticated) {
+        emit(SplashLoggedInState());
       } else {
-        emit(SplashScreenLoggedOutState());
+        emit(SplashLoggedOutState());
       }
     } catch (e) {
-      emit(SplashScreenErrorState(
-          error: 'Error checking login status. Please try again.'));
+      emit(const SplashErrorState(
+        error: 'Error checking login status. Please try again.',
+      ));
     }
   }
 
-  Future<void> _onNavigateToNextScreen(
-      NavigateToNextScreenEvent event, Emitter<SplashScreenState> emit) async {
+  Future<void> _handleNavigateToNextScreen(
+      NavigateToNextScreenEvent event,
+      Emitter<SplashState> emit,
+      ) async {
     try {
-      User? currentUser = _auth.currentUser;
-      bool isLoggedIn = currentUser != null && !currentUser.isAnonymous;
+      bool isAuthenticated = await _authService.authStateChanges.first;
 
-      if (isLoggedIn) {
-        // Verify if user data exists in Firestore
-        DocumentSnapshot userDoc =
-            await _firestore.collection('Users').doc(currentUser.uid).get();
-
-        if (userDoc.exists) {
-          emit(SplashScreenNavigationState(true));
-        } else {
-          await _auth.signOut();
-          emit(SplashScreenNavigationState(false));
-        }
+      if (isAuthenticated) {
+        emit(const SplashNavigationState(true));
       } else {
-        emit(SplashScreenNavigationState(false));
+        emit(const SplashNavigationState(false));
       }
     } catch (e) {
-      emit(SplashScreenErrorState(
-          error: 'Error during navigation. Please try again.'));
+      emit(const SplashErrorState(
+        error: 'Error during navigation. Please try again.',
+      ));
     }
   }
 }

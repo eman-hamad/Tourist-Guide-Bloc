@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
-import 'package:tourist_guide/data/firebase/auth_services.dart';
+import 'package:tourist_guide/data/firebase/firebase_auth_services.dart';
 import 'package:tourist_guide/ui/home/home.dart';
 
 part 'edit_profile_event.dart';

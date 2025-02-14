@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tourist_guide/data/firebase/auth_services.dart';
+import 'package:tourist_guide/data/firebase/firebase_auth_services.dart';
 import 'package:tourist_guide/data/models/fire_store_goverorate_model.dart';
 import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';

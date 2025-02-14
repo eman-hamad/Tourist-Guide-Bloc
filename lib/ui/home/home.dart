@@ -2,6 +2,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tourist_guide/bloc/auth_bloc/auth_bloc.dart';
+import 'package:tourist_guide/bloc/auth_bloc/auth_event.dart';
+import 'package:tourist_guide/bloc/auth_bloc/auth_states.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
 import 'package:tourist_guide/bloc/data_blocs/fav_screen_cubit/fav_screen_cubit.dart';
 import 'package:tourist_guide/bloc/data_blocs/gov_screen/gov_screen_cubit.dart';
@@ -9,9 +12,10 @@ import 'package:tourist_guide/bloc/data_blocs/places_screen/places_screen_cubit.
 import 'package:tourist_guide/bloc/home_cubit/home_cubit.dart';
 import 'package:tourist_guide/bloc/profile_bloc/profile_bloc.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/core/widgets/auth_dialog.dart';
+import 'package:tourist_guide/core/di/service_locator.dart';
+
 import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
-import 'package:tourist_guide/data/biometric_auth_service.dart';
+
 import 'package:tourist_guide/ui/landmarks/favs/screens/fav_screen.dart';
 import 'package:tourist_guide/ui/landmarks/govs/screens/govs_screen.dart';
 import 'package:tourist_guide/ui/landmarks/places/screen/places_screen.dart';
@@ -23,8 +27,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.enableScale(enableWH: () => true, enableText: () => true);
-    return BlocProvider(
-      create: (context) => HomeCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => HomeCubit()),
+        BlocProvider(
+          create: (context) => AuthBloc(
+            authService: ServiceLocator.get(),
+            biometricService: ServiceLocator.get(),
+          ),
+        ),
+      ],
       child: _HomeView(),
     );
   }
@@ -37,41 +49,9 @@ class _HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<_HomeView> {
   final PageController _pageController = PageController();
-  final BiometricAuth _biometricAuth = BiometricAuth();
 
-  Future<bool> _authenticateForProfile() async {
-    try {
-      bool isAvailable = await _biometricAuth.isBiometricAvailable();
 
-      if (!isAvailable) {
-        CustomSnackBar.showError(
-          context: context,
-          message: 'Biometric authentication is not available on this device',
-          duration: const Duration(seconds: 3),
-        );
-        return false;
-      }
 
-      bool isAuthenticated = await _biometricAuth.authenticate();
-
-      if (isAuthenticated) {
-        CustomSnackBar.showSuccess(
-          context: context,
-          message: 'Authentication successful',
-          duration: const Duration(seconds: 2),
-        );
-      }
-
-      return isAuthenticated;
-    } catch (e) {
-      CustomSnackBar.showError(
-        context: context,
-        message: 'Authentication error: ${e.toString()}',
-        duration: const Duration(seconds: 3),
-      );
-      return false;
-    }
-  }
 // Constructs the Home screen UI, which includes a body with
 // a PageView and a bottom curved navigation bar.
   @override
@@ -137,48 +117,76 @@ class _HomeViewState extends State<_HomeView> {
   Widget _curvedNavBar(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return SizedBox(
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          BlocBuilder<HomeCubit, int>(
-            builder: (context, pageIndex) {
-              return CurvedNavigationBar(
-                index: pageIndex,
-                backgroundColor: Colors.transparent,
-                color: isDarkMode ? kMainColorDark : kMainColor,
-                items: const [
-                  Icon(Icons.home_rounded, size: 30),
-                  Icon(Icons.place_rounded, size: 30),
-                  Icon(Icons.favorite_rounded, size: 30),
-                  Icon(Icons.person_rounded, size: 30),
-                ],
-                onTap: (index) async {
-                  if (index == 3) { // Profile page
-                    bool authenticated = await _authenticateForProfile();
-                    if (authenticated) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is BiometricAuthSuccess) {
+              CustomSnackBar.showSuccess(
+                context: context,
+                message: 'Authentication successful',
+                duration: const Duration(milliseconds: 1500),
+              );
+              context.read<HomeCubit>().navigateToPage(3); // Navigate to profile
+            } else if (state is BiometricAuthError) {
+              CustomSnackBar.showError(
+                context: context,
+                message: state.message,
+                duration: const Duration(milliseconds: 1500),
+              );
+            }
+          },
+        ),
+        BlocListener<HomeCubit, int>(
+          listener: (context, state) {
+            _pageController.animateToPage(
+              state,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          },
+        ),
+      ],
+      child: SizedBox(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            BlocBuilder<HomeCubit, int>(
+              builder: (context, pageIndex) {
+                return CurvedNavigationBar(
+                  index: pageIndex,
+                  backgroundColor: Colors.transparent,
+                  color: isDarkMode ? kMainColorDark : kMainColor,
+                  items: const [
+                    Icon(Icons.home_rounded, size: 30, color: Colors.white),
+                    Icon(Icons.place_rounded, size: 30, color: Colors.white),
+                    Icon(Icons.favorite_rounded, size: 30, color: Colors.white),
+                    Icon(Icons.person_rounded, size: 30, color: Colors.white),
+                  ],
+                  onTap: (index) {
+                    if (index == 3) {
+                      context.read<AuthBloc>().add(BiometricAuthRequested());
+                    } else {
                       context.read<HomeCubit>().navigateToPage(index);
                     }
-                  } else {
-                    context.read<HomeCubit>().navigateToPage(index);
-                  }
-                },
-              );
-            },
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 8.r),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _navBarTxt('Places'),
-                _navBarTxt('Governorates'),
-                _navBarTxt('Favorits'),
-                _navBarTxt('Profile'),
-              ],
+                  },
+                );
+              },
             ),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.only(bottom: 8.r),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _navBarTxt('Places'),
+                  _navBarTxt('Governorates'),
+                  _navBarTxt('Favorits'),
+                  _navBarTxt('Profile'),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
