@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:tourist_guide/features/Home/component/details/ui/details_screen.dart';
+import '../../features/Home/component/details/ui/details_screen.dart';
 import '../colors/colors.dart';
 import 'custom_page_route.dart';
 import 'favorite_button.dart';

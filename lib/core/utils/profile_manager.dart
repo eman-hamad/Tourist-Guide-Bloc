@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/features/Home/tabs/profile/blocs/profile_bloc/profile_bloc.dart';
+import '../../features/Home/tabs/profile/blocs/profile_bloc/profile_bloc.dart';
 
 // profile logic
 class ProfileManager {

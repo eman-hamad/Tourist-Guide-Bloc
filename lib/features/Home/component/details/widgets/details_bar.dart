@@ -1,56 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../data/models/fire_store_landmark_model.dart';
+import '../bloc/details_screen/details_screen_cubit.dart';
 import '../../../../../core/colors/colors.dart';
 
-class PlaceDetails extends StatelessWidget {
-  final String name;
-  final String gov;
-  final double rate;
-  const PlaceDetails({
-    super.key,
-    required this.name,
-    required this.gov,
-    required this.rate,
-  });
+class AnimatedDetails extends StatelessWidget {
+  final FSLandMark landMark;
+  const AnimatedDetails({super.key, required this.landMark});
 
-  // Widget to display landmark details like name, location, and rating.
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              name,
-              style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Icon(Icons.place, color: isDarkMode ? kMainColorDark : kMainColor),
-            Text(
-              gov,
-              style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w900,
-                  color: isDarkMode ? kMainColorDark : kMainColor),
-            ),
-            Spacer(),
-            Icon(Icons.star,
-                color: isDarkMode ? kMainColorDark : kMainColor, size: 30),
-            Text(
-              rate.toString(),
-              style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.w700,
-                  color: isDarkMode ? kDarkTexe : kBlack),
-            ),
-          ],
-        ),
-      ],
+    return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
+      builder: (context, state) {
+        return AnimatedOpacity(
+          opacity: state.showSecond ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeIn,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    landMark.name,
+                    style:
+                        TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.place,
+                      color: isDarkMode ? kMainColorDark : kMainColor),
+                  Text(
+                    landMark.governorate,
+                    style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w900,
+                        color: isDarkMode ? kMainColorDark : kMainColor),
+                  ),
+                  Spacer(),
+                  Icon(Icons.star,
+                      color: isDarkMode ? kMainColorDark : kMainColor,
+                      size: 30),
+                  Text(
+                    landMark.rate.toString(),
+                    style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w700,
+                        color: isDarkMode ? kDarkTexe : kBlack),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
 import '../../../../../core/colors/colors.dart';
 import '../../../../../data/models/fire_store_goverorate_model.dart';
 
@@ -36,7 +38,12 @@ class GovernorateCard extends StatelessWidget {
         child: CachedNetworkImage(
           imageUrl: gov.coverImgUrl,
           placeholder: (context, url) => Center(
-            child: CircularProgressIndicator(),
+            child: Skeletonizer(
+                child: Container(
+              color: Colors.grey[700],
+              width: 1.sw,
+              height: 1.sh,
+            )),
           ),
           errorWidget: (context, url, error) => Icon(Icons.error),
           height: 1.sh,

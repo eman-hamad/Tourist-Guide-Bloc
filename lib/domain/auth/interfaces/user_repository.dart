@@ -2,8 +2,8 @@
 
 import 'package:tourist_guide/domain/auth/entities/user_entity.dart';
 
-import '../models/sign_up_data.dart';
 import '../../../core/utils/result.dart';
+import '../models/sign_up_data.dart';
 
 abstract class IUserRepository {
   Future<Result<UserEntity?>> getUserById(String id);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:tourist_guide/features/Home/tabs/govs/widgets/govs_card.dart';
+import 'govs_card.dart';
 
 import '../../../../../data/models/fire_store_goverorate_model.dart';
 

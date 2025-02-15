@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import '../../../../../core/colors/colors.dart';
-import '../../../../../core/widgets/landmark_card.dart';
+import 'package:tourist_guide/features/Home/component/details/widgets/nearby_places.dart';
+import 'package:tourist_guide/features/Home/component/details/widgets/place_description.dart';
+
 import '../../../../../data/models/fire_store_landmark_model.dart';
+import '../../fav_btn_bloc/fav_btn_bloc.dart';
 import '../bloc/details_screen/details_screen_cubit.dart';
 import '../bloc/nearbyPlacesCubit/nearby_places_cubit.dart';
 import '../widgets/cover_img.dart';
 import '../widgets/details_bar.dart';
 import '../widgets/maps_widget.dart';
-import '../../fav_btn_bloc/fav_btn_bloc.dart';
 
 // ignore: must_be_immutable
 class DetailsScreen extends StatelessWidget {
@@ -41,155 +41,23 @@ class DetailsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 50.h),
-                _buildAnimatedCoverImage(landMark),
+                AnimatedCoverImage(
+                  landMark: landMark,
+                ),
                 SizedBox(height: 16.h),
-                _buildAnimatedDetails(landMark),
+                AnimatedDetails(
+                  landMark: landMark,
+                ),
                 SizedBox(height: 16.h),
-                _buildAnimatedDescription(landMark, isDarkMode),
+                AnimatedDescription(landMark: landMark, isDarkMode: isDarkMode),
                 SizedBox(height: 16.h),
-                _buildAnimatedMaps(landMark, isDarkMode),
-                _buildNearbyPlaces(landMark, isDarkMode),
+                AnimatedMaps(landMark: landMark, isDarkMode: isDarkMode),
+                AnimatedNearbyPlaces(landMark: landMark, isDarkMode: isDarkMode)
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildAnimatedCoverImage(FSLandMark landMark) {
-    return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
-      builder: (context, state) {
-        return AnimatedOpacity(
-          opacity: state.showFirst ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-          child: CoverImg(landMark: landMark),
-        );
-      },
-    );
-  }
-
-  Widget _buildAnimatedDetails(FSLandMark landMark) {
-    return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
-      builder: (context, state) {
-        return AnimatedOpacity(
-          opacity: state.showSecond ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-          child: PlaceDetails(
-            name: landMark.name,
-            gov: landMark.governorate,
-            rate: landMark.rate,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildAnimatedMaps(FSLandMark landMark, bool isDarkMode) {
-    return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
-      builder: (context, state) {
-        return AnimatedOpacity(
-          opacity: state.showFourth ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-          child: MapsWidget(
-            landmMark: landMark,
-            isDarkMode: isDarkMode,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildAnimatedDescription(FSLandMark landMark, bool isDarkMode) {
-    return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
-      builder: (context, state) {
-        return AnimatedOpacity(
-          opacity: state.showThird ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-          child: Container(
-            height: 250.h,
-            padding: REdgeInsets.all(12),
-            decoration: BoxDecoration(
-                border: Border.all(
-                    width: 2.w,
-                    color: isDarkMode ? kMainColorDark : kMainColor),
-                borderRadius: BorderRadius.circular(20.r)),
-            child: SingleChildScrollView(
-              child: Text(
-                textAlign: TextAlign.center,
-                landMark.description,
-                overflow: TextOverflow.fade,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.sp,
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildNearbyPlaces(FSLandMark landMark, isDarkMode) {
-    return BlocBuilder<DetailsScreenCubit, DetailsScreenState>(
-      builder: (context, state) {
-        if (!state.showFifth) return const SizedBox.shrink();
-
-        return AnimatedOpacity(
-          opacity: state.showFourth ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeIn,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Divider(height: 30.h),
-              Text(
-                'Nearby Places',
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                  color: isDarkMode ? kMainColorDark : kMainColor,
-                ),
-              ),
-              SizedBox(height: 5.h),
-              SizedBox(
-                height: 250.h,
-                child: BlocBuilder<NearbyPlacesCubit, NearbyPlacesState>(
-                    builder: (context, state) {
-                  if (state is NearbyPlacesLoaded) {
-                    return ListView.separated(
-                      separatorBuilder: (context, index) => SizedBox(
-                        width: 10,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: state.nearbyPlaces.length,
-                      itemBuilder: (context, index) {
-                        return LandmarkCard(place: state.nearbyPlaces[index]);
-                      },
-                    );
-                  }
-                  if (state is NearbyPlacesError) {
-                    return Text(state.errorMsg);
-                  }
-
-                  return Skeletonizer(
-                      child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                    width: 200,
-                  ));
-                }),
-              ),
-              SizedBox(height: 20.h),
-            ],
-          ),
-        );
-      },
     );
   }
 }

@@ -1,6 +1,7 @@
 // lib/application/splash/splash_bloc.dart
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../domain/auth/interfaces/auth_service.dart';
 import '../../../../domain/auth/interfaces/user_repository.dart';
 import 'splash_event.dart';

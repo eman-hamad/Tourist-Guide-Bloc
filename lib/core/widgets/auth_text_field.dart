@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/features/Home/bloc/auth_text_field_bloc/auth_text_field_bloc.dart';
-import 'package:tourist_guide/features/Home/bloc/auth_text_field_bloc/auth_text_field_event.dart';
-import 'package:tourist_guide/features/Home/bloc/auth_text_field_bloc/auth_text_field_states.dart';
+import '../../features/Home/bloc/auth_text_field_bloc/auth_text_field_bloc.dart';
+import '../../features/Home/bloc/auth_text_field_bloc/auth_text_field_event.dart';
+import '../../features/Home/bloc/auth_text_field_bloc/auth_text_field_states.dart';
 import '../colors/colors.dart';
 
 class AuthTextField extends StatefulWidget {

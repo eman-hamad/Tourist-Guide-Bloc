@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../../../data/firebase/firebase_auth_services.dart';
 import '../../../../../../data/models/fire_store_user_model.dart';
+
 part 'profile_event.dart';
 part 'profile_state.dart';
 

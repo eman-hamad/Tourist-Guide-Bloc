@@ -2,14 +2,13 @@
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:tourist_guide/domain/auth/entities/user_entity.dart';
+
+import '../../../core/utils/result.dart';
 import '../../../domain/auth/interfaces/auth_service.dart';
 import '../../../domain/auth/interfaces/user_repository.dart';
 import '../../../domain/auth/models/auth_credentials.dart';
 import '../../../domain/auth/models/sign_up_data.dart';
-
-import '../../../core/utils/result.dart';
 
 
 class FirebaseAuthService implements IAuthService {

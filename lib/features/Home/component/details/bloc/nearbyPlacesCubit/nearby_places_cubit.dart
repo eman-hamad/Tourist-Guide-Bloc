@@ -1,7 +1,8 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
-import '../../../../../../data/services/places_services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../../../data/models/fire_store_landmark_model.dart';
+import '../../../../../../data/services/places_services.dart';
 
 part 'nearby_places_state.dart';
 

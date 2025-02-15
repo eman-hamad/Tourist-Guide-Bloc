@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/features/Home/bloc/home_cubit/home_cubit.dart';
+import '../../../bloc/home_cubit/home_cubit.dart';
 import '../../../../../core/colors/colors.dart';
 
 class PlacesHeader extends StatelessWidget {

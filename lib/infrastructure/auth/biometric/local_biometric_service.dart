@@ -1,6 +1,7 @@
 // lib/infrastructure/auth/biometric/local_biometric_service.dart
 
 import 'package:local_auth/local_auth.dart';
+
 import '../../../domain/auth/interfaces/biometric_service.dart';
 
 class LocalBiometricService implements IBiometricService {

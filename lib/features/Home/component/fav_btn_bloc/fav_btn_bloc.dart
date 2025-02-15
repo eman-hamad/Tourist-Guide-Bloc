@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../data/services/places_services.dart';
 
 part 'fav_btn_event.dart';

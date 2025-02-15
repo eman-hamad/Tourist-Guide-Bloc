@@ -1,12 +1,13 @@
 // lib/core/di/service_locator.dart
 
 import 'package:get_it/get_it.dart';
+
 import '../../domain/auth/interfaces/auth_service.dart';
 import '../../domain/auth/interfaces/biometric_service.dart';
 import '../../domain/auth/interfaces/user_repository.dart';
+import '../../infrastructure/auth/biometric/local_biometric_service.dart';
 import '../../infrastructure/auth/firebase/firebase_auth_service.dart';
 import '../../infrastructure/auth/firebase/firebase_user_repository.dart';
-import '../../infrastructure/auth/biometric/local_biometric_service.dart';
 
 class ServiceLocator {
   static final GetIt _getIt = GetIt.instance;

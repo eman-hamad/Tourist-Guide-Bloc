@@ -3,14 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/features/auth/bloc/auth_bloc.dart';
-import 'package:tourist_guide/features/auth/bloc/auth_event.dart';
-import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
 import 'package:tourist_guide/core/colors/colors.dart';
 import 'package:tourist_guide/core/widgets/auth_text_field.dart';
 import 'package:tourist_guide/core/widgets/custom_button.dart';
 import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
 import 'package:tourist_guide/core/widgets/loading_overlay.dart';
+import 'package:tourist_guide/features/auth/bloc/auth_bloc.dart';
+import 'package:tourist_guide/features/auth/bloc/auth_event.dart';
+import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
+
 import '../../../core/di/service_locator.dart';
 
 class LoginScreen extends StatelessWidget {

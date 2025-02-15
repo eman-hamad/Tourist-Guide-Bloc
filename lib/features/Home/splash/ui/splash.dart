@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/core/di/service_locator.dart';
-import 'package:tourist_guide/core/widgets/custom_page_route.dart';
-import 'package:tourist_guide/core/widgets/custom_snack_bar.dart';
-import 'package:tourist_guide/features/Home/splash/splash_bloc/splash_bloc.dart';
-import 'package:tourist_guide/features/Home/splash/splash_bloc/splash_event.dart';
-import 'package:tourist_guide/features/Home/splash/splash_bloc/splash_state.dart';
-import 'package:tourist_guide/features/Home/ui/home.dart';
-import 'package:tourist_guide/features/auth/ui/login_screen.dart';
+import '../../../../core/colors/colors.dart';
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/widgets/custom_page_route.dart';
+import '../../../../core/widgets/custom_snack_bar.dart';
+import '../splash_bloc/splash_bloc.dart';
+import '../splash_bloc/splash_event.dart';
+import '../splash_bloc/splash_state.dart';
+import '../../ui/home.dart';
+import '../../../auth/ui/login_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

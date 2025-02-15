@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:tourist_guide/data/dummy/dummy_data.dart';
-import 'package:tourist_guide/features/Home/tabs/places/bloc/places_screen_cubit.dart';
-import 'package:tourist_guide/features/Home/tabs/places/widgets/header.dart';
-import 'package:tourist_guide/features/Home/tabs/places/widgets/pop_places.dart';
-import 'package:tourist_guide/features/Home/tabs/places/widgets/sug_places.dart';
-import 'package:tourist_guide/features/Home/tabs/profile/blocs/profile_bloc/profile_bloc.dart';
+
 import '../../../../../core/colors/colors.dart';
+import '../../../../../data/dummy/dummy_data.dart';
+import '../../profile/blocs/profile_bloc/profile_bloc.dart';
+import '../bloc/places_screen_cubit.dart';
+import '../widgets/header.dart';
+import '../widgets/pop_places.dart';
+import '../widgets/sug_places.dart';
 
 class PlacesScreen extends StatelessWidget {
   final void Function(int)? onNavigate;

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
+import '../models/fire_store_landmark_model.dart';
 
 final kDummyData = FSLandMark(
   id: '0',

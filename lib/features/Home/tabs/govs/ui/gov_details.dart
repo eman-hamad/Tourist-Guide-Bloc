@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/data/dummy/dummy_data.dart';
-import 'package:tourist_guide/features/Home/tabs/govs/bloc/gov_details_cubit/gov_details_cubit.dart';
-import 'package:tourist_guide/features/Home/tabs/govs/widgets/details_list.dart';
-import 'package:tourist_guide/features/Home/widgets/common_header.dart';
+import '../../../../../data/dummy/dummy_data.dart';
+import '../bloc/gov_details_cubit/gov_details_cubit.dart';
+import '../widgets/details_list.dart';
+import '../../../widgets/common_header.dart';
 
 class GovernorateDetails extends StatelessWidget {
   const GovernorateDetails({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/features/Home/tabs/govs/bloc/gov_scrren_cubit/gov_screen_cubit.dart';
-import 'package:tourist_guide/features/Home/tabs/govs/widgets/govs_grid.dart';
-import 'package:tourist_guide/features/Home/widgets/common_header.dart';
+import '../bloc/gov_scrren_cubit/gov_screen_cubit.dart';
+import '../widgets/govs_grid.dart';
+import '../../../widgets/common_header.dart';
 
 import '../../../../../data/models/fire_store_goverorate_model.dart';
 

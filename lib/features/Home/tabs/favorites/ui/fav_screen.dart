@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:tourist_guide/data/dummy/dummy_data.dart';
-import 'package:tourist_guide/features/Home/tabs/favorites/bloc/fav_screen_cubit.dart';
-import 'package:tourist_guide/features/Home/tabs/favorites/widgets/empty_favs.dart';
-import 'package:tourist_guide/features/Home/tabs/favorites/widgets/favs_list.dart';
-import 'package:tourist_guide/features/Home/widgets/common_header.dart';
+import '../../../../../data/dummy/dummy_data.dart';
+import '../bloc/fav_screen_cubit.dart';
+import '../widgets/empty_favs.dart';
+import '../widgets/favs_list.dart';
+import '../../../widgets/common_header.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});

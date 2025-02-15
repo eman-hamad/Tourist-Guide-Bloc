@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
-import 'package:tourist_guide/data/services/places_services.dart';
+import '../../../../../../data/models/fire_store_landmark_model.dart';
+import '../../../../../../data/services/places_services.dart';
 
 part 'gov_details_state.dart';
 

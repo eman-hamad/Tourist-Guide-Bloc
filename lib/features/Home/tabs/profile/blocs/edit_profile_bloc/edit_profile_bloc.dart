@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/features/Home/ui/home.dart';
+import '../../../../ui/home.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
 import '../../../../../../data/firebase/firebase_auth_services.dart';
 

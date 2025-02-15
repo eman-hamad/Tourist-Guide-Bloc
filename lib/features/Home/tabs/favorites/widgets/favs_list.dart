@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
 import '../../../../../core/widgets/landmark_card.dart';
 import '../../../../../data/models/fire_store_landmark_model.dart';
 
