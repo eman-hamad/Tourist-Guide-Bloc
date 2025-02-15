@@ -25,7 +25,7 @@ class UserEntity {
     List<String>? favPlacesIds,
   }) {
     return UserEntity(
-      id: this.id,
+      id: id,
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,

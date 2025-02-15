@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/bloc/auth_text_field_bloc/auth_text_field_bloc.dart';
-import 'package:tourist_guide/bloc/auth_text_field_bloc/auth_text_field_event.dart';
-import 'package:tourist_guide/bloc/auth_text_field_bloc/auth_text_field_states.dart';
+import 'package:tourist_guide/features/Home/bloc/auth_text_field_bloc/auth_text_field_bloc.dart';
+import 'package:tourist_guide/features/Home/bloc/auth_text_field_bloc/auth_text_field_event.dart';
+import 'package:tourist_guide/features/Home/bloc/auth_text_field_bloc/auth_text_field_states.dart';
+import '../colors/colors.dart';
 
 class AuthTextField extends StatefulWidget {
   final String labelText;
@@ -18,7 +18,7 @@ class AuthTextField extends StatefulWidget {
   final TextEditingController? passwordController;
 
   const AuthTextField({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.hintText,
     required this.prefixIcon,
@@ -27,7 +27,7 @@ class AuthTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.isPassword = false,
     this.passwordController,
-  }) : super(key: key);
+  });
 
   @override
   State<AuthTextField> createState() => AuthTextFieldState();

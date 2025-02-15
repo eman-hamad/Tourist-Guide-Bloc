@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
-import 'package:tourist_guide/bloc/data_blocs/gov_details_cubit/gov_details_cubit.dart';
-import 'package:tourist_guide/bloc/settings_bloc/settings_bloc_bloc.dart';
-import 'package:tourist_guide/bloc/splash_bloc/splash_bloc.dart';
-import 'package:tourist_guide/core/di/service_locator.dart';
-import 'package:tourist_guide/core/utils/user_manager.dart';
-import 'package:tourist_guide/ui/auth/signup_screen.dart';
-import 'package:tourist_guide/ui/landmarks/govs/screens/gov_details.dart';
-import 'package:tourist_guide/ui/home/home.dart';
-import 'package:tourist_guide/ui/splash/splash.dart';
+import 'package:tourist_guide/features/Home/component/fav_btn_bloc/fav_btn_bloc.dart';
+import 'package:tourist_guide/features/Home/splash/ui/splash.dart';
+import 'package:tourist_guide/features/Home/tabs/govs/bloc/gov_details_cubit/gov_details_cubit.dart';
+import 'package:tourist_guide/features/Home/tabs/govs/ui/gov_details.dart';
+import 'package:tourist_guide/features/Home/ui/home.dart';
+import 'package:tourist_guide/features/auth/ui/login_screen.dart';
+import 'package:tourist_guide/features/auth/ui/signup_screen.dart';
+import 'core/blocs/settings_bloc/settings_bloc_bloc.dart';
+import 'features/Home/splash/splash_bloc/splash_bloc.dart';
+import 'core/di/service_locator.dart';
+import 'core/utils/user_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'ui/auth/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -76,8 +76,6 @@ class MyApp extends StatelessWidget {
       child: const SplashScreen(),
     );
   }
-
-
 
   Widget _govDetails() {
     return MultiBlocProvider(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourist_guide/bloc/data_blocs/fav_btn_bloc/fav_btn_bloc.dart';
-import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/data/models/fire_store_landmark_model.dart';
+import 'package:tourist_guide/features/Home/component/fav_btn_bloc/fav_btn_bloc.dart';
+import '../colors/colors.dart';
+import '../../data/models/fire_store_landmark_model.dart';
 
 class FavoriteButton extends StatelessWidget {
   final FSLandMark place;

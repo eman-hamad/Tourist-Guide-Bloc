@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/core/colors/colors.dart';
-
+import '../colors/colors.dart';
 
 class AuthenticationLoadingDialog extends StatelessWidget {
+  const AuthenticationLoadingDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -47,14 +47,3 @@ class AuthenticationLoadingDialog extends StatelessWidget {
     );
   }
 }
-
-// You can also add this method for custom error handling
-// void _handleAuthenticationError(String message) {
-//   CustomSnackBar.showCustom(
-//     context: context,
-//     message: message,
-//     backgroundColor: Colors.red.shade700,
-//     icon: Icons.error_outline,
-//     duration: const Duration(seconds: 3),
-//   );
-// }

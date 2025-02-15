@@ -1,5 +1,4 @@
-
-import 'package:tourist_guide/domain/repositories/auth_repository.dart';
+import '../repositories/auth_repository.dart';
 
 import '../../data/models/user_model.dart';
 

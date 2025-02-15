@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tourist_guide/data/models/fire_store_user_model.dart';
+import '../models/fire_store_user_model.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -50,7 +50,7 @@ class FirebaseService {
       }
       return null;
     } catch (e) {
-      print('Error during sign up: $e');
+      debugPrint('Error during sign up: $e');
       rethrow;
     }
   }
@@ -77,7 +77,7 @@ class FirebaseService {
       }
       return null;
     } catch (e) {
-      print('Error during sign in: $e');
+      debugPrint('Error during sign in: $e');
       rethrow;
     }
   }
@@ -106,7 +106,7 @@ class FirebaseService {
       }
       return null;
     } catch (e) {
-      print('Error getting user data: $e');
+      debugPrint('Error getting user data: $e');
       rethrow;
     }
   }
@@ -125,7 +125,7 @@ class FirebaseService {
         await currentUser.updatePassword(password);
       }
     } catch (e) {
-      print('Error updating user data: $e');
+      debugPrint('Error updating user data: $e');
       rethrow;
     }
   }
@@ -143,7 +143,7 @@ class FirebaseService {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      print('Error resetting password: $e');
+      debugPrint('Error resetting password: $e');
       rethrow;
     }
   }
