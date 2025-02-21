@@ -61,6 +61,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/card_bg.png
   AssetGenImage get cardBg => const AssetGenImage('assets/images/card_bg.png');
 
+  /// File path: assets/images/login_tourist.jpg
+  AssetGenImage get loginTourist =>
+      const AssetGenImage('assets/images/login_tourist.jpg');
+
   /// File path: assets/images/minya1.jpg
   AssetGenImage get minya1 => const AssetGenImage('assets/images/minya1.jpg');
 
@@ -91,6 +95,10 @@ class $AssetsImagesGen {
   AssetGenImage get pyramids3 =>
       const AssetGenImage('assets/images/pyramids3.jpg');
 
+  /// File path: assets/images/pyramids_cartoon.jpg
+  AssetGenImage get pyramidsCartoon =>
+      const AssetGenImage('assets/images/pyramids_cartoon.jpg');
+
   /// File path: assets/images/sphinx.jpg
   AssetGenImage get sphinx => const AssetGenImage('assets/images/sphinx.jpg');
 
@@ -118,6 +126,7 @@ class $AssetsImagesGen {
         karnak2,
         arrowBack,
         cardBg,
+        loginTourist,
         minya1,
         minya2,
         minya3,
@@ -127,6 +136,7 @@ class $AssetsImagesGen {
         pyramids,
         pyramids2,
         pyramids3,
+        pyramidsCartoon,
         sphinx,
         sphinx2,
         sphinx3,

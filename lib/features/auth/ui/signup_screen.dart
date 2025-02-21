@@ -183,26 +183,31 @@ class _SignUpViewState extends State<SignUpView> {
   Widget _buildLoginRow() {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Already have an account?',
-          style: TextStyle(fontSize: 14.sp),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, '/login'),
-          child: Text(
-            'Log In',
-            style: TextStyle(
-              color: isDarkMode ? kMainColorDark : kMainColor,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.bold,
+    return // In your signup_screen.dart, find the Row that's causing the overflow (around line 186)
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min, // Add this
+        children: [
+          Flexible( // Wrap the Text in Flexible
+            child: Text(
+              'Already have an account?',
+              style: TextStyle(fontSize: 14.sp),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-        ),
-      ],
-    );
+          TextButton(
+            onPressed: () => Navigator.pushNamed(context, '/login'),
+            child: Text(
+              'Log In',
+              style: TextStyle(
+                color: isDarkMode ? kMainColorDark : kMainColor,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
   }
   void _handleSignUp() {
     if (_formKey.currentState?.validate() ?? false) {
