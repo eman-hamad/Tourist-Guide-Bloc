@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/features/Home/component/details/widgets/nearby_places.dart';
-import 'package:tourist_guide/features/Home/component/details/widgets/place_description.dart';
+import '../widgets/nearby_places.dart';
+import '../widgets/place_description.dart';
 
 import '../../../../../data/models/fire_store_landmark_model.dart';
 import '../../fav_btn_bloc/fav_btn_bloc.dart';

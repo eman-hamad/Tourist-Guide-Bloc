@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:tourist_guide/core/widgets/landmark_card.dart';
-import 'package:tourist_guide/features/Home/component/details/bloc/nearbyPlacesCubit/nearby_places_cubit.dart';
+import '../../../../../core/widgets/landmark_card.dart';
+import '../bloc/nearbyPlacesCubit/nearby_places_cubit.dart';
 
 import '../../../../../core/../../../core/colors/colors.dart';
 import '../../../../../data/models/fire_store_landmark_model.dart';

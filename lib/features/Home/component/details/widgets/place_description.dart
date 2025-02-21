@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tourist_guide/core/colors/colors.dart';
-import 'package:tourist_guide/features/Home/component/details/bloc/details_screen/details_screen_cubit.dart';
+import '../../../../../core/colors/colors.dart';
+import '../bloc/details_screen/details_screen_cubit.dart';
 import '../../../../../data/models/fire_store_landmark_model.dart';
 
 class AnimatedDescription extends StatelessWidget {
