@@ -52,6 +52,14 @@ Tourist Guide is a mobile application built using **Flutter and Bloc state manag
 - **Screens**: Various screens in the app such as the login screen, place details screen, and home screen.
 
 ---
+## Clean Architecture
+- **Core**: Contains the business logic and use cases of the application. Core is responsible for managing the application's state and handling business logic. It contains the **Bloc** classes that listen to events and emit states. It communicates with the data layer to fetch data and update the UI. DI is used to inject dependencies into the Core layer.
+- **Data**: Contains the data layer of the application. Data is responsible for interacting with data sources such as Firestore and SharedPreferences. It includes the models for data handling and services for data retrieval and storage.
+- **Domain**: Contains the domain layer of the application. Domain is responsible for defining the business logic and use cases of the application. It includes the repositories and interactors that fetch data from the data layer and provide it to the Core layer.
+- **Features**: Contains the feature modules of the application. Each feature module represents a specific feature or screen of the app, such as the login screen or home screen. Features are responsible for the UI and presentation logic of the application.
+- *Gen**: Contains the general classes used throughout the application, such as constants, assets, fonts and extensions. Gen is responsible for providing utility functions and constants to other layers of the application.
+- **Infrastructure**: Contains the external dependencies such as Firebase services. Infrastructure is responsible for interacting with external services and data sources.
+- 
 
 ## Firebase Integration
 
@@ -69,6 +77,10 @@ Tourist Guide is a mobile application built using **Flutter and Bloc state manag
 - **Favorite Places Sync**: When a user adds or removes a place from their favorites, the change is immediately reflected in Firestore and synced across all devices.
 - **User Profile Updates**: Any changes to the user's profile, such as updating their name or phone number, are saved in Firestore and updated in real-time.
 
+### Testing and CI/CD
+- **Unit Testing**: The app includes unit tests for Firebase services, such as user authentication and Firestore data retrieval. These tests ensure that the app's core functionality works as expected.
+- **Widget Testing**: The app also includes widget tests to verify the behavior of custom widgets and UI components.
+- **Integrate GitHub Actions**: The app uses GitHub Actions for continuous integration and automated testing. This ensures that the app's codebase is always up-to-date and functional.
 ---
 
 ## Getting Started
