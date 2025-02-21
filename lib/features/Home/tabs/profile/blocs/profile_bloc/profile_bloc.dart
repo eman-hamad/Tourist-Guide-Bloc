@@ -104,8 +104,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       emit(ProfileImageLoading());
 
-      final XFile? pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      bool isCamera = event.isCamera;
+      final XFile? pickedFile = await ImagePicker().pickImage(
+          source: isCamera ? ImageSource.camera : ImageSource.gallery);
       if (pickedFile != null) {
         File imagePath = File(pickedFile.path);
         Uint8List? imageBytes = await imagePath.readAsBytes();

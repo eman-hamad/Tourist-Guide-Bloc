@@ -109,29 +109,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
 
                         if (state is ProfileImageLoaded) {
-                          return Stack(alignment: Alignment.center, children: [
-                            ProfileImage(
-                                img: state.image != null
-                                    ? MemoryImage(state.image!)
-                                    : assetProfileImage()),
-                            if (state.image != null)
-                              Positioned(
-                                bottom: -12.h,
-                                left: 65.w,
-                                right: 0.w,
-                                child: IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => removeAlert());
-                                    },
-                                    icon: Icon(
-                                      Icons.delete_rounded,
-                                      size: 30.w,
-                                    ),
-                                    color: isDarkMode ? kWhite : kMainColor),
-                              ),
-                          ]);
+                          return   ProfileImage(
+                            img: state.image != null
+                                ? MemoryImage(state.image!)
+                                : assetProfileImage(),
+                            context: context,
+                          );
+                        }
+
+                        if (state is ProfileImageRemoved) {
+                          return ProfileImage(
+                            img: assetProfileImage(),
+                            context: context,
+                          );
                         }
 
                         if (state is ProfileImageRemoved) {
@@ -236,25 +226,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ))));
   }
 
-  Widget removeAlert() {
-    return AlertDialog(
-      title: Text("Remove Profile Picture"),
-      content: Text("Are you sure you want to remove your profile picture?"),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text("Cancel",
-              style: TextStyle(fontWeight: FontWeight.bold, color: kBlack)),
-        ),
-        TextButton(
-          onPressed: () {
-            removeImage();
-            Navigator.pop(context);
-          },
-          child: Text("Remove",
-              style: TextStyle(fontWeight: FontWeight.bold, color: kMainColor)),
-        ),
-      ],
-    );
+ 
   }
-}

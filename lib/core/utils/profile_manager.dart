@@ -4,8 +4,9 @@ import '../../features/Home/tabs/profile/blocs/profile_bloc/profile_bloc.dart';
 
 // profile logic
 class ProfileManager {
-  void uploadImage(BuildContext context) {
-    context.read<ProfileBloc>().add(UpdateAvatar());
+ void uploadImage(BuildContext context , bool isCam) {
+    context.read<ProfileBloc>().add(UpdateAvatar(context: context, isCamera: isCam));
+
   }
 
   void removeImage(BuildContext context) {

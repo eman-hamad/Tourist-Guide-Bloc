@@ -3,7 +3,12 @@ part of 'profile_bloc.dart';
 // profile events
 abstract class ProfileEvent {}
 
-class UpdateAvatar extends ProfileEvent {}
+class UpdateAvatar extends ProfileEvent {
+    BuildContext ? context; 
+  final bool isCamera; 
+
+  UpdateAvatar({required this.isCamera ,  this.context});
+}
 
 class LoadHeaderData extends ProfileEvent {}
 
