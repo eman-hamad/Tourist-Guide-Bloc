@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../data/dummy/dummy_data.dart';
 import '../bloc/fav_screen_cubit.dart';
 import '../widgets/empty_favs.dart';
@@ -14,6 +15,9 @@ class FavoritesScreen extends StatelessWidget {
     return Column(
       children: [
         CommonHeader(title: 'Favorite Places'),
+        SizedBox(
+          height: 0.3.sh,
+        ),
         BlocBuilder<FavScreenCubit, FavScreenState>(
           builder: (context, state) {
             if (state is FavScreenLoading) {
