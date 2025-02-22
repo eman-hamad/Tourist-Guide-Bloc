@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -10,13 +9,6 @@ import 'package:tourist_guide/domain/auth/interfaces/biometric_service.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_bloc.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_event.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
-
-
-
-
-import '../mocks/auth_unit_test.mocks.dart';
-
-
 
 @GenerateMocks([IAuthService, IBiometricService])
 void main() {
@@ -40,7 +32,8 @@ void main() {
   final testUser = UserEntity(
     id: '1',
     name: 'Test User',
-    email: 'test@example.com', phone: '1234567890',
+    email: 'test@example.com',
+    phone: '1234567890',
   );
 
   group('AuthBloc', () {
@@ -51,7 +44,7 @@ void main() {
     group('SignInRequested', () {
       test('emits [AuthLoading, AuthSuccess] when sign in is successful', () {
         when(mockAuthService.signIn(any)).thenAnswer(
-              (_) async => Result.success(testUser),
+          (_) async => Result.success(testUser),
         );
 
         final expected = [
@@ -72,7 +65,7 @@ void main() {
 
       test('emits [AuthLoading, AuthError] when sign in fails', () {
         when(mockAuthService.signIn(any)).thenAnswer(
-              (_) async => Result.failure('Invalid credentials'),
+          (_) async => Result.failure('Invalid credentials'),
         );
 
         final expected = [
@@ -95,7 +88,7 @@ void main() {
     group('SignUpRequested', () {
       test('emits [AuthLoading, AuthSuccess] when sign up is successful', () {
         when(mockAuthService.signUp(any)).thenAnswer(
-              (_) async => Result.success(testUser),
+          (_) async => Result.success(testUser),
         );
 
         final expected = [

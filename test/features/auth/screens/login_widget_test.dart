@@ -8,14 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_bloc.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
 
-
 import 'package:tourist_guide/features/auth/ui/login_screen.dart';
-
-import '../mocks/mock.mocks.dart';
-
-
-
-
 
 void main() {
   late MockAuthBloc mockAuthBloc;
@@ -65,7 +58,8 @@ void main() {
       expect(find.text('Sign Up'), findsOneWidget);
     });
 
-    testWidgets('validates empty fields on submit', (WidgetTester tester) async {
+    testWidgets('validates empty fields on submit',
+        (WidgetTester tester) async {
       tester.view.physicalSize = const Size(375, 812);
       tester.view.devicePixelRatio = 1.0;
 

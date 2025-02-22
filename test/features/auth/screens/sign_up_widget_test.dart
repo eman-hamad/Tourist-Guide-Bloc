@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,12 +5,9 @@ import 'package:mockito/mockito.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_bloc.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
 import 'package:tourist_guide/features/auth/ui/signup_screen.dart';
-import '../mocks/mock.mocks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
-
-
+import '../../profile/widgets/profile_widgets_test.dart';
 
 void main() {
   late MockAuthBloc mockAuthBloc;
@@ -61,16 +56,11 @@ void main() {
       await tester.pump();
 
       // Fill form fields
-      await tester.enterText(
-          find.byType(TextFormField).first,
-          'Test User'
-      );
+      await tester.enterText(find.byType(TextFormField).first, 'Test User');
       await tester.pump();
 
       await tester.enterText(
-          find.byType(TextFormField).at(1),
-          'test@example.com'
-      );
+          find.byType(TextFormField).at(1), 'test@example.com');
       await tester.pump();
 
       // Verify text was entered
