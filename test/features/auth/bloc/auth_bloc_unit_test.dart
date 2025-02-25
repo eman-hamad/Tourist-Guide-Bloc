@@ -10,6 +10,8 @@ import 'package:tourist_guide/features/auth/bloc/auth_bloc.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_event.dart';
 import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
 
+import '../mocks/mock.mocks.dart';
+
 @GenerateMocks([IAuthService, IBiometricService])
 void main() {
   late AuthBloc authBloc;

@@ -7,7 +7,9 @@ import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
 import 'package:tourist_guide/features/auth/ui/signup_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../profile/widgets/profile_widgets_test.dart';
+import '../mocks/mock.mocks.dart';
+
+
 
 void main() {
   late MockAuthBloc mockAuthBloc;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tourist_guide/features/Home/bloc/home_cubit/home_cubit.dart';
+
 import 'package:tourist_guide/features/Home/tabs/favorites/widgets/empty_favs.dart';
 
 void main() {

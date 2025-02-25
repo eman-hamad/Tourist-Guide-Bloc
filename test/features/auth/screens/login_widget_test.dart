@@ -10,6 +10,8 @@ import 'package:tourist_guide/features/auth/bloc/auth_states.dart';
 
 import 'package:tourist_guide/features/auth/ui/login_screen.dart';
 
+import '../mocks/mock.mocks.dart';
+
 void main() {
   late MockAuthBloc mockAuthBloc;
 
