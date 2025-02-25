@@ -44,11 +44,13 @@ class LandmarkCard extends StatelessWidget {
                   children: [
                     FavoriteButton(place: place),
                     const Expanded(child: SizedBox()),
-                    _aboutPlace(
-                      place.name,
-                      place.governorate,
-                      place.rate.toString(),
-                      context,
+                    Flexible(
+                      child: _aboutPlace(
+                        place.name,
+                        place.governorate,
+                        place.rate.toString(),
+                        context,
+                      ),
                     ),
                   ],
                 ),
@@ -86,10 +88,10 @@ class LandmarkCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
-        height: 0.09.sh,
+        height: ScreenUtil().screenHeight == 600.0 ? 0.2.sh : 0.09.sh,
         width: ScreenUtil().screenWidth - 12,
         decoration: detailsBoxTheme(15),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.only(left: 8, right: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,

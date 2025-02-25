@@ -20,7 +20,7 @@ class GovernorateScreen extends StatelessWidget {
               return GovsGrid(
                 loading: true,
                 itemCount: 6,
-                govs: List.filled(6, _dummyData),
+                govs: List.filled(6, dummyData),
               );
             } //
             else if (state is GovScreenLoaded) {
@@ -40,7 +40,7 @@ class GovernorateScreen extends StatelessWidget {
     );
   }
 
-  static final _dummyData = GovernorateModel(
+  static final dummyData = GovernorateModel(
     name: 'Cairo',
     placesIds: [],
     coverImgUrl:
